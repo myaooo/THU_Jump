@@ -5,4 +5,5 @@ package com.mygdx.jump.GameScreen;
  */
 // This is a class floor which the doodle step on
 public class Floor extends GameObject {
+
 }
