@@ -13,8 +13,8 @@ import com.mygdx.jump.GameScreen.GameItem.Item;
 public class GameStage extends Stage{
 
     // fields
-    //private final ArrayList<Doodle> doodles = new ArrayList<>();
-    private final Doodle doodle = new Doodle();
+    //private final ArrayList<Doctor> doodles = new ArrayList<>();
+    private final Doctor doctor = new Doctor();
     private final ArrayList<Floor> floors = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();

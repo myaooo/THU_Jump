@@ -7,6 +7,10 @@ import com.mygdx.jump.Settings;
 /**
  * Created by Yao on 15/12/2.
  */
+
+/**
+ * This is the main game screen, which contains a gamestage to operate game logic
+ */
 public class GameScreen implements Screen {
 
     // fields
