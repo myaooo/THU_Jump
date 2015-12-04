@@ -3,8 +3,12 @@ package com.mygdx.jump.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.jump.Resource.Image;
+import com.mygdx.jump.Resource.Resources;
 
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
@@ -13,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Doctor extends GameObject {
     // Fields
+    // Static fields
     /** This value means that Doctor is jumping now*/
     public static final int STATUS_JUMP = 0;
     /** This value means that Doctor has jumped, and is falling now*/
@@ -28,19 +33,34 @@ public class Doctor extends GameObject {
     /** The height of Doctor*/
     public static final float HEIGHT = 0.8f;
 
-    private Pixmap mPixmap;
-    private Texture mTexture;
-    private TextureRegion mTextureRegion;
-    private Sprite mSprite;
-
-    private float timer;
+    // class private fields
+    private Image image;    // image class
+    private Animation animation;
+    private int status; // the status of doctor
+    private float stateTime;    // a timer that stores the time
 
     public Doctor()
     {
-        mPixmap = new Pixmap(Gdx.files.internal("doctor.png"));
-        mTexture = new Texture(mPixmap);
-        mTextureRegion = new TextureRegion(mTexture, 0, 0, 30, 30);
-        mSprite = new Sprite(mTextureRegion);
-        mSprite.setPosition(800 / 2, 480 / 2);
+        // copy fields from resources
+        image = Resources._DOCTOR_NORMAL;
+        animation = Resources._DOCTOR_FALL.getAnimation();
     }
+
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha)
+    {
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        TextureRegion keyFrame = animation.getKeyFrame(stateTime,true);
+        // 这里要注意，我们添加的action只是改变actor的属性值，绘制的时候并没有
+        // 自动给我们处理这些逻辑， 我们要做的就是取得这些值，然后自己处理
+        batch.draw(textureRegion, getX(), getY(),
+                textureRegion.getRegionWidth() / 2,
+                textureRegion.getRegionHeight() / 2,
+                textureRegion.getRegionWidth(),
+                textureRegion.getRegionHeight(), getScaleX(), getScaleY(),
+                getRotation());
+
+    }
+
 }
