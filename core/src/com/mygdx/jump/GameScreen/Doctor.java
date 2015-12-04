@@ -1,12 +1,8 @@
 package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Image;
 import com.mygdx.jump.Resource.Resources;
 
@@ -33,33 +29,44 @@ public class Doctor extends GameObject {
     /** The height of Doctor*/
     public static final float HEIGHT = 0.8f;
 
-    // class private fields
+    // private fields
     private Image image;    // image class
     private Animation animation;
-    private int status; // the status of doctor
-    private float stateTime;    // a timer that stores the time
+    private int status = STATUS_FALL; // the status of doctor
+    private float stateTime = 0;    // a timer that stores the time
+    private Item item = null;  // the item that the doctor get with him
 
+    // methods
+    /**Default constructor*/
     public Doctor()
     {
         // copy fields from resources
-        image = Resources._DOCTOR_NORMAL;
-        animation = Resources._DOCTOR_FALL.getAnimation();
+        this.image = Resources._DOCTOR_NORMAL;
+        this.animation = Resources._DOCTOR_FALL.getAnimation();
+    }
+    /**Constructor, setting the image and animation to a loaded Image and Animation*/
+    public Doctor(Image im, Animation anim)
+    {
+        this.image = im;
+        this.animation = anim;
     }
 
+    /**Update Function, calls before draw*/
+    public void update(){
+
+    }
+
+    /** override draw from Actor*/
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha)
+    public void draw(Batch batch, float parentAlpha)
     {
         stateTime += Gdx.graphics.getDeltaTime();
-
         TextureRegion keyFrame = animation.getKeyFrame(stateTime,true);
-        // 这里要注意，我们添加的action只是改变actor的属性值，绘制的时候并没有
-        // 自动给我们处理这些逻辑， 我们要做的就是取得这些值，然后自己处理
-        batch.draw(textureRegion, getX(), getY(),
-                textureRegion.getRegionWidth() / 2,
-                textureRegion.getRegionHeight() / 2,
-                textureRegion.getRegionWidth(),
-                textureRegion.getRegionHeight(), getScaleX(), getScaleY(),
-                getRotation());
+
+        batch.draw(keyFrame, getX(), getY(),    // position
+                keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
+                keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), // texture width and height
+                getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
 
     }
 
