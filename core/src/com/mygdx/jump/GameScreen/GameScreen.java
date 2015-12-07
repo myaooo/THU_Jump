@@ -3,6 +3,7 @@ package com.mygdx.jump.GameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
@@ -14,7 +15,7 @@ import com.mygdx.jump.TsinghuaJump;
 /**
  * This is the main game screen, which contains a gamestage to operate game logic
  */
-public class GameScreen implements Screen {
+public class GameScreen extends ScreenAdapter {
 
     // fields
     // static fields
@@ -66,6 +67,7 @@ public class GameScreen implements Screen {
         Settings.setScreen(width, height);
     }
 
+    @Override
     public void dispose(){
 
     }

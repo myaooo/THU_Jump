@@ -22,10 +22,10 @@ public class Monster extends GameObject {
     private int type;
     private float stateTime;
 
-    public Monster(int itype, float x, float y){
-        super(x,y,MONSTER_WIDTH,MONSTER_HEIGHT);
+    public Monster(int itype, float x, float y) {
+        super(x, y, MONSTER_WIDTH, MONSTER_HEIGHT);
         type = itype;
-        switch (type){
+        switch (type) {
             case MONSTER_TYPE_NORMAL:
                 animation = Assets.getMonsterNorm();
                 break;
@@ -38,21 +38,24 @@ public class Monster extends GameObject {
         stateTime = 0;
     }
 
-    /**Update Function, calls before draw*/
+    /**
+     * Update Function, calls before draw
+     */
     @Override
-    public void update(float deltaTime){
+    public void update(float deltaTime) {
         // update velocity
         this.velocity.add(acceleration.scl(deltaTime));
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
-        keyFrame = animation.getKeyFrame(stateTime,true);
+        keyFrame = animation.getKeyFrame(stateTime, true);
         stateTime += deltaTime;
     }
 
-    /** override draw from Actor*/
+    /**
+     * override draw from Actor
+     */
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y

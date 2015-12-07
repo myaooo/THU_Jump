@@ -2,7 +2,7 @@ package com.mygdx.jump.GameScreen;
 
 /**
  * GameStage, wrapped game logic in the stage
- * Created by Yao on 15/12/2.
+ * @author Ming Yao
  */
 
 import java.util.ArrayList;
@@ -138,6 +138,7 @@ public class GameStage extends Stage {
      */
     public void checkCollisions(){
         isHittingFloor();
+        isHittingMonster();
     }
 
 

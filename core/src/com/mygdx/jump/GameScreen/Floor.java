@@ -22,7 +22,7 @@ public class Floor extends GameObject {
     public static final int FLOOR_STATUS_NORMAL = 0;
     public static final int FLOOR_STATUS_BREAKING = 1;
     public static final float FLOOR_VELOCITY = 2;
-    public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL*3;
+    public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL * 3;
 
     // private class fields
     private int type;
@@ -32,33 +32,38 @@ public class Floor extends GameObject {
     private TextureRegion keyFrame;
     private Animation imageBreak = null;
 
-    /** Constructor, input floor type, and its position x,y*/
-    public Floor (int itype, float x, float y) {
+    /**
+     * Constructor, input floor type, and its position x,y
+     */
+    public Floor(int itype, float x, float y) {
         super(x, y, FLOOR_WIDTH, FLOOR_HEIGHT);
         this.type = itype;
         this.status = FLOOR_STATUS_NORMAL;
         this.stateTime = 0;
-        switch(type) {
+        switch (type) {
             case FLOOR_TYPE_STATIC:
                 image = Assets.getFloorNorm();
-                velocity.set(0,0);
+                velocity.set(0, 0);
                 break;
             case FLOOR_TYPE_MOVABLE:
                 image = Assets.getFloorMov();
-                velocity.set(FLOOR_VELOCITY,0);
+                velocity.set(FLOOR_VELOCITY, 0);
                 break;
             case FLOOR_TYPE_BREAKABLE:
                 image = Assets.getFloorBreakable();
                 imageBreak = Assets.getFloorBreaking();
-                velocity.set(0,0);
-            default: break;
+                velocity.set(0, 0);
+            default:
+                break;
         }
         keyFrame = image.getTextureRegion();
     }
 
-    /** Update the floor, input deltaTime*/
+    /**
+     * Update the floor, input deltaTime
+     */
     @Override
-    public void update(float deltaTime){
+    public void update(float deltaTime) {
         if (type == FLOOR_TYPE_MOVABLE) {
             this.moveBy(velocity.x * deltaTime, 0);
             // check the position of the floor
@@ -71,16 +76,17 @@ public class Floor extends GameObject {
                 this.setX(Settings.SCREEN_WIDTH - FLOOR_WIDTH / 2);
             }
         }
-        if (status == FLOOR_STATUS_BREAKING){
-            keyFrame = imageBreak.getKeyFrame(stateTime,false);
+        if (status == FLOOR_STATUS_BREAKING) {
+            keyFrame = imageBreak.getKeyFrame(stateTime, false);
         }
         stateTime += deltaTime;
     }
 
-    /** override draw from Actor*/
+    /**
+     * override draw from Actor
+     */
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
@@ -89,18 +95,25 @@ public class Floor extends GameObject {
 
     }
 
-    /** Calls when the floor is broken*/
-    public void floorBreak(){
+    /**
+     * Calls when the floor is broken
+     */
+    public void floorBreak() {
         status = FLOOR_STATUS_BREAKING;
         stateTime = 0;
     }
 
-    /** return true if the floor type is breakable*/
-    public boolean isBreakable(){
+    /**
+     * return true if the floor type is breakable
+     */
+    public boolean isBreakable() {
         return type == FLOOR_TYPE_BREAKABLE;
     }
-    /** return true if the floor is broken and needs to be deleted*/
-    public boolean isBroken(){
+
+    /**
+     * return true if the floor is broken and needs to be deleted
+     */
+    public boolean isBroken() {
         return status == FLOOR_STATUS_BREAKING && stateTime > FLOOR_BREAKING_TIME;
     }
 

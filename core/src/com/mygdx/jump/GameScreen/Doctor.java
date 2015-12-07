@@ -6,25 +6,40 @@ import com.mygdx.jump.Resource.Assets;
 
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
+ *
  * @author Ming Yao
  */
 
 public class Doctor extends GameObject {
     // Fields
     // Static fields
-    /** This value means that Doctor is jumping now*/
+    /**
+     * This value means that Doctor is jumping now
+     */
     public static final int STATUS_JUMP = 0;
-    /** This value means that Doctor has jumped, and is falling now*/
+    /**
+     * This value means that Doctor has jumped, and is falling now
+     */
     public static final int STATUS_FALL = 1;
-    /** This value means that Doctor just get hit by a monster*/
+    /**
+     * This value means that Doctor just get hit by a monster
+     */
     public static final int STATUS_HIT = 2;
-    /** The jumping velocity of Doctor*/
+    /**
+     * The jumping velocity of Doctor
+     */
     public static final float JUMP_VELOCITY = 11;
-    /** The moving velocity of Doctor, when moving key was pressed*/
+    /**
+     * The moving velocity of Doctor, when moving key was pressed
+     */
     public static final float MOVE_VELOCITY = 20;
-    /** The width of Doctor*/
+    /**
+     * The width of Doctor
+     */
     public static final float WIDTH = 0.8f;
-    /** The height of Doctor*/
+    /**
+     * The height of Doctor
+     */
     public static final float HEIGHT = 0.8f;
 
     // private fields
@@ -40,55 +55,79 @@ public class Doctor extends GameObject {
     private float maxjumpheight = 0;
 
     // methods
-    /**Default constructor*/
-    public Doctor()
-    {
+
+    /**
+     * Default constructor
+     */
+    public Doctor() {
         // copy fields from resources
         this(Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
     }
-    /**Constructor, setting the image and animation to a loaded Image and Animation*/
-    public Doctor(Animation anim_f, Animation anim_j, Animation anim_h)
-    {
-        this.setAnimation(anim_f,anim_j,anim_h);
+
+    /**
+     * Constructor, setting the image and animation to a loaded Image and Animation
+     */
+    public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
+        this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
         this.acceleration = GameStage.GRAVITY;
-        maxjumpheight = -JUMP_VELOCITY*JUMP_VELOCITY/(GameStage.GRAVITY.y * 2);
+        maxjumpheight = -JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY.y * 2);
     }
 
-    /**Set Animation*/
-    public void setAnimation(Animation anim_f, Animation anim_j, Animation anim_h){
+    /**
+     * Set Animation
+     */
+    public void setAnimation(Animation anim_f, Animation anim_j, Animation anim_h) {
         this.animation_fall = anim_f;
         this.animation_jump = anim_j;
         this.animation_hit = anim_h;
     }
 
-    /**Update Function, calls before draw*/
+    /**
+     * Update Function, calls before draw
+     */
     @Override
-    public void update(float deltaTime){
+    public void update(float deltaTime) {
         // update velocity
         this.velocity.add(acceleration.scl(deltaTime));
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
-        keyFrame = current_anim.getKeyFrame(stateTime,true);
+        keyFrame = current_anim.getKeyFrame(stateTime, true);
         stateTime += deltaTime;
     }
 
-    /**Reset stateTime to zero, calls whenever status is changed*/
-    public void resetTime(){
+    /**
+     * Reset stateTime to zero, calls whenever status is changed
+     */
+    public void resetTime() {
         stateTime = 0;
     }
 
-    /**If the doctor is falling, return true, else return false*/
-    public boolean isFalling(){return status == STATUS_FALL;}
+    /**
+     * If the doctor is falling, return true, else return false
+     */
+    public boolean isFalling() {
+        return status == STATUS_FALL;
+    }
 
-    /**If the doctor is shielded, return true, else return false*/
-    public boolean isShielded(){return shield;}
+    /**
+     * If the doctor is shielded, return true, else return false
+     */
+    public boolean isShielded() {
+        return shield;
+    }
 
-    /**If the doctor is shielded, return true, else return false*/
-    public boolean isHitted(){return status == STATUS_HIT;}
+    /**
+     * If the doctor is shielded, return true, else return false
+     */
+    public boolean isHitted() {
+        return status == STATUS_HIT;
+    }
 
-    /**Calls when the doctor hits a floor*/
-    public void hitFloor(){
+    /**
+     * Calls when the doctor hits a floor
+     */
+    public void hitFloor() {
         // change status, current_animation, and y velocity
         status = STATUS_JUMP;
         current_anim = animation_jump;
@@ -97,21 +136,25 @@ public class Doctor extends GameObject {
         resetTime();
     }
 
-    /**Calls when the doctor hits a monster*/
-    public void hitMonster(){
+    /**
+     * Calls when the doctor hits a monster
+     */
+    public void hitMonster() {
         // change status, current_animation, and y velocity
         status = STATUS_HIT;
         current_anim = animation_hit;
-        velocity.set(0,0);
+        velocity.set(0, 0);
         // resetTime;
         resetTime();
     }
 
-    /**Change the current status to newStatus and reset the stateTime*/
-    public void changeStatus(int newStatus){
+    /**
+     * Change the current status to newStatus and reset the stateTime
+     */
+    public void changeStatus(int newStatus) {
         status = newStatus;
         // check status
-        switch(status){
+        switch (status) {
             case STATUS_FALL:
                 current_anim = animation_fall;
                 break;
@@ -122,15 +165,17 @@ public class Doctor extends GameObject {
                 current_anim = animation_jump;
                 velocity.y = JUMP_VELOCITY;
                 break;
-            default: break;
+            default:
+                break;
         }
         resetTime();
     }
 
-    /** override draw from Actor*/
+    /**
+     * override draw from Actor
+     */
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y

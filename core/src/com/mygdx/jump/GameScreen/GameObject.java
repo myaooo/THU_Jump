@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A basic object class of game object, it extends Actor in libgdx. See https://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+ *
  * @author Ming Yao
  */
 
@@ -22,55 +23,83 @@ public class GameObject extends Actor {
     public Vector2 acceleration;
     // methods
     // constructors
-    /** Default constructor */
+
+    /**
+     * Default constructor
+     */
     public GameObject() {
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 0);
     }
-    /** constrcutor, setting position to  (x,y), with a bounding rectangle with width and height*/
+
+    /**
+     * constrcutor, setting position to  (x,y), with a bounding rectangle with width and height
+     */
     public GameObject(float x, float y, float width, float height) {
         this.setBounds(x, y, width, height);
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 0);
     }
 
-    /**update function*/
-    public void update(float deltaTime){
+    /**
+     * update function
+     */
+    public void update(float deltaTime) {
 
     }
 
-    /** get the bounding rectangle of the object*/
+    /**
+     * get the bounding rectangle of the object
+     */
     public Rectangle getRectangle() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    /** check is overlapped*/
-    public boolean overlaps(GameObject obj){
+    /**
+     * check is overlapped
+     */
+    public boolean overlaps(GameObject obj) {
         return this.getRectangle().overlaps(obj.getRectangle());
     }
 
-    /** set the Velocity to (x,y)*/
+    /**
+     * set the Velocity to (x,y)
+     */
     public void setVelocity(float x, float y) {
         velocity.set(x, y);
     }
 
-    /** set the Velocity to Vector2 v*/
-    public void setVelocity(Vector2 v){ velocity = v;}
+    /**
+     * set the Velocity to Vector2 v
+     */
+    public void setVelocity(Vector2 v) {
+        velocity = v;
+    }
 
-    /** set the Acceleration to (x,y) */
+    /**
+     * set the Acceleration to (x,y)
+     */
     public void setAcceleration(float x, float y) {
         acceleration.set(x, y);
     }
 
-    /** set the Acceleration to Vector2 accel*/
-    public void setAcceleration(Vector2 accel){ acceleration = accel;}
+    /**
+     * set the Acceleration to Vector2 accel
+     */
+    public void setAcceleration(Vector2 accel) {
+        acceleration = accel;
+    }
 
-    /** get the object's velocity*/
+    /**
+     * get the object's velocity
+     */
     public Vector2 getVelocity() {
         return velocity;
     }
 
-    /** get the acceleration of the object*/
+    /**
+     * get the acceleration of the object
+     */
     public Vector2 getAcceleration() {
         return acceleration;
     }
