@@ -34,9 +34,19 @@ public class GameObject extends Actor {
         acceleration = new Vector2(0, 0);
     }
 
+    /**update function*/
+    public void update(float deltaTime){
+
+    }
+
     /** get the bounding rectangle of the object*/
     public Rectangle getRectangle() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    /** check is overlapped*/
+    public boolean overlaps(GameObject obj){
+        return this.getRectangle().overlaps(obj.getRectangle());
     }
 
     /** set the Velocity to (x,y)*/

@@ -35,21 +35,23 @@ public class Doctor extends GameObject {
     private Animation current_anim;     // reference to the current animation
     private int status = STATUS_FALL; // the status of doctor
     private float stateTime = 0;    // a timer that stores the time
+    private TextureRegion keyFrame;
     private Item item = null;  // the item that the doctor get with him
+    private boolean shield = false;
 
     // methods
     /**Default constructor*/
     public Doctor()
     {
         // copy fields from resources
-        this(Resources._DOCTOR_FALL.getAnimation(),Resources._DOCTOR_JUMP.getAnimation(),Resources._DOCTOR_HIT.getAnimation());
+        this(Resources.getDoctorFallAnim(),Resources.getDoctorJumpAnim(),Resources.getDoctorHitAnim());
     }
     /**Constructor, setting the image and animation to a loaded Image and Animation*/
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h)
     {
-        this.acceleration = GameStage.GRAVITY;
         this.setAnimation(anim_f,anim_j,anim_h);
         this.current_anim = animation_fall;
+        this.acceleration = GameStage.GRAVITY;
     }
 
     /**Set Animation*/
@@ -65,7 +67,8 @@ public class Doctor extends GameObject {
         this.velocity.add(acceleration.scl(deltaTime));
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
-
+        keyFrame = current_anim.getKeyFrame(stateTime,true);
+        stateTime += deltaTime;
     }
 
     /**Reset stateTime to zero, calls whenever status is changed*/
@@ -73,8 +76,30 @@ public class Doctor extends GameObject {
         stateTime = 0;
     }
 
-    public int getStatus(){
-        return status;
+    /**If the doctor is falling, return true, else return false*/
+    public boolean isFalling(){return status == STATUS_FALL;}
+
+    /**If the doctor is shielded, return true, else return false*/
+    public boolean isShielded(){return shield;}
+
+    /**Calls when the doctor hits a floor*/
+    public void hitFloor(){
+        // change status, current_animation, and y velocity
+        status = STATUS_JUMP;
+        current_anim = animation_jump;
+        velocity.y = JUMP_VELOCITY;
+        // resetTime;
+        resetTime();
+    }
+
+    /**Calls when the doctor hits a monster*/
+    public void hitMonster(){
+        // change status, current_animation, and y velocity
+        status = STATUS_HIT;
+        current_anim = animation_hit;
+        velocity.set(0,0);
+        // resetTime;
+        resetTime();
     }
 
     /**Change the current status to newStatus and reset the stateTime*/
@@ -82,9 +107,16 @@ public class Doctor extends GameObject {
         status = newStatus;
         // check status
         switch(status){
-            case STATUS_FALL: current_anim = animation_fall; break;
-            case STATUS_HIT: current_anim = animation_hit; break;
-            case STATUS_JUMP: current_anim = animation_jump; break;
+            case STATUS_FALL:
+                current_anim = animation_fall;
+                break;
+            case STATUS_HIT:
+                current_anim = animation_hit;
+                break;
+            case STATUS_JUMP:
+                current_anim = animation_jump;
+                velocity.y = JUMP_VELOCITY;
+                break;
             default: break;
         }
         resetTime();
@@ -94,10 +126,6 @@ public class Doctor extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-        update(Gdx.graphics.getDeltaTime());
-        stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion keyFrame = current_anim.getKeyFrame(stateTime,true);
-
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
