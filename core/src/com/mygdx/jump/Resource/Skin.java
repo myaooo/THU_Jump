@@ -21,6 +21,9 @@ public class Skin {
     public AnimatedImage FLOOR_BREAKING;
     //public AnimatedImage FLOOR_WITH_SPRING;
 
+    // monsters
+    public AnimatedImage MONSTER_NORMAL;
+    public AnimatedImage MONSTER_HOLE;
     // types of items
 
     // coin
@@ -39,8 +42,11 @@ public class Skin {
         FLOOR_MOVABLE = new Image(folderPath+"floor_m.png");
         FLOOR_BREAKABLE = new Image(folderPath+"floor_bkb.png");
         FLOOR_BREAKING = new AnimatedImage(folderPath+"floor_bkg3.png",3,Settings.ANIMATION_INTERVAL);
+        MONSTER_NORMAL = new AnimatedImage(folderPath+"monster_n2.pno",2,Settings.ANIMATION_INTERVAL);
+        MONSTER_HOLE = new AnimatedImage(folderPath+"monster_h2.pno",2,Settings.ANIMATION_INTERVAL);
         //FLOOR_WITH_SPRING = new AnimatedImage(folderPath+"floor_s2.png",2,Settings.ANIMATION_INTERVAL);
         COIN = new AnimatedImage(folderPath+"coin.png",2,Settings.ANIMATION_INTERVAL);
+
     }
 
 }

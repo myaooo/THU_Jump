@@ -9,22 +9,32 @@ package com.mygdx.jump;
 public class Settings {
 
     // Modifiable fields
-    public static int SCREEN_WIDTH;
-    public static int SCREEN_HEIGHT;
+    /**The width of the screen in screen coordinates*/
+    public static int SCREEN_WIDTH = 480;
+    /**The height of the screen in screen coordinates*/
+    public static int SCREEN_HEIGHT = 800;
     public static final float ANIMATION_INTERVAL = 0.2f;
+    public static final String settingsfile = ".settings";
 
     // Constant fields
-
+    // the width and height in coordinates of game world in stage
+    public static final float WORLD_WIDTH = 12;
+    public static final float WORLD_HEIGHT = 20;
 
 
     // Methods
     /** Load settings from path*/
-    public Settings(String path){
+    public static void load(){
+        load(settingsfile);
+    }
+
+    /** Load settings from path*/
+    public static void load(String path){
 
     }
 
     /** Save settings into path*/
-    public void saveSettings(String path){
+    public static void saveSettings(String path){
 
     }
 

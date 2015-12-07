@@ -1,11 +1,10 @@
 package com.mygdx.jump.GameScreen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Resource.Image;
-import com.mygdx.jump.Resource.Resources;
 import com.mygdx.jump.Settings;
 
 /**
@@ -41,16 +40,16 @@ public class Floor extends GameObject {
         this.stateTime = 0;
         switch(type) {
             case FLOOR_TYPE_STATIC:
-                image = Resources.getFloorNorm();
+                image = Assets.getFloorNorm();
                 velocity.set(0,0);
                 break;
             case FLOOR_TYPE_MOVABLE:
-                image = Resources.getFloorMov();
+                image = Assets.getFloorMov();
                 velocity.set(FLOOR_VELOCITY,0);
                 break;
             case FLOOR_TYPE_BREAKABLE:
-                image = Resources.getFloorBreakable();
-                imageBreak = Resources.getFloorBreaking();
+                image = Assets.getFloorBreakable();
+                imageBreak = Assets.getFloorBreaking();
                 velocity.set(0,0);
             default: break;
         }

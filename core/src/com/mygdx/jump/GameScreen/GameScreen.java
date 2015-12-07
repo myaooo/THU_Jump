@@ -1,9 +1,11 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.jump.Settings;
+import com.mygdx.jump.TsinghuaJump;
 
 /**
  * Created by Yao on 15/12/2.
@@ -15,16 +17,46 @@ import com.mygdx.jump.Settings;
 public class GameScreen implements Screen {
 
     // fields
+    // static fields
+    final static int GAME_READY = 0;
+    final static int GAME_RUNNING = 1;
+    final static int GAME_OVER = 2;
+    final static int GAME_PAUSE = 3;
+
+    // private class fields
     private GameStage gameStage;
-    private Stage testStage;
+    private TsinghuaJump game;
+    private int status;
 
-    // methods
-    public GameScreen(){
-
+    /**constructor*/
+    public GameScreen(TsinghuaJump inGame){
+        this.game = inGame;
+        gameStage = new GameStage();
+        status = GAME_READY;
     }
+
+    private void update(float delta){
+
+        switch(status){
+            case GAME_READY:
+                // code goes here
+                break;
+            case GAME_RUNNING:
+                // code goes here
+                break;
+            case GAME_PAUSE:
+                // code goes here
+                break;
+            case GAME_OVER:
+                // code goes here
+                break;
+        }
+    }
+
     @Override
     public void render(float delta) {
-        gameStage.act(Gdx.graphics.getDeltaTime());
+        update(delta);
+        gameStage.update(delta);
         gameStage.draw();
     }
 

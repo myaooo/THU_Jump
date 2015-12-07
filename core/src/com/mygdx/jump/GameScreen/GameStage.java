@@ -18,23 +18,26 @@ import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Settings;
 
 // This is a class that contains all the objects in a game
-public class GameStage extends Stage{
+public class GameStage extends Stage {
 
     // fields
     // static fields
-    /**Gravity in the stage, changes the velocity of objects*/
-    static final Vector2 GRAVITY = new Vector2(0,-10f);
+    /**
+     * Gravity in the stage, changes the velocity of objects
+     */
+    static final Vector2 GRAVITY = new Vector2(0, -10f);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
-    public static final float HEIGHT_LEVEL_BASE = 500;
+    public static final float HEIGHT_LEVEL_BASE = Settings.WORLD_HEIGHT * 10;
 
-    // private fields
+    // class fields
     private final Doctor doctor = new Doctor();
     private final ArrayList<Floor> floors = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();
     public int score = 0;
     public float currentHeight = 0;
+    public float floorHeight = 0;
     public int level = 1;
     public float next_level_height = HEIGHT_LEVEL_BASE;
     public int coins = 0;
@@ -42,37 +45,56 @@ public class GameStage extends Stage{
     private Random rand = new Random();
 
 
-    /**Default constructor set the viewport to scalingViewport and screen dimension */
-    public GameStage(){
+    /**
+     * Default constructor set the viewport to scalingViewport and screen dimension
+     */
+    public GameStage() {
         ScalingViewport viewport =
-                new ScalingViewport(Scaling.fit, Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
+                new ScalingViewport(Scaling.fit, Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
         this.setViewport(viewport);
 
     }
 
-    /** inherited constructor from stage*/
-    public GameStage(Viewport viewport){
+    /**
+     * inherited constructor from stage
+     */
+    public GameStage(Viewport viewport) {
         super(viewport);
     }
 
-    /**Add Floor*/
-    private void AddFloor(){
+    /**
+     * Add Floor
+     */
+    private void generateFloor() {
+        while (floorHeight < currentHeight + this.getHeight()) {
 
+        }
     }
 
-    /**Update*/
-    public void update(float deltaTime){
+    /**
+     * Update
+     */
+    public void update(float deltaTime) {
+        updateDoctor(deltaTime);
         updateFloors(deltaTime);
+        updateMonsters(deltaTime);
+        updateItems(deltaTime);
+        updateLevel();
+        if (doctor.isHitted())
+            checkCollisions();
+        isGameOver();
     }
 
-    /**Update Floors*/
-    public void updateFloors(float deltaTime){
+    /**
+     * Update Floors
+     */
+    public void updateFloors(float deltaTime) {
         // update each floor
         int len = floors.size();
-        for (int i = 0; i< len;++i){
+        for (int i = 0; i < len; ++i) {
             Floor fli = floors.get(i);
             fli.update(deltaTime);
-            if(fli.isBroken()) {
+            if (fli.isBroken()) {
                 // the floor is broken and should be removed.
                 floors.remove(fli);
                 len--;
@@ -80,44 +102,57 @@ public class GameStage extends Stage{
         }
     }
 
-    /**Update level*/
-    public void updateLevel(){
+    /**
+     * Update Monsters
+     */
+    public void updateMonsters(float deltaTime) {
+
+    }
+
+    /**
+     * Update Items
+     */
+    public void updateItems(float deltaTime) {
+
+    }
+
+    /**
+     * Update level
+     */
+    public void updateLevel() {
         if (currentHeight > next_level_height) {
             level++;
-            next_level_height *=2;
+            next_level_height *= 2;
         }
     }
 
+    /**
+     * Update Doctor
+     */
+    public void updateDoctor(float deltaTime) {
+
+    }
+
+    /**
+     * Check all kinds of collisions
+     */
+    public void checkCollisions(){
+        isHittingFloor();
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    /**Check whether doctor hits a floor and update doctor and floor status*/
-    public boolean isHittingFloor(){
-        if(doctor.isFalling())
+    /**
+     * Check whether doctor hits a floor and update doctor and floor status
+     */
+    public boolean isHittingFloor() {
+        if (doctor.isFalling())
             return false;
-        for (Floor fl:floors) {
+        for (Floor fl : floors) {
             if (doctor.getY() > fl.getY()) {
                 if (doctor.overlaps(fl)) {
                     // doctor hit a floor
                     doctor.hitFloor();
-                    if(fl.isBreakable())
+                    if (fl.isBreakable())
                         fl.floorBreak();
                     return true;
                 }
@@ -126,12 +161,14 @@ public class GameStage extends Stage{
         return false;
     }
 
-    /**Check whether doctor hits a monster and update doctor status*/
-    public boolean isHittingMonster(){
-        if(doctor.isShielded())
+    /**
+     * Check whether doctor hits a monster and update doctor status
+     */
+    public boolean isHittingMonster() {
+        if (doctor.isShielded())
             // the doctor is shielded
             return false;
-        for (Monster mst:monsters) {
+        for (Monster mst : monsters) {
             if (doctor.getY() > mst.getY()) {
                 if (doctor.overlaps(mst)) {
                     // doctor hit a floor
@@ -143,9 +180,11 @@ public class GameStage extends Stage{
         return false;
     }
 
-    /**Check whether the game is over (the doctor falls under current height) and update the status*/
-    public boolean isGameOver(){
-        if (doctor.getY() < currentHeight){
+    /**
+     * Check whether the game is over (the doctor falls under current height) and update the status
+     */
+    public boolean isGameOver() {
+        if (doctor.getY() < currentHeight) {
             status = STATUS_GAME_OVER;
             return true;
         }

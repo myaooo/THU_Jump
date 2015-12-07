@@ -1,9 +1,8 @@
 package com.mygdx.jump.GameScreen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.mygdx.jump.GameScreen.GameItem.Item;
-import com.mygdx.jump.Resource.Resources;
+import com.mygdx.jump.Resource.Assets;
 
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
@@ -38,13 +37,14 @@ public class Doctor extends GameObject {
     private TextureRegion keyFrame;
     private Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
+    private float maxjumpheight = 0;
 
     // methods
     /**Default constructor*/
     public Doctor()
     {
         // copy fields from resources
-        this(Resources.getDoctorFallAnim(),Resources.getDoctorJumpAnim(),Resources.getDoctorHitAnim());
+        this(Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
     }
     /**Constructor, setting the image and animation to a loaded Image and Animation*/
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h)
@@ -52,6 +52,7 @@ public class Doctor extends GameObject {
         this.setAnimation(anim_f,anim_j,anim_h);
         this.current_anim = animation_fall;
         this.acceleration = GameStage.GRAVITY;
+        maxjumpheight = -JUMP_VELOCITY*JUMP_VELOCITY/(GameStage.GRAVITY.y * 2);
     }
 
     /**Set Animation*/
@@ -62,6 +63,7 @@ public class Doctor extends GameObject {
     }
 
     /**Update Function, calls before draw*/
+    @Override
     public void update(float deltaTime){
         // update velocity
         this.velocity.add(acceleration.scl(deltaTime));
@@ -81,6 +83,9 @@ public class Doctor extends GameObject {
 
     /**If the doctor is shielded, return true, else return false*/
     public boolean isShielded(){return shield;}
+
+    /**If the doctor is shielded, return true, else return false*/
+    public boolean isHitted(){return status == STATUS_HIT;}
 
     /**Calls when the doctor hits a floor*/
     public void hitFloor(){

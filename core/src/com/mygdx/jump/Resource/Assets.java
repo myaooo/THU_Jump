@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import java.util.ArrayList;
 
 /**
- * This is a Resources class, which loaded the needed resources such as bitmaps and animation when the game is initialized.
+ * This is a Assets class, which loaded the needed resources such as bitmaps and animation when the game is initialized.
  * The game objects and other objects load image and font data from resource when they are created.
  *
  * @author Yao
  */
-public class Resources {
+public class Assets {
 
+    // static fields
     ////////////////
     // GameScreen Skins
     ////////////////
@@ -20,13 +21,13 @@ public class Resources {
     /**current Skin*/
     public static Skin curSkin;
     ////////////////
-    // GameScreen Resources
+    // GameScreen Assets
     ////////////////
     /*
-    Other Resources here
+    Other Assets here
      */
-    // Loading process
-    static{
+    /**Load resources from data*/
+    public static void load(){
         skinList.add(new Skin());
         /*
          *  Add more Skins here
@@ -60,6 +61,14 @@ public class Resources {
 
     public static Animation getFloorBreaking(){
         return curSkin.FLOOR_BREAKING.getAnimation();
+    }
+
+    public static Animation getMonsterNorm(){
+        return curSkin.MONSTER_NORMAL.getAnimation();
+    }
+
+    public static Animation getMonsterHole(){
+        return curSkin.MONSTER_HOLE.getAnimation();
     }
 
 }
