@@ -8,5 +8,5 @@ import com.mygdx.jump.GameScreen.GameObject;
 
 // A basic class of game item
 public class Item extends GameObject {
-    int a;
+
 }

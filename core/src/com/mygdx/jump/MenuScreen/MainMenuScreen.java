@@ -1,7 +1,7 @@
 package com.mygdx.jump.MenuScreen;
 
 /**
- * Created by Yao on 15/12/2.
+ * @author Wang Yuehan
  */
 
 import com.badlogic.gdx.Screen;

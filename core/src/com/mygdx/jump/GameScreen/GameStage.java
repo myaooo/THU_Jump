@@ -63,15 +63,6 @@ public class GameStage extends Stage {
     }
 
     /**
-     * Add Floor
-     */
-    private void generateFloor() {
-        while (floorHeight < currentHeight + this.getHeight()) {
-
-        }
-    }
-
-    /**
      * Update
      */
     public void update(float deltaTime) {
@@ -83,6 +74,15 @@ public class GameStage extends Stage {
         if (doctor.isHitted())
             checkCollisions();
         isGameOver();
+    }
+
+    /**
+     * Generate Floors
+     */
+    private void generateFloor() {
+        while (floorHeight < currentHeight + this.getHeight()) {
+
+        }
     }
 
     /**
