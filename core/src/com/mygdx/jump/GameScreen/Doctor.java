@@ -3,7 +3,6 @@ package com.mygdx.jump.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.mygdx.jump.GameScreen.GameItem.Item;
-import com.mygdx.jump.Resource.Image;
 import com.mygdx.jump.Resource.Resources;
 
 /**
@@ -30,8 +29,10 @@ public class Doctor extends GameObject {
     public static final float HEIGHT = 0.8f;
 
     // private fields
-    private Image image;    // image class
-    private Animation animation;
+    private Animation animation_fall;   // the animation that the doctor falls
+    private Animation animation_jump;   // the animation that the doctor jumps
+    private Animation animation_hit;    // the animation that the doctor gets hit
+    private Animation current_anim;     // reference to the current animation
     private int status = STATUS_FALL; // the status of doctor
     private float stateTime = 0;    // a timer that stores the time
     private Item item = null;  // the item that the doctor get with him
@@ -41,28 +42,63 @@ public class Doctor extends GameObject {
     public Doctor()
     {
         // copy fields from resources
-        this.image = Resources._DOCTOR_NORMAL;
-        this.animation = Resources._DOCTOR_FALL.getAnimation();
+        this(Resources._DOCTOR_FALL.getAnimation(),Resources._DOCTOR_JUMP.getAnimation(),Resources._DOCTOR_HIT.getAnimation());
     }
     /**Constructor, setting the image and animation to a loaded Image and Animation*/
-    public Doctor(Image im, Animation anim)
+    public Doctor(Animation anim_f, Animation anim_j, Animation anim_h)
     {
-        this.image = im;
-        this.animation = anim;
+        this.acceleration = GameStage.GRAVITY;
+        this.setAnimation(anim_f,anim_j,anim_h);
+        this.current_anim = animation_fall;
+    }
+
+    /**Set Animation*/
+    public void setAnimation(Animation anim_f, Animation anim_j, Animation anim_h){
+        this.animation_fall = anim_f;
+        this.animation_jump = anim_j;
+        this.animation_hit = anim_h;
     }
 
     /**Update Function, calls before draw*/
-    public void update(){
+    public void update(float deltaTime){
+        // update velocity
+        this.velocity.add(acceleration.scl(deltaTime));
+        // update position
+        this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
 
+    }
+
+    /**Reset stateTime to zero, calls whenever status is changed*/
+    public void resetTime(){
+        stateTime = 0;
+    }
+
+    public int getStatus(){
+        return status;
+    }
+
+    /**Change the current status to newStatus and reset the stateTime*/
+    public void changeStatus(int newStatus){
+        status = newStatus;
+        // check status
+        switch(status){
+            case STATUS_FALL: current_anim = animation_fall; break;
+            case STATUS_HIT: current_anim = animation_hit; break;
+            case STATUS_JUMP: current_anim = animation_jump; break;
+            default: break;
+        }
+        resetTime();
     }
 
     /** override draw from Actor*/
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
+        update(Gdx.graphics.getDeltaTime());
         stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion keyFrame = animation.getKeyFrame(stateTime,true);
+        TextureRegion keyFrame = current_anim.getKeyFrame(stateTime,true);
 
+        // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
                 keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), // texture width and height

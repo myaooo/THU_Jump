@@ -18,8 +18,8 @@ import com.badlogic.gdx.math.Vector2;
 public class GameObject extends Actor {
     // fields
     // The object's velocity and acceleration
-    private final Vector2 velocity;
-    private final Vector2 acceleration;
+    public Vector2 velocity;
+    public Vector2 acceleration;
     // methods
     // constructors
     /** Default constructor */
@@ -44,10 +44,16 @@ public class GameObject extends Actor {
         velocity.set(x, y);
     }
 
+    /** set the Velocity to Vector2 v*/
+    public void setVelocity(Vector2 v){ velocity = v;}
+
     /** set the Acceleration to (x,y) */
     public void setAcceleration(float x, float y) {
         acceleration.set(x, y);
     }
+
+    /** set the Acceleration to Vector2 accel*/
+    public void setAcceleration(Vector2 accel){ acceleration = accel;}
 
     /** get the object's velocity*/
     public Vector2 getVelocity() {

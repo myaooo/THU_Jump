@@ -2,6 +2,7 @@ package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.jump.Settings;
 
 /**
@@ -14,9 +15,13 @@ import com.mygdx.jump.Settings;
 public class GameScreen implements Screen {
 
     // fields
-    GameStage gameStage;
+    private GameStage gameStage;
+    private Stage testStage;
 
     // methods
+    public GameScreen(){
+
+    }
     @Override
     public void render(float delta) {
         gameStage.act(Gdx.graphics.getDeltaTime());
