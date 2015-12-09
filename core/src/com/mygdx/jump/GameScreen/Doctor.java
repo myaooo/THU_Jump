@@ -3,6 +3,7 @@ package com.mygdx.jump.GameScreen;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
+import com.mygdx.jump.Settings;
 
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
@@ -26,9 +27,9 @@ public class Doctor extends GameObject {
      */
     public static final int STATUS_HIT = 2;
     /**
-     * The jumping velocity of Doctor
+     * The jumping velocity of Doctor. max_v = sqrt(2*g*h)
      */
-    public static final float JUMP_VELOCITY = 11;
+    public static final float JUMP_VELOCITY = Settings.NORMAL_JUMP_VELOCITY;
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */
@@ -36,11 +37,11 @@ public class Doctor extends GameObject {
     /**
      * The width of Doctor
      */
-    public static final float WIDTH = 0.8f;
+    public static final float WIDTH = Settings.WORLD_WIDTH/8;
     /**
      * The height of Doctor
      */
-    public static final float HEIGHT = 0.8f;
+    public static final float HEIGHT = Settings.WORLD_HEIGHT/8;
 
     // private fields
     private Animation animation_fall;   // the animation that the doctor falls
@@ -68,6 +69,7 @@ public class Doctor extends GameObject {
      * Constructor, setting the image and animation to a loaded Image and Animation
      */
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
+        super(Settings.WORLD_WIDTH/2, Settings.WORLD_HEIGHT+0.5f, WIDTH,HEIGHT);
         this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
         this.acceleration = GameStage.GRAVITY;

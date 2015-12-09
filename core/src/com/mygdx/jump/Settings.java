@@ -20,6 +20,9 @@ public class Settings {
     // the width and height in coordinates of game world in stage
     public static final float WORLD_WIDTH = 12;
     public static final float WORLD_HEIGHT = 20;
+    public static final float MAX_JUMP_HEIGHT = 8;
+    public static final float GRAVITY_ABS = 10;
+    public static final float NORMAL_JUMP_VELOCITY = (float)Math.sqrt(2*MAX_JUMP_HEIGHT*GRAVITY_ABS);
 
 
     // Methods

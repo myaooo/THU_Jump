@@ -23,16 +23,20 @@ public class Assets {
     ////////////////
     // GameScreen Assets
     ////////////////
+    public static Image BULLET;
     /*
     Other Assets here
      */
     /**Load resources from data*/
     public static void load(){
-        skinList.add(new Skin());
+        // load Skins
+        skinList.add(new Skin("data/doctor/"));
         /*
          *  Add more Skins here
          */
         curSkin = skinList.get(0);
+        // load other data
+        BULLET = new Image("data/bullet.png");
     }
 
     public static Animation getDoctorJumpAnim(){

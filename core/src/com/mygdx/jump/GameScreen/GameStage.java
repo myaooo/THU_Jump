@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
@@ -25,7 +26,7 @@ public class GameStage extends Stage {
     /**
      * Gravity in the stage, changes the velocity of objects
      */
-    static final Vector2 GRAVITY = new Vector2(0, -10f);
+    static final Vector2 GRAVITY = new Vector2(0, -Settings.GRAVITY_ABS);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
     public static final float HEIGHT_LEVEL_BASE = Settings.WORLD_HEIGHT * 10;
@@ -49,8 +50,8 @@ public class GameStage extends Stage {
      * Default constructor set the viewport to scalingViewport and screen dimension
      */
     public GameStage() {
-        ScalingViewport viewport =
-                new ScalingViewport(Scaling.fit, Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
+        FitViewport viewport =
+                new FitViewport(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
         this.setViewport(viewport);
 
     }

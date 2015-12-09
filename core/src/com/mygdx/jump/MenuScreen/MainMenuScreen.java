@@ -15,7 +15,7 @@ import com.mygdx.jump.TsinghuaJump;
 public class MainMenuScreen implements Screen{
 
     private TsinghuaJump game;
-    public MainMenuScreen(final TsinghuaJump agame){
+    public MainMenuScreen(TsinghuaJump agame){
         this.game = agame;
     }
 
