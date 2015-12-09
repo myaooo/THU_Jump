@@ -7,20 +7,22 @@ package com.mygdx.jump.MenuScreen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 
+import com.mygdx.jump.GameScreen.GameScreen;
 import com.mygdx.jump.Settings;
+import com.mygdx.jump.TsinghuaJump;
 
 // MainMenuScreen
 public class MainMenuScreen implements Screen{
 
-    private Game game;
-    public MainMenuScreen(final Game agame){
+    private TsinghuaJump game;
+    public MainMenuScreen(final TsinghuaJump agame){
         this.game = agame;
     }
 
     @Override
     // A methods that render the screen, calls whenever the screen should be rendered
     public void render(float delta){
-
+        game.setScreen(new GameScreen(game));
     }
 
     @Override

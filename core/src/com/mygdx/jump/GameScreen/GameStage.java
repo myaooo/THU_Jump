@@ -106,7 +106,11 @@ public class GameStage extends Stage {
      * Update Monsters
      */
     public void updateMonsters(float deltaTime) {
-
+        int len = monsters.size();
+        for(int i = 0; i < len; ++i){
+            Monster ms = monsters.get(i);
+            // do updates here;
+        }
     }
 
     /**

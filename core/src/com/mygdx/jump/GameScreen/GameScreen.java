@@ -37,7 +37,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update(float delta){
-
+        gameStage.update(delta);
         switch(status){
             case GAME_READY:
                 // code goes here
