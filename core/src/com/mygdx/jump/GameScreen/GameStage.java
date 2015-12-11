@@ -8,14 +8,18 @@ package com.mygdx.jump.GameScreen;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
+import com.mygdx.jump.GameScreen.GameItem.Mediator;
+import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 // This is a class that contains all the objects in a game
@@ -26,10 +30,15 @@ public class GameStage extends Stage {
     /**
      * Gravity in the stage, changes the velocity of objects
      */
-    static final Vector2 GRAVITY = new Vector2(0, -Settings.GRAVITY_ABS);
+    public static final float WORLD_WIDTH = 12;
+    public static final float WORLD_HEIGHT = 20;
+    public static final float MAX_JUMP_HEIGHT = 8;
+    public static final float GRAVITY_ABS = 10;
+    public static final float NORMAL_JUMP_VELOCITY = (float)Math.sqrt(2*MAX_JUMP_HEIGHT*GRAVITY_ABS);
+    static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
-    public static final float HEIGHT_LEVEL_BASE = Settings.WORLD_HEIGHT * 10;
+    public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 10;
 
     // class fields
     private final Doctor doctor = new Doctor();
@@ -44,35 +53,38 @@ public class GameStage extends Stage {
     public int coins = 0;
     private int status = STATUS_RUNNING;
     private Random rand = new Random();
-
+    private TextureRegion background;
 
     /**
      * Default constructor set the viewport to scalingViewport and screen dimension
      */
     public GameStage() {
+        OrthographicCamera camera = new OrthographicCamera(WORLD_WIDTH,WORLD_HEIGHT);
+        camera.position.set(WORLD_WIDTH/2,WORLD_HEIGHT/2,0);
         FitViewport viewport =
-                new FitViewport(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
+                new FitViewport(WORLD_WIDTH, WORLD_HEIGHT,camera);
+        viewport.setScreenBounds(0,0,Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
         this.setViewport(viewport);
+        initializeFloor();
+        int debugScreenY = viewport.getScreenHeight();
+        int debugScreenX = viewport.getScreenWidth();
+        float debugWorldY = viewport.getWorldHeight();
+        float debugWorldX = viewport.getWorldWidth();
+        background = Assets.getBackground();
 
-    }
-
-    /**
-     * inherited constructor from stage
-     */
-    public GameStage(Viewport viewport) {
-        super(viewport);
     }
 
     /**
      * Update
      */
-    public void update(float deltaTime) {
-        updateDoctor(deltaTime);
+    public void update(float deltaTime, Mediator mediator) {
+        int moveDirection = mediator.getDirection();
+        updateDoctor(deltaTime, moveDirection);
         updateFloors(deltaTime);
         updateMonsters(deltaTime);
         updateItems(deltaTime);
         updateLevel();
-        if (doctor.isHitted())
+        if (doctor.isHit())
             checkCollisions();
         isGameOver();
     }
@@ -80,10 +92,17 @@ public class GameStage extends Stage {
     /**
      * Generate Floors
      */
-    private void generateFloor() {
-        while (floorHeight < currentHeight + this.getHeight()) {
+    private void initializeFloor() {
+        Floor fl = new Floor(Floor.FLOOR_STATUS_NORMAL,getWidth()/2,0.5f);
+        floors.add(fl);
+        /*while (floorHeight < currentHeight + this.getHeight()) {
 
-        }
+        }*/
+        generateFloor();
+    }
+
+    private void generateFloor(){
+
     }
 
     /**
@@ -134,8 +153,9 @@ public class GameStage extends Stage {
     /**
      * Update Doctor
      */
-    public void updateDoctor(float deltaTime) {
-
+    public void updateDoctor(float deltaTime, int moveDirection) {
+        doctor.setVelocityX(moveDirection);
+        doctor.update(deltaTime);
     }
 
     /**
@@ -195,5 +215,31 @@ public class GameStage extends Stage {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void draw(){
+        Camera camera = getCamera();
+        camera.update();
+
+        Batch batch = getBatch();
+        if (batch != null) {
+            batch.setProjectionMatrix(camera.combined);
+            batch.begin();
+            doctor.draw(batch,1);
+            for (Floor fl:floors){
+                fl.draw(batch,1);
+            }
+            for(Monster ms:monsters){
+                ms.draw(batch,1);
+            }
+            for(Item it:items){
+                it.draw(batch,1);
+            }
+            float w = getWidth();
+            float h = getHeight();
+            batch.draw(background,0,0,w,h);
+            batch.end();
+        }
     }
 }

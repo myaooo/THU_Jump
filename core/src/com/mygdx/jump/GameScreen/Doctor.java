@@ -29,7 +29,7 @@ public class Doctor extends GameObject {
     /**
      * The jumping velocity of Doctor. max_v = sqrt(2*g*h)
      */
-    public static final float JUMP_VELOCITY = Settings.NORMAL_JUMP_VELOCITY;
+    public static final float JUMP_VELOCITY = GameStage.NORMAL_JUMP_VELOCITY;
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */
@@ -37,11 +37,11 @@ public class Doctor extends GameObject {
     /**
      * The width of Doctor
      */
-    public static final float WIDTH = Settings.WORLD_WIDTH/8;
+    public static final float WIDTH = GameStage.WORLD_WIDTH/8;
     /**
      * The height of Doctor
      */
-    public static final float HEIGHT = Settings.WORLD_HEIGHT/8;
+    public static final float HEIGHT = GameStage.WORLD_HEIGHT/8;
 
     // private fields
     private Animation animation_fall;   // the animation that the doctor falls
@@ -69,7 +69,7 @@ public class Doctor extends GameObject {
      * Constructor, setting the image and animation to a loaded Image and Animation
      */
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
-        super(Settings.WORLD_WIDTH/2, Settings.WORLD_HEIGHT+0.5f, WIDTH,HEIGHT);
+        super(GameStage.WORLD_WIDTH/2, 1f, WIDTH,HEIGHT);
         status = STATUS_JUMP;
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
@@ -92,12 +92,17 @@ public class Doctor extends GameObject {
      */
     @Override
     public void update(float deltaTime) {
+
         // update velocity
         this.velocity.add(acceleration.scl(deltaTime));
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         keyFrame = current_anim.getKeyFrame(stateTime, true);
         stateTime += deltaTime;
+    }
+
+    public void setVelocityX(int direction){
+        velocity.x = direction * MOVE_VELOCITY;
     }
 
     /**
@@ -124,7 +129,7 @@ public class Doctor extends GameObject {
     /**
      * If the doctor is shielded, return true, else return false
      */
-    public boolean isHitted() {
+    public boolean isHit() {
         return status == STATUS_HIT;
     }
 

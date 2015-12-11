@@ -4,7 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.jump.GameScreen.GameItem.Mediator;
 import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
 
@@ -28,37 +30,60 @@ public class GameScreen extends ScreenAdapter {
     private GameStage gameStage;
     private TsinghuaJump game;
     private int status;
+    private Mediator mediator;
 
     /**constructor*/
     public GameScreen(TsinghuaJump inGame){
         this.game = inGame;
         gameStage = new GameStage();
         status = GAME_READY;
+        mediator = new Mediator();
     }
 
     private void update(float delta){
-        gameStage.update(delta);
         switch(status){
             case GAME_READY:
-                // code goes here
+                updateReady();
                 break;
             case GAME_RUNNING:
-                // code goes here
+                updateRunning();
                 break;
             case GAME_PAUSE:
-                // code goes here
+                updatePause();
                 break;
             case GAME_OVER:
-                // code goes here
+                updateOver();
                 break;
         }
+        gameStage.update(delta, mediator);
+        mediator.reset();
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-        gameStage.update(delta);
         gameStage.draw();
+    }
+
+    public void updateReady(){
+        if (Gdx.input.justTouched()) {
+            status = GAME_RUNNING;
+        }
+    }
+
+    public void updateRunning(){
+        if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
+            mediator.setLeft();
+        if(Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
+            mediator.setRight();
+    }
+
+    public void updatePause(){
+
+    }
+
+    public void updateOver(){
+
     }
 
     @Override

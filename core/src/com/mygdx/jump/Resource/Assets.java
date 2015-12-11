@@ -70,6 +70,10 @@ public class Assets {
         return BULLET.getTextureRegion();
     }
 
+    public static TextureRegion getBackground(){
+        return curSkin.BACKGROUND.getTextureRegion();
+    }
+
     public static Animation getFloorBreaking(){
         return curSkin.FLOOR_BREAKING.getAnimation();
     }
