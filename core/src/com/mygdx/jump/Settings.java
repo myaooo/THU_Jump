@@ -24,7 +24,6 @@ public class Settings {
     public static final float GRAVITY_ABS = 10;
     public static final float NORMAL_JUMP_VELOCITY = (float)Math.sqrt(2*MAX_JUMP_HEIGHT*GRAVITY_ABS);
 
-
     // Methods
     /** Load settings from path*/
     public static void load(){

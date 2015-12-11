@@ -48,8 +48,8 @@ public class Doctor extends GameObject {
     private Animation animation_jump;   // the animation that the doctor jumps
     private Animation animation_hit;    // the animation that the doctor gets hit
     private Animation current_anim;     // reference to the current animation
-    private int status = STATUS_FALL; // the status of doctor
-    private float stateTime = 0;    // a timer that stores the time
+    //private int status = STATUS_FALL; // the status of doctor inherited from object
+    //private float stateTime = 0;    // a timer that stores the time
     private TextureRegion keyFrame;
     private Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
@@ -70,6 +70,8 @@ public class Doctor extends GameObject {
      */
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
         super(Settings.WORLD_WIDTH/2, Settings.WORLD_HEIGHT+0.5f, WIDTH,HEIGHT);
+        status = STATUS_JUMP;
+        stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
         this.acceleration = GameStage.GRAVITY;
@@ -180,8 +182,8 @@ public class Doctor extends GameObject {
     public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
-                keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
-                keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), // texture width and height
+                getOriginX(), getOriginY(), // rotate and scale center x,y
+                getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
 
     }

@@ -17,7 +17,7 @@ public class Image {
 
     private TextureRegion textureRegion;
     private Texture texture;
-    private Sprite sprite;
+    //private Sprite sprite;
 
     /**Constructor with a internal path, which should be in the asset folder*/
     public Image(String internalPath) {
@@ -36,7 +36,7 @@ public class Image {
         if (repeat)
             texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
         textureRegion = new TextureRegion(texture);
-        sprite = new Sprite(textureRegion);
+        //sprite = new Sprite(textureRegion);
     }
     /**Set Image texture region*/
     public void setTextureRegion(int x, int y, int width, int height){
@@ -44,9 +44,9 @@ public class Image {
     }
 
     /**get the image data*/
-    public Sprite getImage() {
+    /*public Sprite getImage() {
         return sprite;
-    }
+    }*/
 
     /**get the texture data*/
     public Texture getTexture(){
@@ -57,13 +57,13 @@ public class Image {
     public TextureRegion getTextureRegion(){return textureRegion;}
 
     /**get image width*/
-    public float getWidth() {
+    /*public float getWidth() {
         return sprite.getWidth();
-    }
+    }*/
 
     /**get image height*/
-    public float getHeight() {
+    /*public float getHeight() {
         return sprite.getHeight();
     }
-
+*/
 }

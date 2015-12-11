@@ -1,6 +1,7 @@
 package com.mygdx.jump.Resource;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class Assets {
     // GameScreen Skins
     ////////////////
     /**A list that contains all the skins*/
-    public static ArrayList<Skin> skinList;
+    //public static ArrayList<Skin> skinList;
     /**current Skin*/
     public static Skin curSkin;
     ////////////////
@@ -30,11 +31,13 @@ public class Assets {
     /**Load resources from data*/
     public static void load(){
         // load Skins
-        skinList.add(new Skin("data/doctor/"));
+        curSkin= new Skin("data/doctor/");
+        //skinList.add(skin);
         /*
          *  Add more Skins here
          */
-        curSkin = skinList.get(0);
+        //curSkin = skinList.get(0);
+        //curSkin = skin;
         // load other data
         BULLET = new Image("data/bullet.png");
     }
@@ -51,16 +54,20 @@ public class Assets {
         return curSkin.DOCTOR_HIT.getAnimation();
     }
 
-    public static Image getFloorNorm(){
-        return curSkin.FLOOR_NORMAL;
+    public static TextureRegion getFloorNorm(){
+        return curSkin.FLOOR_NORMAL.getTextureRegion();
     }
 
-    public static Image getFloorMov(){
-        return curSkin.FLOOR_MOVABLE;
+    public static TextureRegion getFloorMov(){
+        return curSkin.FLOOR_MOVABLE.getTextureRegion();
     }
 
-    public static Image getFloorBreakable(){
-        return curSkin.FLOOR_BREAKABLE;
+    public static TextureRegion getFloorBreakable(){
+        return curSkin.FLOOR_BREAKABLE.getTextureRegion();
+    }
+
+    public static TextureRegion getBullet(){
+        return BULLET.getTextureRegion();
     }
 
     public static Animation getFloorBreaking(){

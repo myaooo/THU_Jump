@@ -16,11 +16,13 @@ public class Monster extends GameObject {
     public static final float MONSTER_HEIGHT = 2;
     public static final int MONSTER_TYPE_NORMAL = 0;
     public static final int MONSTER_TYPE_HOLE = 1;
+    public static final int STATUS_NORMAL = 0;
+    public static final int STATUS_HIT = 1;
     // Class fields
     private Animation animation;
     private TextureRegion keyFrame;
     private int type;
-    private float stateTime;
+    //private float stateTime;
 
     public Monster(int itype, float x, float y) {
         super(x, y, MONSTER_WIDTH, MONSTER_HEIGHT);
@@ -35,6 +37,7 @@ public class Monster extends GameObject {
             default:
                 break;
         }
+        status = STATUS_NORMAL;
         stateTime = 0;
     }
 
@@ -58,10 +61,18 @@ public class Monster extends GameObject {
     public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
-                keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
-                keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), // texture width and height
+                getOriginX(), getOriginY(), // rotate and scale center x,y
+                getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
-
     }
+
+    public void hitBullet(){
+        status = STATUS_HIT;
+    }
+
+    public boolean isHitted(){
+        return status == STATUS_HIT;
+    }
+
 
 }

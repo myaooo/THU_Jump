@@ -26,9 +26,8 @@ public class Floor extends GameObject {
 
     // private class fields
     private int type;
-    private int status;
-    private float stateTime;
-    private Image image;
+    //private int status;
+    //private float stateTime;
     private TextureRegion keyFrame;
     private Animation imageBreak = null;
 
@@ -37,26 +36,26 @@ public class Floor extends GameObject {
      */
     public Floor(int itype, float x, float y) {
         super(x, y, FLOOR_WIDTH, FLOOR_HEIGHT);
-        this.type = itype;
-        this.status = FLOOR_STATUS_NORMAL;
-        this.stateTime = 0;
+        type = itype;
+        status = FLOOR_STATUS_NORMAL;
+        stateTime = 0;
         switch (type) {
             case FLOOR_TYPE_STATIC:
-                image = Assets.getFloorNorm();
+                keyFrame= Assets.getFloorNorm();
                 velocity.set(0, 0);
                 break;
             case FLOOR_TYPE_MOVABLE:
-                image = Assets.getFloorMov();
+                keyFrame= Assets.getFloorMov();
                 velocity.set(FLOOR_VELOCITY, 0);
                 break;
             case FLOOR_TYPE_BREAKABLE:
-                image = Assets.getFloorBreakable();
+                keyFrame= Assets.getFloorBreakable();
                 imageBreak = Assets.getFloorBreaking();
                 velocity.set(0, 0);
             default:
                 break;
         }
-        keyFrame = image.getTextureRegion();
+        //keyFrame = keyFrame.getTextureRegion();
     }
 
     /**
@@ -89,8 +88,8 @@ public class Floor extends GameObject {
     public void draw(Batch batch, float parentAlpha) {
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
-                keyFrame.getRegionWidth() / 2, keyFrame.getRegionHeight() / 2, // rotate and scale center x,y
-                keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), // texture width and height
+                getOriginX(), getOriginY(), // rotate and scale center x,y
+                getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
 
     }
@@ -115,6 +114,13 @@ public class Floor extends GameObject {
      */
     public boolean isBroken() {
         return status == FLOOR_STATUS_BREAKING && stateTime > FLOOR_BREAKING_TIME;
+    }
+
+    /**
+     * return true if the floor is now breaking
+     */
+    public boolean isBreaking() {
+        return status == FLOOR_STATUS_BREAKING;
     }
 
 }

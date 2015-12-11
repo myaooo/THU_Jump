@@ -19,8 +19,10 @@ import com.badlogic.gdx.math.Vector2;
 public class GameObject extends Actor {
     // fields
     // The object's velocity and acceleration
-    public Vector2 velocity;
-    public Vector2 acceleration;
+    protected Vector2 velocity;
+    protected Vector2 acceleration;
+    protected float stateTime;
+    protected int status;
     // methods
     // constructors
 
@@ -45,7 +47,7 @@ public class GameObject extends Actor {
      * update function
      */
     public void update(float deltaTime) {
-
+        //does nothing here
     }
 
     /**
