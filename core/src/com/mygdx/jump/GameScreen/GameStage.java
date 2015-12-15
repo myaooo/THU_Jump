@@ -33,8 +33,8 @@ public class GameStage extends Stage {
     public static final float WORLD_WIDTH = 12;
     public static final float WORLD_HEIGHT = 20;
     public static final float MAX_JUMP_HEIGHT = 8;
-    public static final float GRAVITY_ABS = 10;
-    public static final float NORMAL_JUMP_VELOCITY = (float)Math.sqrt(2*MAX_JUMP_HEIGHT*GRAVITY_ABS);
+    public static final float GRAVITY_ABS = 30;
+    public static final float NORMAL_JUMP_VELOCITY = 20;
     static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
@@ -84,7 +84,7 @@ public class GameStage extends Stage {
         updateMonsters(deltaTime);
         updateItems(deltaTime);
         updateLevel();
-        if (doctor.isHit())
+        if (!doctor.isHit())
             checkCollisions();
         isGameOver();
     }
@@ -171,7 +171,7 @@ public class GameStage extends Stage {
      * Check whether doctor hits a floor and update doctor and floor status
      */
     public boolean isHittingFloor() {
-        if (doctor.isFalling())
+        if (!doctor.isFalling())
             return false;
         for (Floor fl : floors) {
             if (doctor.getY() > fl.getY()) {
@@ -210,10 +210,10 @@ public class GameStage extends Stage {
      * Check whether the game is over (the doctor falls under current height) and update the status
      */
     public boolean isGameOver() {
-        if (doctor.getY() < currentHeight) {
-            status = STATUS_GAME_OVER;
-            return true;
-        }
+//        if (doctor.getY() < currentHeight) {
+//            status = STATUS_GAME_OVER;
+//            return true;
+//        }
         return false;
     }
 
@@ -226,6 +226,9 @@ public class GameStage extends Stage {
         if (batch != null) {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
+            float w = getWidth();
+            float h = getHeight();
+            batch.draw(background,0,0,w,h);
             doctor.draw(batch,1);
             for (Floor fl:floors){
                 fl.draw(batch,1);
@@ -236,9 +239,6 @@ public class GameStage extends Stage {
             for(Item it:items){
                 it.draw(batch,1);
             }
-            float w = getWidth();
-            float h = getHeight();
-            batch.draw(background,0,0,w,h);
             batch.end();
         }
     }

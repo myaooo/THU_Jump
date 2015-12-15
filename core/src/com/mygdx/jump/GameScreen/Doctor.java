@@ -1,6 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
@@ -33,7 +34,7 @@ public class Doctor extends GameObject {
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */
-    public static final float MOVE_VELOCITY = 20;
+    public static final float MOVE_VELOCITY = 10;
     /**
      * The width of Doctor
      */
@@ -69,12 +70,13 @@ public class Doctor extends GameObject {
      * Constructor, setting the image and animation to a loaded Image and Animation
      */
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
-        super(GameStage.WORLD_WIDTH/2, 1f, WIDTH,HEIGHT);
-        status = STATUS_JUMP;
+        super(GameStage.WORLD_WIDTH/2, 5f, WIDTH,HEIGHT);
+        status = STATUS_FALL;
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
         this.acceleration = GameStage.GRAVITY;
+        this.velocity.set(0,0);
         maxjumpheight = -JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY.y * 2);
     }
 
@@ -92,9 +94,11 @@ public class Doctor extends GameObject {
      */
     @Override
     public void update(float deltaTime) {
-
         // update velocity
-        this.velocity.add(acceleration.scl(deltaTime));
+        this.velocity.add(acceleration.x*deltaTime,acceleration.y*deltaTime);
+        if (!isFalling() && velocity.y<0) {
+            fall();
+        }
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         keyFrame = current_anim.getKeyFrame(stateTime, true);
@@ -142,6 +146,12 @@ public class Doctor extends GameObject {
         current_anim = animation_jump;
         velocity.y = JUMP_VELOCITY;
         // resetTime;
+        resetTime();
+    }
+
+    public void fall(){
+        status = STATUS_FALL;
+        current_anim = animation_fall;
         resetTime();
     }
 
