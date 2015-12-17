@@ -5,13 +5,23 @@ package com.mygdx.jump.GameScreen.GameItem;
  */
 public class Mediator {
     private int direction;
+    private boolean shootBullet;
 
     public Mediator(){
-        direction = 0;
+        reset();
     }
 
     public void reset(){
         direction = 0;
+        shootBullet = false;
+    }
+
+    public void doctorShoot(){
+        shootBullet = true;
+    }
+
+    public boolean isShootBullet(){
+        return shootBullet;
     }
 
     public int getDirection(){

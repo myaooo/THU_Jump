@@ -86,4 +86,13 @@ public class Assets {
         return curSkin.MONSTER_HOLE.getAnimation();
     }
 
+    public static Animation getMonsterBoss(){
+        // add code here
+        return curSkin.MONSTER_NORMAL.getAnimation();
+    }
+
+    public static Animation getCoin(){
+        return curSkin.COIN.getAnimation();
+    }
+
 }

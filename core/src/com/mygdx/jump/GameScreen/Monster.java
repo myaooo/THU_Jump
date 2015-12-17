@@ -16,12 +16,14 @@ public class Monster extends GameObject {
     public static final float MONSTER_HEIGHT = 2;
     public static final int MONSTER_TYPE_NORMAL = 0;
     public static final int MONSTER_TYPE_HOLE = 1;
+    public static final int MONSTER_TYPE_BOSS = 2;
     public static final int STATUS_NORMAL = 0;
     public static final int STATUS_HIT = 1;
     // Class fields
     private Animation animation;
     private TextureRegion keyFrame;
     private int type;
+    private float health;
     //private float stateTime;
 
     public Monster(int itype, float x, float y) {
@@ -30,11 +32,20 @@ public class Monster extends GameObject {
         switch (type) {
             case MONSTER_TYPE_NORMAL:
                 animation = Assets.getMonsterNorm();
+                health = 1;
                 break;
             case MONSTER_TYPE_HOLE:
                 animation = Assets.getMonsterHole();
+                health = 100000;
+                break;
+            case MONSTER_TYPE_BOSS:
+                animation = Assets.getMonsterBoss();
+                health = 10;
                 break;
             default:
+                type = MONSTER_TYPE_NORMAL;
+                animation = Assets.getMonsterNorm();
+                health = 1;
                 break;
         }
         status = STATUS_NORMAL;
@@ -70,7 +81,7 @@ public class Monster extends GameObject {
         status = STATUS_HIT;
     }
 
-    public boolean isHitted(){
+    public boolean isHit(){
         return status == STATUS_HIT;
     }
 

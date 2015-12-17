@@ -42,7 +42,7 @@ public class Doctor extends GameObject {
     /**
      * The height of Doctor
      */
-    public static final float HEIGHT = GameStage.WORLD_HEIGHT/8;
+    public static final float HEIGHT = WIDTH;
 
     // private fields
     private Animation animation_fall;   // the animation that the doctor falls
@@ -55,6 +55,8 @@ public class Doctor extends GameObject {
     private Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
     private float maxjumpheight = 0;
+    private float XMin;
+    private float XMax;
 
     // methods
 
@@ -78,6 +80,8 @@ public class Doctor extends GameObject {
         this.acceleration = GameStage.GRAVITY;
         this.velocity.set(0,0);
         maxjumpheight = -JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY.y * 2);
+        XMin = -WIDTH/2;
+        XMax = GameStage.WORLD_WIDTH-WIDTH/2;
     }
 
     /**
@@ -101,6 +105,9 @@ public class Doctor extends GameObject {
         }
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
+        // check for illegal X position
+        if (getX() < XMin)  this.setX(XMax);
+        if (getX() > XMax) this.setX(XMin);
         keyFrame = current_anim.getKeyFrame(stateTime, true);
         stateTime += deltaTime;
     }

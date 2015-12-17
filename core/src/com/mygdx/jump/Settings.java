@@ -24,6 +24,7 @@ public class Settings {
     // Keys
     public static int KEY_LEFT = Keys.LEFT;
     public static int KEY_RIGHT = Keys.RIGHT;
+    public static int KEY_SHOOT = Keys.SPACE;
 
     // Methods
     /** Load settings from path*/

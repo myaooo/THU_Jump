@@ -35,9 +35,10 @@ public class GameScreen extends ScreenAdapter {
     /**constructor*/
     public GameScreen(TsinghuaJump inGame){
         this.game = inGame;
-        gameStage = new GameStage();
-        status = GAME_READY;
         mediator = new Mediator();
+        gameStage = new GameStage(mediator);
+        status = GAME_READY;
+
     }
 
     private void update(float delta){
@@ -55,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
                 updateOver();
                 break;
         }
-        gameStage.update(delta, mediator);
+        gameStage.update(delta);
         mediator.reset();
     }
 
@@ -74,8 +75,10 @@ public class GameScreen extends ScreenAdapter {
     public void updateRunning(){
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
             mediator.setLeft();
-        if(Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
+        if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
             mediator.setRight();
+        if (Gdx.input.isKeyPressed(Settings.KEY_SHOOT))
+            mediator.doctorShoot();
     }
 
     public void updatePause(){

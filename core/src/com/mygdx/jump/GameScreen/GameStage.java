@@ -34,7 +34,8 @@ public class GameStage extends Stage {
     public static final float WORLD_HEIGHT = 20;
     public static final float MAX_JUMP_HEIGHT = 8;
     public static final float GRAVITY_ABS = 30;
-    public static final float NORMAL_JUMP_VELOCITY = 20;
+    public static final float NORMAL_JUMP_VELOCITY = (float) Math.sqrt(2 * GRAVITY_ABS * MAX_JUMP_HEIGHT);
+    public static final float[] HEIGHT_INTERVAL = {0.4f,0.65f,0.8f,0.9f,1f};
     static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
@@ -45,6 +46,7 @@ public class GameStage extends Stage {
     private final ArrayList<Floor> floors = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();
+    private final ArrayList<Bullet> bullets = new ArrayList<>();
     public int score = 0;
     public float currentHeight = 0;
     public float floorHeight = 0;
@@ -54,22 +56,22 @@ public class GameStage extends Stage {
     private int status = STATUS_RUNNING;
     private Random rand = new Random();
     private TextureRegion background;
+    private float stateTime = 0;
+
+    private Mediator mediator;
 
     /**
      * Default constructor set the viewport to scalingViewport and screen dimension
      */
-    public GameStage() {
+    public GameStage(Mediator media) {
         OrthographicCamera camera = new OrthographicCamera(WORLD_WIDTH,WORLD_HEIGHT);
         camera.position.set(WORLD_WIDTH/2,WORLD_HEIGHT/2,0);
         FitViewport viewport =
-                new FitViewport(WORLD_WIDTH, WORLD_HEIGHT,camera);
+                new FitViewport(WORLD_WIDTH, 1000*WORLD_HEIGHT,camera);
         viewport.setScreenBounds(0,0,Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
         this.setViewport(viewport);
+        mediator = media;
         initializeFloor();
-        int debugScreenY = viewport.getScreenHeight();
-        int debugScreenX = viewport.getScreenWidth();
-        float debugWorldY = viewport.getWorldHeight();
-        float debugWorldX = viewport.getWorldWidth();
         background = Assets.getBackground();
 
     }
@@ -77,32 +79,46 @@ public class GameStage extends Stage {
     /**
      * Update
      */
-    public void update(float deltaTime, Mediator mediator) {
-        int moveDirection = mediator.getDirection();
-        updateDoctor(deltaTime, moveDirection);
+    public void update(float deltaTime) {
+        updateCamera();
+        updateDoctor(deltaTime);
         updateFloors(deltaTime);
         updateMonsters(deltaTime);
         updateItems(deltaTime);
+        updateBullets(deltaTime);
         updateLevel();
         if (!doctor.isHit())
             checkCollisions();
         isGameOver();
+        stateTime += deltaTime;
     }
 
     /**
      * Generate Floors
      */
     private void initializeFloor() {
-        Floor fl = new Floor(Floor.FLOOR_STATUS_NORMAL,getWidth()/2,0.5f);
+        Floor fl = new Floor(Floor.FLOOR_TYPE_STATIC,getWidth()/2,0.5f);
         floors.add(fl);
         /*while (floorHeight < currentHeight + this.getHeight()) {
 
         }*/
+        floorHeight = fl.getHeight();
         generateFloor();
     }
 
     private void generateFloor(){
+        while (floorHeight < currentHeight + WORLD_HEIGHT){
+            float floorX = rand.nextFloat() * WORLD_WIDTH;
+            float floorY = MAX_JUMP_HEIGHT;
+            int type;
+            if (level < 5){
+                floorY *= HEIGHT_INTERVAL[level-1];
+            }
+            floorHeight += floorY;
+            Floor fl = new Floor(Floor.FLOOR_TYPE_STATIC,floorX,floorHeight);
+            floors.add(fl);
 
+        }
     }
 
     /**
@@ -120,6 +136,7 @@ public class GameStage extends Stage {
                 len--;
             }
         }
+        generateFloor();
     }
 
     /**
@@ -153,9 +170,47 @@ public class GameStage extends Stage {
     /**
      * Update Doctor
      */
-    public void updateDoctor(float deltaTime, int moveDirection) {
+    public void updateDoctor(float deltaTime) {
+        int moveDirection = mediator.getDirection();
         doctor.setVelocityX(moveDirection);
         doctor.update(deltaTime);
+    }
+
+    /**
+     * Update Bullets
+     */
+    public void updateBullets(float deltaTime) {
+        int len = bullets.size();
+        for (int i = 0; i < len; ++i) {
+            Bullet bullet = bullets.get(i);
+            bullet.update(deltaTime);
+            if (!bullet.isNormal()) {
+                // the floor is broken and should be removed.
+                bullets.remove(bullet);
+                len--;
+            }
+        }
+        genBullet();
+    }
+
+    /**
+     * Update Camera
+     */
+    public void updateCamera() {
+        Camera camera = getCamera();
+        if ( camera.position.y < doctor.getY()){
+            camera.position.y = doctor.getY();
+            currentHeight =  camera.position.y - WORLD_HEIGHT/2;
+        }
+    }
+
+    private void genBullet(){
+        if (mediator.isShootBullet()){
+            Bullet blt;
+            if (monsters.size()!=0) blt = new Bullet(doctor, monsters.get(0));
+            else blt = new Bullet(doctor);
+            bullets.add(blt);
+        }
     }
 
     /**
@@ -228,8 +283,7 @@ public class GameStage extends Stage {
             batch.begin();
             float w = getWidth();
             float h = getHeight();
-            batch.draw(background,0,0,w,h);
-            doctor.draw(batch,1);
+            batch.draw(background,0,currentHeight,WORLD_WIDTH,WORLD_HEIGHT);
             for (Floor fl:floors){
                 fl.draw(batch,1);
             }
@@ -239,6 +293,10 @@ public class GameStage extends Stage {
             for(Item it:items){
                 it.draw(batch,1);
             }
+            for (Bullet blt:bullets){
+                blt.draw(batch,1);
+            }
+            doctor.draw(batch,1);
             batch.end();
         }
     }

@@ -16,19 +16,22 @@ public class Bullet extends GameObject {
     public static final float HEIGHT = 0.2f;
     public static final int STATUS_NORMAL = 0;
     public static final int STATUS_HIT_MONSTER = 1;
-    public static final float BULLET_VELOCITY = 15;
+    public static final int STATUS_MISSED = 2;
+    public static final float BULLET_VELOCITY = 30;
 
     //private fields
     private TextureRegion keyFrame;
+    private Monster target;
 
     // methods
-    /**Constructor, a doctor's bullet shooting to an objectr*/
-    public Bullet(Doctor doctor, GameObject object){
+    /**Constructor, a doctor's bullet shooting to an monster*/
+    public Bullet(Doctor doctor, Monster monster){
         super(doctor.getX(Align.center),doctor.getY(Align.center),WIDTH,HEIGHT);
+        target = monster;
         createBullet();
         // set bullet velocity
-        float vx = this.getX(Align.center)-object.getX(Align.center);
-        float vy = this.getY(Align.center) - object.getY(Align.center);
+        float vx = this.getX(Align.center)-monster.getX(Align.center);
+        float vy = this.getY(Align.center) - monster.getY(Align.center);
         velocity.set(vx,vy);
         velocity.nor();
         velocity.scl(BULLET_VELOCITY);
@@ -48,18 +51,36 @@ public class Bullet extends GameObject {
         keyFrame = Assets.getBullet();
     }
 
-
-    public void hitMonster(){
-        status = STATUS_HIT_MONSTER;
-    }
-
     /**
      * Update Function, calls before draw
      */
     public void update(float deltaTime){
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
+        if (getX() < 0 || getX() > GameStage.WORLD_WIDTH) status = STATUS_MISSED;
         stateTime += deltaTime;
+    }
+
+    /**
+     * Return true if the bullet is still normal and needs to be rendered
+     */
+    public boolean isNormal(){
+        return status == STATUS_NORMAL;
+    }
+
+    /**
+     * Return true if the bullet has hit the monster
+     */
+    public boolean isHitMonster(){
+        return status == STATUS_HIT_MONSTER;
+    }
+
+    /**
+     * calls when the bullet has hit the monster, it sets the status of the monster into hit
+     */
+    public void hitMonster(){
+        status = STATUS_HIT_MONSTER;
+        target.hitBullet();
     }
 
     /**
