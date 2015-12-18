@@ -21,7 +21,7 @@ public class Floor extends GameObject {
     public static final int FLOOR_TYPE_BREAKABLE = 2;
     public static final int FLOOR_STATUS_NORMAL = 0;
     public static final int FLOOR_STATUS_BREAKING = 1;
-    public static final float FLOOR_VELOCITY = 2;
+    public static final float FLOOR_VELOCITY = 4;
     public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL * 3;
 
     // private class fields
@@ -66,13 +66,13 @@ public class Floor extends GameObject {
         if (type == FLOOR_TYPE_MOVABLE) {
             this.moveBy(velocity.x * deltaTime, 0);
             // check the position of the floor
-            if (this.getX() < FLOOR_WIDTH / 2) {
+            if (this.getX() < 0) {
                 velocity.x = -velocity.x;
-                this.setX(FLOOR_WIDTH / 2);
+                //this.setX(0);
             }
-            if (this.getX() > Settings.SCREEN_WIDTH - FLOOR_WIDTH / 2) {
+            if (this.getX() > GameStage.WORLD_WIDTH - FLOOR_WIDTH) {
                 velocity.x = -velocity.x;
-                this.setX(Settings.SCREEN_WIDTH - FLOOR_WIDTH / 2);
+                //this.setX(GameStage.WORLD_WIDTH - FLOOR_WIDTH);
             }
         }
         if (status == FLOOR_STATUS_BREAKING) {

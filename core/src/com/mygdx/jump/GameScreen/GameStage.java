@@ -32,14 +32,14 @@ public class GameStage extends Stage {
      */
     public static final float WORLD_WIDTH = 12;
     public static final float WORLD_HEIGHT = 20;
-    public static final float MAX_JUMP_HEIGHT = 8;
+    public static final float MAX_JUMP_HEIGHT = 7;
     public static final float GRAVITY_ABS = 30;
     public static final float NORMAL_JUMP_VELOCITY = (float) Math.sqrt(2 * GRAVITY_ABS * MAX_JUMP_HEIGHT);
-    public static final float[] HEIGHT_INTERVAL = {0.4f,0.65f,0.8f,0.9f,1f};
+    public static final float[] HEIGHT_INTERVAL = {0.4f,0.65f,0.8f,0.95f};
     static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
-    public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 10;
+    public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 2;
 
     // class fields
     private final Doctor doctor = new Doctor();
@@ -67,7 +67,7 @@ public class GameStage extends Stage {
         OrthographicCamera camera = new OrthographicCamera(WORLD_WIDTH,WORLD_HEIGHT);
         camera.position.set(WORLD_WIDTH/2,WORLD_HEIGHT/2,0);
         FitViewport viewport =
-                new FitViewport(WORLD_WIDTH, 1000*WORLD_HEIGHT,camera);
+                new FitViewport(WORLD_WIDTH, 10000*WORLD_HEIGHT,camera);
         viewport.setScreenBounds(0,0,Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
         this.setViewport(viewport);
         mediator = media;
@@ -108,14 +108,16 @@ public class GameStage extends Stage {
 
     private void generateFloor(){
         while (floorHeight < currentHeight + WORLD_HEIGHT){
-            float floorX = rand.nextFloat() * WORLD_WIDTH;
-            float floorY = MAX_JUMP_HEIGHT;
-            int type;
-            if (level < 5){
+            float floorX = rand.nextFloat() * (WORLD_WIDTH-Floor.FLOOR_WIDTH);
+            float floorY = MAX_JUMP_HEIGHT*0.95f;
+            if (level < 4){
                 floorY *= HEIGHT_INTERVAL[level-1];
             }
+            int type = rand.nextInt(6);
+            if (type < level-2) type = Floor.FLOOR_TYPE_MOVABLE;
+            else    type = Floor.FLOOR_TYPE_STATIC;
             floorHeight += floorY;
-            Floor fl = new Floor(Floor.FLOOR_TYPE_STATIC,floorX,floorHeight);
+            Floor fl = new Floor(type,floorX,floorHeight);
             floors.add(fl);
 
         }
@@ -198,18 +200,19 @@ public class GameStage extends Stage {
      */
     public void updateCamera() {
         Camera camera = getCamera();
-        if ( camera.position.y < doctor.getY()){
-            camera.position.y = doctor.getY();
+        if ( camera.position.y < doctor.getY()+2){
+            camera.position.y = doctor.getY()+2;
             currentHeight =  camera.position.y - WORLD_HEIGHT/2;
         }
     }
 
     private void genBullet(){
-        if (mediator.isShootBullet()){
+        if (mediator.isShootBullet()&&(stateTime > 0.5f)){
             Bullet blt;
             if (monsters.size()!=0) blt = new Bullet(doctor, monsters.get(0));
             else blt = new Bullet(doctor);
             bullets.add(blt);
+            stateTime = 0;
         }
     }
 

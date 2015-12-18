@@ -72,11 +72,12 @@ public class MainMenuScreen implements Screen{
 
     private void update(float delta){
 
-        time = time + delta/3;
+        time = time + delta/2;
 
         if(button.get(0).isPressed()==true)
         {
-
+            GameScreen gameScreen = new GameScreen(game);
+            game.setScreen(gameScreen);
         }
         else if (button.get(1).isPressed()==true)
         {
@@ -172,11 +173,11 @@ public class MainMenuScreen implements Screen{
         float Dtime = (float)Math.floor(time);
           if(Dtime%2==0)
           {
-              textButton.setPosition(positionX+range*(time-Dtime),positionY);
+              textButton.setPosition(positionX+2*range*(time-Dtime-0.5f),positionY);
           }
           else
           {
-              textButton.setPosition(positionX-range*(time-Dtime),positionY);
+              textButton.setPosition(positionX-2*range*(time-Dtime-0.5f),positionY);
           }
     }
 }
