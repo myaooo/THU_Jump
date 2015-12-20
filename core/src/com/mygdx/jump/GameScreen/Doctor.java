@@ -42,7 +42,7 @@ public class Doctor extends GameObject {
     /**
      * The height of Doctor
      */
-    public static final float HEIGHT = WIDTH;
+    public static final float HEIGHT = WIDTH*13/12;
 
     // private fields
     private Animation animation_fall;   // the animation that the doctor falls
@@ -112,6 +112,8 @@ public class Doctor extends GameObject {
         stateTime += deltaTime;
     }
 
+    /**
+     * Set the X direction's velocity into MOVE_VELOCITY*/
     public void setVelocityX(int direction){
         velocity.x = direction * MOVE_VELOCITY;
     }
@@ -156,6 +158,8 @@ public class Doctor extends GameObject {
         resetTime();
     }
 
+    /**
+     * Calls when the doctor is falling (vy < 0)*/
     public void fall(){
         status = STATUS_FALL;
         current_anim = animation_fall;
@@ -198,6 +202,18 @@ public class Doctor extends GameObject {
     }
 
     /**
+     * Calls when the doctor hits an item and get the item*/
+    public void getItem(Item it){
+        this.item = it;
+    }
+
+    /**
+     * Calls when the doctor uses this item*/
+    public void useItem(){
+        item.use();
+    }
+
+    /**
      * override draw from Actor
      */
     @Override
@@ -207,6 +223,8 @@ public class Doctor extends GameObject {
                 getOriginX(), getOriginY(), // rotate and scale center x,y
                 getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
+        if (item != null)
+            item.draw(batch, parentAlpha);
 
     }
 

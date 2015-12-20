@@ -172,11 +172,11 @@ public class SettingsScreen extends ScreenAdapter {
         float Dtime = (float)Math.floor(time);
         if(Dtime%2==0)
         {
-            textButton.setPosition(positionX+range*(time-Dtime),positionY);
+            textButton.setPosition(positionX+2*range*(time-Dtime-0.5f),positionY);
         }
         else
         {
-            textButton.setPosition(positionX-range*(time-Dtime),positionY);
+            textButton.setPosition(positionX-2*range*(time-Dtime-0.5f),positionY);
         }
     }
 }

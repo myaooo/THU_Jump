@@ -45,7 +45,7 @@ public class Skin {
         MONSTER_NORMAL = new AnimatedImage(folderPath+"monster_n2.png",2,Settings.ANIMATION_INTERVAL);
         MONSTER_HOLE = new AnimatedImage(folderPath+"monster_h2.png",2,Settings.ANIMATION_INTERVAL);
         //FLOOR_WITH_SPRING = new AnimatedImage(folderPath+"floor_s2.png",2,Settings.ANIMATION_INTERVAL);
-        COIN = new AnimatedImage(folderPath+"coin.png",2,Settings.ANIMATION_INTERVAL);
+        COIN = new AnimatedImage(folderPath+"coin4.png",4,Settings.ANIMATION_INTERVAL);
 
     }
 
