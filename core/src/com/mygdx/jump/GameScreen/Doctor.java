@@ -1,10 +1,10 @@
 package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
-import com.mygdx.jump.Settings;
+
+import java.util.ArrayList;
 
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
@@ -34,7 +34,9 @@ public class Doctor extends GameObject {
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */
-    public static final float MOVE_VELOCITY = 10;
+    public static float MOVE_VELOCITY = 10;
+
+    public static final float MOVE_ACCELERATION = 30;
     /**
      * The width of Doctor
      */
@@ -52,6 +54,7 @@ public class Doctor extends GameObject {
     //private int status = STATUS_FALL; // the status of doctor inherited from object
     //private float stateTime = 0;    // a timer that stores the time
     private TextureRegion keyFrame;
+    private ArrayList<Item> itemPacakage;
     private Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
     private float maxjumpheight = 0;
@@ -73,6 +76,7 @@ public class Doctor extends GameObject {
      */
     public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
         super(GameStage.WORLD_WIDTH/2, 5f, WIDTH,HEIGHT);
+        this.setOrigin(WIDTH/2,HEIGHT/2);
         status = STATUS_FALL;
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
@@ -114,8 +118,9 @@ public class Doctor extends GameObject {
 
     /**
      * Set the X direction's velocity into MOVE_VELOCITY*/
-    public void setVelocityX(int direction){
+    public void setMoveDirection(int direction){
         velocity.x = direction * MOVE_VELOCITY;
+        if (direction != 0) this.setScale(direction,1);
     }
 
     /**
@@ -204,13 +209,18 @@ public class Doctor extends GameObject {
     /**
      * Calls when the doctor hits an item and get the item*/
     public void getItem(Item it){
-        this.item = it;
+        itemPacakage.add(it);
     }
 
     /**
      * Calls when the doctor uses this item*/
     public void useItem(){
-        item.use();
+        item.activate();
+    }
+
+    /**Calls when the item is power off*/
+    public void itemPowerOff(){
+        item.powerOff();
     }
 
     /**

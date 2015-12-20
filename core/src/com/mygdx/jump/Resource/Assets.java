@@ -95,4 +95,51 @@ public class Assets {
         return curSkin.COIN.getAnimation();
     }
 
+    public static TextureRegion getReversor(){
+        return curSkin.REVERSOR.getTextureRegion();
+    }
+
+    public static Animation getReversorAct(){
+        return curSkin.REVERSOR_ACTIVE.getAnimation();
+    }
+
+    public static TextureRegion getSpring(){
+        return curSkin.SPRING.getTextureRegion();
+    }
+
+    public static TextureRegion getSpringAct(){
+        return curSkin.SPRING_ACTIVE.getTextureRegion();
+    }
+
+    public static TextureRegion getFloater(){
+        return curSkin.FLOATER.getTextureRegion();
+    }
+
+    public static Animation getFloaterAct(){
+        return curSkin.FLOATER_ACTIVE.getAnimation();
+    }
+
+    public static TextureRegion getRocket(){
+        return curSkin.ROCKET.getTextureRegion();
+    }
+
+    public static Animation getRocketAct(){
+        return curSkin.ROCKET_ACTIVE.getAnimation();
+    }
+
+    public static TextureRegion getJumper(){
+        return curSkin.JUMPER.getTextureRegion();
+    }
+
+    public static TextureRegion getJumperAct(){
+        return curSkin.JUMPER_ACTIVE.getTextureRegion();
+    }
+
+    public static TextureRegion getShield(){
+        return curSkin.SHIELD.getTextureRegion();
+    }
+
+    public static TextureRegion getShieldAct(){
+        return curSkin.SHIELD_ACTIVE.getTextureRegion();
+    }
 }

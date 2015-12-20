@@ -32,17 +32,14 @@ public class GameScreen extends ScreenAdapter {
         this.game = inGame;
         mediator = new Mediator();
         gameStage = new GameStage(mediator);
-        status = GAME_READY;
+        status = GAME_RUNNING;
 
     }
 
     private void update(float delta){
         switch(status){
-            case GAME_READY:
-                updateReady();
-                break;
             case GAME_RUNNING:
-                updateRunning();
+                updateRunning(delta);
                 break;
             case GAME_PAUSE:
                 updatePause();
@@ -51,14 +48,22 @@ public class GameScreen extends ScreenAdapter {
                 updateOver();
                 break;
         }
-        gameStage.update(delta);
-        mediator.reset();
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-        gameStage.draw();
+        switch(status){
+            case GAME_RUNNING:
+                gameStage.draw();
+                break;
+            case GAME_PAUSE:
+                updatePause();
+                break;
+            case GAME_OVER:
+                updateOver();
+                break;
+        }
     }
 
     public void updateReady(){
@@ -67,13 +72,18 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    public void updateRunning(){
+    public void updateRunning(float delta){
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
             mediator.setLeft();
         if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
             mediator.setRight();
         if (Gdx.input.isKeyPressed(Settings.KEY_SHOOT))
             mediator.doctorShoot();
+
+        gameStage.update(delta);
+        mediator.reset();
+        if (gameStage.isGameOver())
+            status = GAME_OVER;
     }
 
     public void updatePause(){

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.jump.Settings;
 
 /**
  * AnimatedImage class, Load png files as libGDX Animation class
@@ -13,6 +14,10 @@ public class AnimatedImage {
     private Texture fullTexture;
     private TextureRegion[] keyFrames;
     private Animation animation;
+
+    public AnimatedImage(String internalPath, int num){
+        this(internalPath, num, Settings.ANIMATION_INTERVAL);
+    }
 
     public AnimatedImage(String internalPath, int num, float cycleTime) {
         if (num<1) //illegal input

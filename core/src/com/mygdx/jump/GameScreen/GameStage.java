@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
+import com.mygdx.jump.GameScreen.GameItem.Spring;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
@@ -87,8 +88,9 @@ public class GameStage extends Stage {
         updateLevel();
         if (!doctor.isHit())
             checkCollisions();
-        isGameOver();
+        updateStatus();
         stateTime += deltaTime;
+
     }
 
     /**
@@ -154,7 +156,9 @@ public class GameStage extends Stage {
      * Update Items
      */
     public void updateItems(float deltaTime) {
-
+        // generate springs
+        float rate = Spring.getRate();
+        
     }
 
     /**
@@ -172,7 +176,7 @@ public class GameStage extends Stage {
      */
     public void updateDoctor(float deltaTime) {
         int moveDirection = mediator.getDirection();
-        doctor.setVelocityX(moveDirection);
+        doctor.setMoveDirection(moveDirection);
         doctor.update(deltaTime);
     }
 
@@ -263,14 +267,19 @@ public class GameStage extends Stage {
     }
 
     /**
-     * Check whether the game is over (the doctor falls under current height) and update the status
+     * Return true if the game is over.
      */
     public boolean isGameOver() {
-//        if (doctor.getY() < currentHeight) {
-//            status = STATUS_GAME_OVER;
-//            return true;
-//        }
-        return false;
+        return status == STATUS_GAME_OVER;
+    }
+
+    /**
+     * Check whether the game is over (the doctor falls under current height) and update the status
+     */
+    public void updateStatus(){
+        if (doctor.getY() < currentHeight || doctor.isHit()) {
+            status = STATUS_GAME_OVER;
+        }
     }
 
     @Override
@@ -282,8 +291,6 @@ public class GameStage extends Stage {
         if (batch != null) {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            float w = getWidth();
-            float h = getHeight();
             batch.draw(background,0,currentHeight,WORLD_WIDTH,WORLD_HEIGHT);
             for (Floor fl:floors){
                 fl.draw(batch,1);
