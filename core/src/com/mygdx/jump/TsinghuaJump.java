@@ -8,19 +8,21 @@ import com.mygdx.jump.MenuScreen.MainMenuScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.mygdx.jump.MenuScreen.ShopScreen;
+import com.mygdx.jump.MenuScreen.StartScreen;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 public class TsinghuaJump extends Game {
-	MainMenuScreen menuScreen;
+	StartScreen startScreen;
 	@Override
 	public void create()
 	{
 		Settings.load();
 		Assets.load();
 		Settings.setScreen(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-		menuScreen = new MainMenuScreen(this);
-		setScreen(menuScreen);
+		startScreen = new StartScreen(this);
+		setScreen(startScreen);
 	}
 
 	@Override
