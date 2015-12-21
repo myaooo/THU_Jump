@@ -32,6 +32,7 @@ public class StartScreen implements Screen{
     private TsinghuaJump game;
     private Stage stage;
     private Array<Button> button;
+    private Image barimg;
 
     private float time;
 
@@ -42,6 +43,7 @@ public class StartScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         loadAssets();
     }
+//    public ProgressBar(float min, float max,float stepSize,boolean vertical,Skin skin)
 
     @Override
     // A methods that render the screen, calls whenever the screen should be rendered
@@ -52,9 +54,11 @@ public class StartScreen implements Screen{
 
     private void update(float delta){
 
-        time = time + delta;
-        if (time>=1)
-        {
+        time = time + delta/2;
+        if (time<=2) {
+            sizemove(barimg,time);
+        }
+        else{
             MainMenuScreen MainMenuScreen = new MainMenuScreen(game);
             game.setScreen(MainMenuScreen);
         }
@@ -87,11 +91,22 @@ public class StartScreen implements Screen{
 
     private void loadAssets(){
         //background picture
-        Texture logo = new Texture(Gdx.files.internal("data/qinghuayuan.jpg"));
+        Texture logo = new Texture(Gdx.files.internal("data/startscreen/qinghuayuan.jpg"));
         Image image = new Image(new TextureRegionDrawable( new TextureRegion(logo) ));
         image.setSize(480,800);
         stage.addActor(image);
 
+        Texture platform = new Texture(Gdx.files.internal("data/startscreen/platform.png"));
+        Image platformimg = new Image(new TextureRegionDrawable( new TextureRegion(platform) ));
+        platformimg.setSize(220,40);
+        platformimg.setPosition(135, 195);
+        stage.addActor(platformimg);
+
+        Texture bar = new Texture(Gdx.files.internal("data/startscreen/bar.png"));
+        barimg = new Image(new TextureRegionDrawable( new TextureRegion(bar) ));
+        barimg.setSize(210,30);
+        barimg.setPosition(140,200);
+        stage.addActor(barimg);
 
         //labels
         BitmapFont font1 =
@@ -101,5 +116,10 @@ public class StartScreen implements Screen{
         Label label = new Label("Tsinghua Jump",ls);
         label.setColor(0f,1f,0f,1f);
         label.setPosition((480-label.getWidth())/2,600);
+    }
+
+    private void sizemove(Image barimage,float length)
+    {
+            barimage.setSize(210*(length/2),30);
     }
 }
