@@ -86,4 +86,8 @@ public class Item extends GameObject {
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
     }
 
+    public boolean checkHitDoctor(Doctor doc){
+        return false;
+    }
+
 }

@@ -9,16 +9,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.GameScreen.GameItem.Spring;
 import com.mygdx.jump.Resource.Assets;
+import com.mygdx.jump.Resource.Font;
 import com.mygdx.jump.Settings;
 
 // This is a class that contains all the objects in a game
@@ -39,6 +44,7 @@ public class GameStage extends Stage {
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
     public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 2;
+    final static String SCORE = "SCORE: ";
 
     // class fields
     private final Doctor doctor = new Doctor();
@@ -56,7 +62,8 @@ public class GameStage extends Stage {
     private Random rand = new Random();
     private TextureRegion background;
     private float stateTime = 0;
-
+    private String scoreString;
+    private Label scoreLabel;
     private Mediator mediator;
 
     /**
@@ -72,7 +79,24 @@ public class GameStage extends Stage {
         mediator = media;
         initializeFloor();
         background = Assets.getBackground();
+        addScoreLabel();
+    }
 
+    /**Several public get functions*/
+
+    /**get Score*/
+    public int getScore(){
+        return score;
+    }
+
+    /**get Height*/
+    public float getHeight(){
+        return currentHeight;
+    }
+
+    /**get coins*/
+    public int getCoins(){
+        return coins;
     }
 
     /**
@@ -85,12 +109,14 @@ public class GameStage extends Stage {
         updateMonsters(deltaTime);
         updateItems(deltaTime);
         updateBullets(deltaTime);
-        updateLevel();
         if (!doctor.isHit())
             checkCollisions();
         updateStatus();
         stateTime += deltaTime;
-
+        while (floorHeight < currentHeight + WORLD_HEIGHT) {
+            generateFloor();
+            genItem();
+        }
     }
 
     /**
@@ -107,7 +133,6 @@ public class GameStage extends Stage {
     }
 
     private void generateFloor(){
-        while (floorHeight < currentHeight + WORLD_HEIGHT){
             float floorX = rand.nextFloat() * (WORLD_WIDTH-Floor.FLOOR_WIDTH);
             float floorY = MAX_JUMP_HEIGHT*0.95f;
             if (level < 4){
@@ -119,8 +144,6 @@ public class GameStage extends Stage {
             floorHeight += floorY;
             Floor fl = new Floor(type,floorX,floorHeight);
             floors.add(fl);
-
-        }
     }
 
     /**
@@ -138,7 +161,6 @@ public class GameStage extends Stage {
                 len--;
             }
         }
-        generateFloor();
     }
 
     /**
@@ -156,9 +178,16 @@ public class GameStage extends Stage {
      * Update Items
      */
     public void updateItems(float deltaTime) {
-        // generate springs
-        float rate = Spring.getRate();
-        
+        int len = items.size();
+        for (int i = 0; i < len; ++i) {
+            Item it = items.get(i);
+            it.update(deltaTime);
+            if (it.getY() < currentHeight) {
+                // the floor is broken and should be removed.
+                floors.remove(it);
+                len--;
+            }
+        }
     }
 
     /**
@@ -169,6 +198,7 @@ public class GameStage extends Stage {
             level++;
             next_level_height *= 2;
         }
+        score = (int) currentHeight*2;
     }
 
     /**
@@ -205,6 +235,9 @@ public class GameStage extends Stage {
         if ( camera.position.y < doctor.getY()+2){
             camera.position.y = doctor.getY()+2;
             currentHeight =  camera.position.y - WORLD_HEIGHT/2;
+            //
+            updateLevel();
+            //scoreLabel.setPosition(0,currentHeight+3f);
         }
     }
 
@@ -218,19 +251,51 @@ public class GameStage extends Stage {
         }
     }
 
+    private void genItem(){
+        // generate springs
+        float rate = Spring.getRate();
+        if (rand.nextFloat() < rate) genSpring();
+    }
+
+    private void genSpring(){
+        Floor fl = floors.get(floors.size()-1);
+        Spring spr = new Spring(fl);
+        items.add(spr);
+    }
+
+    private void genJumper(){
+
+    }
+
+    private void genReversor(){
+
+    }
+
+    private void genRocket(){
+
+    }
+
+    private void genShield(){
+
+    }
+    private void genFloater(){
+
+    }
+
     /**
      * Check all kinds of collisions
      */
     public void checkCollisions(){
-        isHittingFloor();
-        isHittingMonster();
+        checkHittingFloor();
+        checkHittingMonster();
+        checkHittingItem();
     }
 
 
     /**
      * Check whether doctor hits a floor and update doctor and floor status
      */
-    public boolean isHittingFloor() {
+    public boolean checkHittingFloor() {
         if (!doctor.isFalling())
             return false;
         for (Floor fl : floors) {
@@ -250,12 +315,12 @@ public class GameStage extends Stage {
     /**
      * Check whether doctor hits a monster and update doctor status
      */
-    public boolean isHittingMonster() {
+    public boolean checkHittingMonster() {
         if (doctor.isShielded())
             // the doctor is shielded
             return false;
         for (Monster mst : monsters) {
-            if (doctor.getY() > mst.getY()) {
+            if (doctor.getY() > mst.getTop()) {
                 if (doctor.overlaps(mst)) {
                     // doctor hit a floor
                     doctor.hitMonster();
@@ -264,6 +329,17 @@ public class GameStage extends Stage {
             }
         }
         return false;
+    }
+
+    public void checkHittingItem(){
+        for (Item it: items){
+            if (it.checkHitDoctor(doctor)) {
+                it.hitDoctor(doctor);
+                if (it.isUsable()){
+                    doctor.getItem(it);
+                }
+            }
+        }
     }
 
     /**
@@ -305,7 +381,23 @@ public class GameStage extends Stage {
                 blt.draw(batch,1);
             }
             doctor.draw(batch,1);
+            scoreLabel.draw(batch,1);
             batch.end();
         }
+    }
+
+    public void drawScore(Batch batch){
+        Assets.defaultFont.draw(batch,SCORE+score,6f,12f);
+    }
+
+    public void addScoreLabel(){
+        BitmapFont font1 = Assets.getDefaultFont();
+        Label.LabelStyle ls = new Label.LabelStyle(font1, Color.YELLOW);
+        scoreLabel = new Label("Tsinghua Jump",ls);
+        scoreLabel.setAlignment(Align.center);
+        scoreLabel.setColor(0f,1f,0f,1f);
+        scoreLabel.setFontScale(0.02f);
+        scoreLabel.setPosition(0,12);
+
     }
 }

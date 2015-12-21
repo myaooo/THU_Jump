@@ -21,6 +21,7 @@ public class GameScreen extends ScreenAdapter {
     final static int GAME_OVER = 2;
     final static int GAME_PAUSE = 3;
 
+
     // private class fields
     private GameStage gameStage;
     private TsinghuaJump game;
@@ -58,17 +59,11 @@ public class GameScreen extends ScreenAdapter {
                 gameStage.draw();
                 break;
             case GAME_PAUSE:
-                updatePause();
+                //
                 break;
             case GAME_OVER:
-                updateOver();
+                //
                 break;
-        }
-    }
-
-    public void updateReady(){
-        if (Gdx.input.justTouched()) {
-            status = GAME_RUNNING;
         }
     }
 

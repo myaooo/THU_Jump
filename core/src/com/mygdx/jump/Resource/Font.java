@@ -3,6 +3,7 @@ package com.mygdx.jump.Resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -68,14 +69,14 @@ public class Font {
     /** simple font draw function
      * @see #draw(SpriteBatch, String, float, float, int, int, float, int, boolean)
      * */
-    public void draw(SpriteBatch spriteBatch, String str, float x, float y) {
+    public void draw(Batch spriteBatch, String str, float x, float y) {
         font.draw(spriteBatch, str, x, y);// + font.getBounds(str).height);
     }
 
     /** a font draw function with alignment
      * @see #draw(SpriteBatch, String, float, float, int, int, float, int, boolean)
      * */
-    public void draw(SpriteBatch spriteBatch, String str, float x, float y, int hAlign) {
+    public void draw(Batch spriteBatch, String str, float x, float y, int hAlign) {
         font.draw(spriteBatch, str, x, y, 0, hAlign, false);
     }
 
@@ -90,7 +91,7 @@ public class Font {
      * @param hAlign Horizontal alignment of the text. Possible values are: bottom, bottomLeft, bottomRight, center, left, right, top, topRight, topLeft
      * @param wrap If true, the text will be wrapped within targetWidth.
      * */
-    public void draw(SpriteBatch spriteBatch,
+    public void draw(Batch spriteBatch,
                      String str,
                      float x,
                      float y,

@@ -1,6 +1,8 @@
 package com.mygdx.jump.Resource;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class Assets {
     // GameScreen Assets
     ////////////////
     public static Image BULLET;
+    public static Font defaultFont;
     /*
     Other Assets here
      */
@@ -40,6 +43,7 @@ public class Assets {
         //curSkin = skin;
         // load other data
         BULLET = new Image("data/bullet.png");
+        defaultFont = new Font("data/3.ttf",50, Color.BLACK);
     }
 
     public static Animation getDoctorJumpAnim(){
@@ -141,5 +145,9 @@ public class Assets {
 
     public static TextureRegion getShieldAct(){
         return curSkin.SHIELD_ACTIVE.getTextureRegion();
+    }
+
+    public static BitmapFont getDefaultFont(){
+        return defaultFont.getFont();
     }
 }

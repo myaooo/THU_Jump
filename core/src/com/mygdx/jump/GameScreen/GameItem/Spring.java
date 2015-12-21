@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.jump.GameScreen.Doctor;
 import com.mygdx.jump.GameScreen.Floor;
+import com.mygdx.jump.GameScreen.GameObject;
 import com.mygdx.jump.Resource.Assets;
 
 /**
@@ -15,7 +16,7 @@ public class Spring extends Item{
     // active
     private TextureRegion activeTexture;
 
-    Spring(Floor floor){
+    public Spring(Floor floor){
         super(floor);
         keyFrame = Assets.getSpring();
         activeTexture = Assets.getSpringAct();
@@ -24,17 +25,25 @@ public class Spring extends Item{
     @Override
     public void hitDoctor(Doctor doc){
         super.hitDoctor(doc);
-
+        activate();
     }
 
     @Override
     public void activate(){
         keyFrame = activeTexture;
-        this.doctor.setVelocity(0,2*doctor.JUMP_VELOCITY);
+        this.doctor.setVelocity(0,2.5f*doctor.JUMP_VELOCITY);
     }
 
     public static float getRate(){
         return GENERATE_RATE;
+    }
+
+    @Override
+    public boolean checkHitDoctor(Doctor doctor){
+        if (doctor.isFalling() && doctor.getY() > this.getY()){
+            return doctor.overlaps(this);
+        }
+        return false;
     }
 
 }
