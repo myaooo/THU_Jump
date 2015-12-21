@@ -12,6 +12,10 @@ public class Coin extends GameObject {
 
     public static final float WIDTH = 0.5f;
     public static final float HEIGHT = 0.5f;
+    public static final int STATUS_UNTOUCHED = 0;
+    public static final int STATUS_TOUCHED = 1;
+    public static final int VALUE = 10;
+    public static final float RATE = 0.1f;
 
     private Animation animation;
     private TextureRegion keyFrame;
@@ -19,6 +23,7 @@ public class Coin extends GameObject {
 
     public Coin(float x, float y){
         super(x,y,WIDTH,HEIGHT);
+        status = STATUS_UNTOUCHED;
         animation = Assets.getCoin();
         keyFrame = animation.getKeyFrame(stateTime, true);
     }
@@ -40,5 +45,9 @@ public class Coin extends GameObject {
                 getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
 
+    }
+
+    public void hitDoctor(){
+        status = STATUS_TOUCHED;
     }
 }

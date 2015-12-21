@@ -2,6 +2,15 @@ package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.mygdx.jump.MenuScreen.MainMenuScreen;
+import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
 
@@ -24,6 +33,7 @@ public class GameScreen extends ScreenAdapter {
 
     // private class fields
     private GameStage gameStage;
+    private Stage overStage;
     private TsinghuaJump game;
     private int status;
     private Mediator mediator;
@@ -37,6 +47,15 @@ public class GameScreen extends ScreenAdapter {
 
     }
 
+    /**Initializing*/
+    private void initialize(){
+        overStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
+        Label.LabelStyle ls = new Label.LabelStyle(Assets.defaultFont.getFont(), Color.WHITE);
+        Label scoreLabel = new Label("SCORE:", ls);
+    }
+
+
+    /**Calls before rendering*/
     private void update(float delta){
         switch(status){
             case GAME_RUNNING:
@@ -62,7 +81,7 @@ public class GameScreen extends ScreenAdapter {
                 //
                 break;
             case GAME_OVER:
-                //
+                gameStage.draw();
                 break;
         }
     }
@@ -77,8 +96,10 @@ public class GameScreen extends ScreenAdapter {
 
         gameStage.update(delta);
         mediator.reset();
-        if (gameStage.isGameOver())
+        if (gameStage.isGameOver()) {
             status = GAME_OVER;
+            gameStage.GameOver();
+        }
     }
 
     public void updatePause(){
@@ -86,7 +107,8 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void updateOver(){
-
+        if (Gdx.input.isTouched())
+            game.setScreen(new MainMenuScreen(game));
     }
 
     @Override
@@ -97,7 +119,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose(){
-
+        gameStage.dispose();
     }
 
     @Override

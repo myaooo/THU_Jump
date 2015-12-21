@@ -1,6 +1,7 @@
 package com.mygdx.jump;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * A class settings that contains many modifiable settings of the game
@@ -19,7 +20,8 @@ public class Settings {
     public static final String settingsfile = ".settings";
 
     // Constant fields
-
+    public static final Color myGoldYellow = new Color(1, 222/255f,0,1);
+    public static final Color myDarkBlue = new Color(0f,0.3f,0.5f,0.9f);
 
     // Keys
     public static int KEY_LEFT = Keys.LEFT;

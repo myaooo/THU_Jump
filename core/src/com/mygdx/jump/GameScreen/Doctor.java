@@ -154,13 +154,20 @@ public class Doctor extends GameObject {
     /**
      * Calls when the doctor hits a floor
      */
-    public void hitFloor() {
-        // change status, current_animation, and y velocity
-        status = STATUS_JUMP;
-        current_anim = animation_jump;
-        velocity.y = JUMP_VELOCITY;
-        // resetTime;
-        resetTime();
+    public boolean hitFloor(Floor fl) {
+        if (this.overlaps(fl)) {
+            // change status, current_animation, and y velocity
+            fl.hitDoctor();
+            if (fl.isBreakable())
+                return false;
+            status = STATUS_JUMP;
+            current_anim = animation_jump;
+            velocity.y = JUMP_VELOCITY;
+            // resetTime;
+            resetTime();
+            return true;
+        }
+        return false;
     }
 
     /**

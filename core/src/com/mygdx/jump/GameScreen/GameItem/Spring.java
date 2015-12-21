@@ -32,7 +32,7 @@ public class Spring extends Item{
     public void activate(){
         keyFrame = activeTexture;
         this.doctor.setVelocity(0,2.5f*doctor.JUMP_VELOCITY);
-    }
+}
 
     public static float getRate(){
         return GENERATE_RATE;

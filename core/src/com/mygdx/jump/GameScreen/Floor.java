@@ -16,46 +16,23 @@ public class Floor extends GameObject {
     // static fields
     public static final float FLOOR_WIDTH = 2;
     public static final float FLOOR_HEIGHT = 0.5f;
-    public static final int FLOOR_TYPE_STATIC = 0;
-    public static final int FLOOR_TYPE_MOVABLE = 1;
-    public static final int FLOOR_TYPE_BREAKABLE = 2;
-    public static final int FLOOR_STATUS_NORMAL = 0;
-    public static final int FLOOR_STATUS_BREAKING = 1;
+
     public static final float FLOOR_VELOCITY = 4;
-    public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL * 3;
 
     // private class fields
     private int type;
     //private int status;
     //private float stateTime;
-    private TextureRegion keyFrame;
-    private Animation imageBreak = null;
+    protected TextureRegion keyFrame;
 
     /**
      * Constructor, input floor type, and its position x,y
      */
-    public Floor(int itype, float x, float y) {
+    public Floor(float x, float y) {
         super(x, y, FLOOR_WIDTH, FLOOR_HEIGHT);
-        type = itype;
-        status = FLOOR_STATUS_NORMAL;
         stateTime = 0;
-        switch (type) {
-            case FLOOR_TYPE_STATIC:
-                keyFrame= Assets.getFloorNorm();
-                velocity.set(0, 0);
-                break;
-            case FLOOR_TYPE_MOVABLE:
-                keyFrame= Assets.getFloorMov();
-                velocity.set(FLOOR_VELOCITY, 0);
-                break;
-            case FLOOR_TYPE_BREAKABLE:
-                keyFrame= Assets.getFloorBreakable();
-                imageBreak = Assets.getFloorBreaking();
-                velocity.set(0, 0);
-            default:
-                break;
-        }
-        //keyFrame = keyFrame.getTextureRegion();
+        keyFrame= Assets.getFloorNorm();
+        velocity.set(0, 0);
     }
 
     /**
@@ -63,21 +40,6 @@ public class Floor extends GameObject {
      */
     @Override
     public void update(float deltaTime) {
-        if (type == FLOOR_TYPE_MOVABLE) {
-            this.moveBy(velocity.x * deltaTime, 0);
-            // check the position of the floor
-            if (this.getX() < 0) {
-                velocity.x = -velocity.x;
-                //this.setX(0);
-            }
-            if (this.getX() > GameStage.WORLD_WIDTH - FLOOR_WIDTH) {
-                velocity.x = -velocity.x;
-                //this.setX(GameStage.WORLD_WIDTH - FLOOR_WIDTH);
-            }
-        }
-        if (status == FLOOR_STATUS_BREAKING) {
-            keyFrame = imageBreak.getKeyFrame(stateTime, false);
-        }
         stateTime += deltaTime;
     }
 
@@ -94,33 +56,21 @@ public class Floor extends GameObject {
 
     }
 
-    /**
-     * Calls when the floor is broken
-     */
-    public void floorBreak() {
-        status = FLOOR_STATUS_BREAKING;
-        stateTime = 0;
-    }
+    /**Hit by a doctor*/
+    public void hitDoctor(){}
 
     /**
      * return true if the floor type is breakable
      */
     public boolean isBreakable() {
-        return type == FLOOR_TYPE_BREAKABLE;
+        return false;
     }
 
     /**
      * return true if the floor is broken and needs to be deleted
      */
     public boolean isBroken() {
-        return status == FLOOR_STATUS_BREAKING && stateTime > FLOOR_BREAKING_TIME;
-    }
-
-    /**
-     * return true if the floor is now breaking
-     */
-    public boolean isBreaking() {
-        return status == FLOOR_STATUS_BREAKING;
+        return false;
     }
 
 }

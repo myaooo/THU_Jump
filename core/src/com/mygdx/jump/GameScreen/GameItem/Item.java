@@ -24,6 +24,7 @@ public class Item extends GameObject {
     static public final float STATIC_HEIGHT = 1f;
     // class fields
     protected Doctor doctor = null;
+    protected Floor attachedFloor;
     protected TextureRegion keyFrame;
     protected boolean usable = false;
 
@@ -37,6 +38,7 @@ public class Item extends GameObject {
 
     public Item(Floor floor, float width, float height){
         super(floor.getX(Align.center)-width/2, floor.getTop(),width, height);
+        attachedFloor = floor;
         status = STATUS_UNTOUCHED;
     }
 
@@ -75,6 +77,17 @@ public class Item extends GameObject {
     /**The item is powered off*/
     public void powerOff(){
         status = STATUS_POWER_OFF;
+    }
+
+    /**Update function*/
+    @Override
+    public void update(float delta){
+        if (isUsable() && doctor != null){
+            // the item is usable and is currently hold by a doctor
+            return;
+        }
+        // update the position of the item
+        this.setPosition(attachedFloor.getX(Align.center)-getWidth()/2, attachedFloor.getTop());
     }
 
     @Override

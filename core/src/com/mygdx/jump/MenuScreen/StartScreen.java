@@ -53,7 +53,7 @@ public class StartScreen implements Screen{
     private void update(float delta){
 
         time = time + delta;
-        if (time>=3)
+        if (time>=1)
         {
             MainMenuScreen MainMenuScreen = new MainMenuScreen(game);
             game.setScreen(MainMenuScreen);
