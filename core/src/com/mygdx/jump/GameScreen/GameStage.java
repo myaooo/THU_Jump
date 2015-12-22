@@ -38,7 +38,7 @@ public class GameStage extends Stage {
     public static final float NORMAL_JUMP_VELOCITY = (float) Math.sqrt(2 * GRAVITY_ABS * MAX_JUMP_HEIGHT);
 
     // GAME PARAMETERS
-    public static final float[] HEIGHT_INTERVAL = {0.4f,0.6f,0.75f,0.85f,0.95f};
+    public static final float[] HEIGHT_INTERVAL = {0.5f,0.6f,0.7f,0.8f,0.9f};
     static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 3;
     public static float SHOOTING_SPEED = 0.5f;  // shooting speed of the doctor
@@ -50,7 +50,7 @@ public class GameStage extends Stage {
     // OTHER CONSTANTS
     final static String SCORE = "SCORE ";
     final static String COIN = "COIN ";
-    final static int SCORE_SCALE = 5;
+    final static int SCORE_SCALE = 10;
 
     // class fields
     private final Doctor doctor = new Doctor();
@@ -287,10 +287,8 @@ public class GameStage extends Stage {
         // Randomize floor's type
         float toll = rand.nextFloat();
         if (toll < FloorBreakable.RATE_BASE){   // Breakable Floor
-            FloorBreakable fl = new FloorBreakable(floorX,floorY+2);
+            FloorBreakable fl = new FloorBreakable(rand.nextFloat()*(WORLD_WIDTH-Floor.FLOOR_WIDTH),floorY-2*rand.nextFloat()+1);
             floors.add(fl);
-            generateFloor();
-            return;
         }
         toll = rand.nextFloat();
         if (toll < (level < 6?(level - 2):4) * FloorMovable.RATE_BASE){   // Movable Floor
