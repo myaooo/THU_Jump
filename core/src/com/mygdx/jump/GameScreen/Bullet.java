@@ -3,7 +3,7 @@ package com.mygdx.jump.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
-import com.mygdx.jump.GameScreen.GameObject;
+import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.Resource.Assets;
 
 /**
@@ -78,9 +78,11 @@ public class Bullet extends GameObject {
     /**
      * calls when the bullet has hit the monster, it sets the status of the monster into hit
      */
-    public void hitMonster(){
-        status = STATUS_HIT_MONSTER;
-        target.hitBullet();
+    public void checkHitMonster(Monster mst){
+        if (this.overlaps(mst)) {
+            status = STATUS_HIT_MONSTER;
+            target.hitBullet();
+        }
     }
 
     /**

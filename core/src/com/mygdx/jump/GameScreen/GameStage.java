@@ -22,6 +22,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.GameScreen.GameItem.Spring;
+import com.mygdx.jump.GameScreen.Monster.Monster;
+import com.mygdx.jump.GameScreen.Monster.MonsterBoss;
+import com.mygdx.jump.GameScreen.Monster.MonsterHole;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
@@ -62,6 +65,7 @@ public class GameStage extends Stage {
     public int score = 0;
     //public float currentHeight = 0;
     public float floorHeight = 0;
+    public float monsterHeight = 0;
     public int level = 1;
     public float next_level_height = HEIGHT_LEVEL_BASE;
     //public int coins = 0;
@@ -150,7 +154,11 @@ public class GameStage extends Stage {
         int len = monsters.size();
         for(int i = 0; i < len; ++i){
             Monster ms = monsters.get(i);
-            // do updates here;
+            ms.update(deltaTime);
+            if (ms.isDied()) {
+                monsters.remove(ms);
+                len--;
+            }
         }
     }
 
@@ -175,8 +183,7 @@ public class GameStage extends Stage {
      */
     public void updateDoctor(float deltaTime) {
         int moveDirection = mediator.getDirection();
-        doctor.setMoveDirection(moveDirection);
-        doctor.update(deltaTime);
+        doctor.update(deltaTime, moveDirection);
     }
 
     /**
@@ -254,6 +261,7 @@ public class GameStage extends Stage {
     protected void generateObjects(){
         while (floorHeight < getCurrentHeight() + WORLD_HEIGHT) {
             generateFloor();
+            genMonster();
             genItem();
             genCoin();
         }
@@ -303,15 +311,44 @@ public class GameStage extends Stage {
         }
     }
 
+    /**Generate Monster, calls when the currentHeight has been updated*/
+    private void genMonster(){
+        if (monsterHeight + 20 < getCurrentHeight()) {
+            float toll = rand.nextFloat();
+            if (toll < 0.05f){
+                float X = rand.nextFloat()*(WORLD_WIDTH-Monster.MONSTER_WIDTH);
+                if (toll < 0.01f) {
+                    MonsterBoss mstBoss = new MonsterBoss(X, getCurrentHeight() + WORLD_HEIGHT);
+                    monsters.add(mstBoss);
+                }
+                else if (toll < 0.02f){
+                    MonsterHole mst = new MonsterHole(X, getCurrentHeight() + WORLD_HEIGHT);
+                    monsters.add(mst);
+                }
+                else{
+                    Monster mst = new Monster(X, getCurrentHeight() + WORLD_HEIGHT, rand.nextFloat()>0.5f);
+                    monsters.add(mst);
+                }
+                monsterHeight = monsters.get(monsters.size()-1).getY();
+            }
+        }
+    }
+
     /**Generate Bullet, calls when the doctor shot a bullet*/
     private void genBullet(){
         // in case that the doctor shoot bullet too quickly
         if (mediator.isShootBullet()&&(stateTime > SHOOTING_SPEED)){
+            stateTime = 0; // reset time
             Bullet blt;
-            if (monsters.size()!=0) blt = new Bullet(doctor, monsters.get(0));
-            else blt = new Bullet(doctor);
+            for (Monster ms:monsters) {
+                if (ms.isShootable()) {
+                    blt = new Bullet(doctor, monsters.get(0));
+                    bullets.add(blt);
+                    return;
+                }
+            }
+            blt = new Bullet(doctor);
             bullets.add(blt);
-            stateTime = 0;
         }
     }
 
@@ -380,13 +417,8 @@ public class GameStage extends Stage {
             // the doctor is shielded
             return false;
         for (Monster mst : monsters) {
-            if (doctor.getY() > mst.getTop()) {
-                if (doctor.overlaps(mst)) {
-                    // doctor hit a floor
-                    doctor.hitMonster();
-                    return true;
-                }
-            }
+            if(mst.checkHitDoctor(doctor))
+                return true;
         }
         return false;
     }
@@ -420,7 +452,7 @@ public class GameStage extends Stage {
      * Check whether the game is over (the doctor falls under current height) and update the status
      */
     public void updateStatus(){
-        if (doctor.getTop() < getCurrentHeight() || doctor.isHit()) {
+        if (doctor.getTop() < getCurrentHeight() || doctor.isDied()) {
             status = STATUS_GAME_OVER;
         }
     }

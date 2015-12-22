@@ -29,6 +29,7 @@ public class Doctor extends GameObject {
      * This value means that Doctor just get hit by a monster
      */
     public static final int STATUS_HIT = 2;
+
     /**
      * The jumping velocity of Doctor. max_v = sqrt(2*g*h)
      */
@@ -68,7 +69,8 @@ public class Doctor extends GameObject {
     // public fields
     public float currentHeight = 0;
     public int coins = 0;
-
+    public float updateScale = 0;
+    public float updateRotate = 10;
     // methods
 
     /**
@@ -108,13 +110,12 @@ public class Doctor extends GameObject {
     /**
      * Update Function, calls before draw
      */
-    @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime, int moveDirection) {
+        updateScale();
         // update velocity
+        if (!isHit())
+            setMoveDirection(moveDirection);
         this.velocity.add(acceleration.x*deltaTime,acceleration.y*deltaTime);
-        if (!isFalling() && velocity.y<0) {
-            fall();
-        }
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         // check for illegal X position
@@ -122,6 +123,9 @@ public class Doctor extends GameObject {
         if (getX() > XMax) this.setX(XMin);
         keyFrame = current_anim.getKeyFrame(stateTime, true);
         stateTime += deltaTime;
+        if (isJump() && velocity.y<0) {
+            fall();
+        }
     }
 
     /**
@@ -159,10 +163,20 @@ public class Doctor extends GameObject {
         return status == STATUS_HIT;
     }
 
+    public boolean isJump(){
+        return status == STATUS_JUMP;
+    }
+
+    public boolean isDied(){
+        return isHit() && stateTime > 0.5f;
+    }
+
     /**
      * Calls when the doctor hits a floor
      */
     public boolean hitFloor(Floor fl) {
+        if (!this.isFalling())
+            return false;
         if (this.overlaps(fl)) {
             // change status, current_animation, and y velocity
             fl.hitDoctor();
@@ -257,6 +271,13 @@ public class Doctor extends GameObject {
 
     public boolean isLowerCurrentHeight(){
         return this.getY() < currentHeight;
+    }
+
+    private void updateScale(){
+        if (isHit()) {
+            this.scaleBy(updateScale);
+            this.rotateBy(updateRotate);
+        }
     }
 
 }

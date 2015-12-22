@@ -31,8 +31,7 @@ public class Floor extends GameObject {
     public Floor(float x, float y) {
         super(x, y, FLOOR_WIDTH, FLOOR_HEIGHT);
         stateTime = 0;
-        keyFrame= Assets.getFloorNorm();
-        velocity.set(0, 0);
+        keyFrame = Assets.getFloorNorm();
     }
 
     /**
