@@ -115,15 +115,16 @@ public class GameStage extends Stage {
      * Update
      */
     public void update(float deltaTime) {
-        updateHeights();
+        updateHeights(deltaTime);
         updateDoctor(deltaTime);
         updateFloors(deltaTime);
         updateMonsters(deltaTime);
         updateItems(deltaTime);
         updateBullets(deltaTime);
         updateCoins(deltaTime);
-        if (!doctor.isHit())
+        if (!doctor.isHit()) {
             checkCollisions();
+        }
         updateStatus();
         // generate objects
         generateObjects();
@@ -139,7 +140,7 @@ public class GameStage extends Stage {
         for (int i = 0; i < len; ++i) {
             Floor fli = floors.get(i);
             fli.update(deltaTime);
-            if (fli.isBroken()) {
+            if (fli.isBroken() || fli.getTop() < getCurrentHeight()) {
                 // the floor is broken and should be removed.
                 floors.remove(fli);
                 len--;
@@ -216,7 +217,7 @@ public class GameStage extends Stage {
 
 
     /**Calls when height changed*/
-    protected void updateHeights(){
+    protected void updateHeights(float deltaTime){
         if ( camera.position.y < doctor.getY()+2){
             updateCamera();
             updateLevelAndLabel();

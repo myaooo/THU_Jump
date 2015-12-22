@@ -77,12 +77,25 @@ public class Monster extends GameObject {
 
     public boolean checkHitDoctor(Doctor doctor){
         if (!doctor.isHit() && this.overlaps(doctor)) {
-            hitDoctor(doctor);
-            return true;
+            {
+                hitDoctor(doctor);
+                return true;
+            }
         }
         return false;
     }
 
+    public boolean overlaps(Doctor doctor){
+        float x1 = getX()+getWidth()*0.15f;
+        float x2 = x1 + getWidth()*0.7f;
+        float y1 = getY() +getHeight()*0.15f;
+        float y2 = y1 + getHeight()*0.7f;
+        float _x1 = doctor.getX();
+        float _x2 = _x1 + doctor.getWidth();
+        float _y1 = doctor.getY();
+        float _y2 = _y1 + doctor.getHeight();
+        return x1 < _x2 && _x1 < x2 && y1 < _y2 && _y1 < y2;
+    }
     protected void hitDoctor(Doctor doctor){
         doctor.hitMonster();
         doctor.setAcceleration(0,0);

@@ -1,5 +1,6 @@
 package com.mygdx.jump.GameScreen.Monster;
 
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.jump.GameScreen.Doctor;
 import com.mygdx.jump.Resource.Assets;
 
@@ -22,7 +23,10 @@ public class MonsterHole extends Monster {
     @Override
     protected void hitDoctor(Doctor doctor){
         doctor.hitMonster();
-        doctor.updateScale = -0.05f;
+        doctor.updateScale = -1f;
         doctor.updateRotate = 20;
+        doctor.setVelocity(0,0);
+        doctor.setAcceleration(0,0);
+        doctor.setOrigin(Align.center);
     }
 }

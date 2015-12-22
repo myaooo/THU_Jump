@@ -111,13 +111,14 @@ public class Doctor extends GameObject {
      * Update Function, calls before draw
      */
     public void update(float deltaTime, int moveDirection) {
-        updateScale();
+        updateScale(deltaTime);
+        // update position
+        this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         // update velocity
         if (!isHit())
             setMoveDirection(moveDirection);
         this.velocity.add(acceleration.x*deltaTime,acceleration.y*deltaTime);
-        // update position
-        this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
+
         // check for illegal X position
         if (getX() < XMin)  this.setX(XMax);
         if (getX() > XMax) this.setX(XMin);
@@ -168,29 +169,31 @@ public class Doctor extends GameObject {
     }
 
     public boolean isDied(){
-        return isHit() && stateTime > 0.5f;
+        return isHit() && stateTime > 1f;
     }
 
     /**
      * Calls when the doctor hits a floor
      */
     public boolean hitFloor(Floor fl) {
-        if (!this.isFalling())
-            return false;
         if (this.overlaps(fl)) {
             // change status, current_animation, and y velocity
             fl.hitDoctor();
             jumpsound.play(1.0f);
             if (fl.isBreakable())
                 return false;
-            status = STATUS_JUMP;
-            current_anim = animation_jump;
-            velocity.y = JUMP_VELOCITY;
-            // resetTime;
-            resetTime();
+            jump(JUMP_VELOCITY);
             return true;
         }
         return false;
+    }
+
+    /**Calls when doctor jumps*/
+    public void jump(float jumpVelocity){
+        status = STATUS_JUMP;
+        current_anim = animation_jump;
+        velocity.y = jumpVelocity;
+        resetTime();
     }
 
     /**
@@ -273,9 +276,9 @@ public class Doctor extends GameObject {
         return this.getY() < currentHeight;
     }
 
-    private void updateScale(){
+    private void updateScale(float deltaTime){
         if (isHit()) {
-            this.scaleBy(updateScale);
+            this.scaleBy(updateScale*deltaTime);
             this.rotateBy(updateRotate);
         }
     }

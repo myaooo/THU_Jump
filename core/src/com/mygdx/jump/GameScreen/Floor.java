@@ -15,7 +15,7 @@ public class Floor extends GameObject {
 
     // static fields
     public static final float FLOOR_WIDTH = 2;
-    public static final float FLOOR_HEIGHT = 0.5f;
+    public static final float FLOOR_HEIGHT = 0.8f;
 
     public static final float FLOOR_VELOCITY = 4;
 
@@ -39,7 +39,7 @@ public class Floor extends GameObject {
      */
     @Override
     public void update(float deltaTime) {
-        stateTime += deltaTime;
+        //stateTime += deltaTime;
     }
 
     /**

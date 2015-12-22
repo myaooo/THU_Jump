@@ -31,7 +31,7 @@ public class Spring extends Item{
     @Override
     public void activate(){
         keyFrame = activeTexture;
-        this.doctor.setVelocity(0,2.5f*doctor.JUMP_VELOCITY);
+        this.doctor.jump(2f*doctor.JUMP_VELOCITY);
 }
 
     public static float getRate(){

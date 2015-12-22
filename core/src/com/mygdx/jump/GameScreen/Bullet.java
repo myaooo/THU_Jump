@@ -21,7 +21,7 @@ public class Bullet extends GameObject {
 
     //private fields
     private TextureRegion keyFrame;
-    private Monster target;
+    private Monster target = null;
 
     // methods
     /**Constructor, a doctor's bullet shooting to an monster*/
@@ -30,8 +30,8 @@ public class Bullet extends GameObject {
         target = monster;
         createBullet();
         // set bullet velocity
-        float vx = this.getX(Align.center)-monster.getX(Align.center);
-        float vy = this.getY(Align.center) - monster.getY(Align.center);
+        float vx = monster.getX(Align.center) - this.getX(Align.center);
+        float vy =  monster.getY(Align.center) - this.getY(Align.center);
         velocity.set(vx,vy);
         velocity.nor();
         velocity.scl(BULLET_VELOCITY);
@@ -58,6 +58,7 @@ public class Bullet extends GameObject {
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         if (getX() < 0 || getX() > GameStage.WORLD_WIDTH) status = STATUS_MISSED;
+        this.checkHitMonster();
         stateTime += deltaTime;
     }
 
@@ -78,8 +79,10 @@ public class Bullet extends GameObject {
     /**
      * calls when the bullet has hit the monster, it sets the status of the monster into hit
      */
-    public void checkHitMonster(Monster mst){
-        if (this.overlaps(mst)) {
+    public void checkHitMonster(){
+        if (target == null)
+            return;
+        if (this.overlaps(target)) {
             status = STATUS_HIT_MONSTER;
             target.hitBullet();
         }

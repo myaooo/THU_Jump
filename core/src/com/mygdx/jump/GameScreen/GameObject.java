@@ -61,6 +61,7 @@ public class GameObject extends Actor {
      * check is overlapped
      */
     public boolean overlaps(GameObject obj) {
+
         return this.getRectangle().overlaps(obj.getRectangle());
     }
 
