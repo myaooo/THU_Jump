@@ -12,7 +12,7 @@ import com.mygdx.jump.GameScreen.GameObject;
  */
 
 // A basic class of game item
-public class Item extends GameObject {
+public abstract class Item extends GameObject {
     // static fields
     static public final int STATUS_UNTOUCHED = 0;
     static public final int STATUS_TOUCHED = 1;
@@ -82,12 +82,31 @@ public class Item extends GameObject {
     /**Update function*/
     @Override
     public void update(float delta){
-        if (isUsable() && doctor != null){
-            // the item is usable and is currently hold by a doctor
-            return;
+        switch(status){
+            case STATUS_UNTOUCHED:
+                updateUntouched(delta);
+                break;
+            case STATUS_TOUCHED:
+                updateHold(delta);
+                break;
+            case STATUS_ACTIVE:
+                updateActive(delta);
+                break;
+            default:
+                break;
         }
-        // update the position of the item
+    }
+
+    public void updateUntouched(float delta){
         this.setPosition(attachedFloor.getX(Align.center)-getWidth()/2, attachedFloor.getTop());
+    }
+
+    public void updateActive(float delta){
+
+    }
+
+    public void updateHold(float delta){
+
     }
 
     @Override

@@ -257,6 +257,10 @@ public class Doctor extends GameObject {
         item.powerOff();
     }
 
+    public void changeShield(){
+        shield = shield ? false : true;
+    }
+
     /**
      * override draw from Actor
      */
