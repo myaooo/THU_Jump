@@ -55,7 +55,7 @@ public class StartScreen implements Screen{
     private void update(float delta){
 
         time = time + delta/2;
-        if (time<=2) {
+        if (time<=1) {
             sizemove(barimg,time);
         }
         else{
@@ -120,6 +120,6 @@ public class StartScreen implements Screen{
 
     private void sizemove(Image barimage,float length)
     {
-            barimage.setSize(210*(length/2),30);
+            barimage.setSize(210*(length),30);
     }
 }

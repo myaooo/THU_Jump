@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
@@ -13,6 +15,7 @@ public class FloorBreakable extends Floor {
     public static final int STATUS_BREAKING = 1;
     public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL * 3;
     public static final float RATE_BASE = 0.1f;
+    private Sound brokesound = Gdx.audio.newSound(Gdx.files.internal("data/sound/hit.wav"));
 
     private Animation breakingAnim;
 
@@ -42,6 +45,7 @@ public class FloorBreakable extends Floor {
      */
     public void floorBreak() {
         status = STATUS_BREAKING;
+        brokesound.play(1.0f);
         stateTime = 0;
     }
 

@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,6 +22,7 @@ public class Coin extends GameObject {
     private Animation animation;
     private TextureRegion keyFrame;
     private float value;
+    private Sound sound = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.mp3"));
 
     public Coin(float x, float y){
         super(x,y,WIDTH,HEIGHT);
@@ -53,6 +56,7 @@ public class Coin extends GameObject {
         if (this.overlaps(doc)) {
             status = STATUS_TOUCHED;
             doc.coins += value;
+            sound.play(1.0f);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
@@ -60,6 +62,8 @@ public class Doctor extends GameObject {
     private float maxjumpheight = 0;
     private float XMin;
     private float XMax;
+    private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("data/sound/jump.wav"));
+    private Sound fallsound = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
 
     // public fields
     public float currentHeight = 0;
@@ -162,6 +166,7 @@ public class Doctor extends GameObject {
         if (this.overlaps(fl)) {
             // change status, current_animation, and y velocity
             fl.hitDoctor();
+            jumpsound.play(1.0f);
             if (fl.isBreakable())
                 return false;
             status = STATUS_JUMP;
@@ -179,6 +184,7 @@ public class Doctor extends GameObject {
     public void fall(){
         status = STATUS_FALL;
         current_anim = animation_fall;
+        //fallsound.play(1.0f);
         resetTime();
     }
 
