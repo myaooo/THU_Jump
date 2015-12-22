@@ -61,6 +61,10 @@ public class Doctor extends GameObject {
     private float XMin;
     private float XMax;
 
+    // public fields
+    public float currentHeight = 0;
+    public int coins = 0;
+
     // methods
 
     /**
@@ -243,6 +247,10 @@ public class Doctor extends GameObject {
         if (item != null)
             item.draw(batch, parentAlpha);
 
+    }
+
+    public boolean isLowerCurrentHeight(){
+        return this.getY() < currentHeight;
     }
 
 }

@@ -10,8 +10,8 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Coin extends GameObject {
 
-    public static final float WIDTH = 0.5f;
-    public static final float HEIGHT = 0.5f;
+    public static final float WIDTH = 1f;
+    public static final float HEIGHT = 1f;
     public static final int STATUS_UNTOUCHED = 0;
     public static final int STATUS_TOUCHED = 1;
     public static final int VALUE = 10;
@@ -19,13 +19,15 @@ public class Coin extends GameObject {
 
     private Animation animation;
     private TextureRegion keyFrame;
-    private float stateTime = 0;
+    private float value;
 
     public Coin(float x, float y){
         super(x,y,WIDTH,HEIGHT);
         status = STATUS_UNTOUCHED;
         animation = Assets.getCoin();
         keyFrame = animation.getKeyFrame(stateTime, true);
+        value = VALUE;
+        stateTime = 0;
     }
 
     /**
@@ -47,7 +49,14 @@ public class Coin extends GameObject {
 
     }
 
-    public void hitDoctor(){
-        status = STATUS_TOUCHED;
+    public void checkhitDoctor(Doctor doc){
+        if (this.overlaps(doc)) {
+            status = STATUS_TOUCHED;
+            doc.coins += value;
+        }
+    }
+
+    public boolean isHit(){
+        return status == STATUS_TOUCHED;
     }
 }

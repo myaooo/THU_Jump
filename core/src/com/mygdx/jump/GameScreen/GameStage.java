@@ -49,6 +49,7 @@ public class GameStage extends Stage {
 
     // OTHER CONSTANTS
     final static String SCORE = "SCORE ";
+    final static String COIN = "COIN ";
     final static int SCORE_SCALE = 5;
 
     // class fields
@@ -57,17 +58,19 @@ public class GameStage extends Stage {
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
+    private final ArrayList<Coin> coins = new ArrayList<>();
     public int score = 0;
-    public float currentHeight = 0;
+    //public float currentHeight = 0;
     public float floorHeight = 0;
     public int level = 1;
     public float next_level_height = HEIGHT_LEVEL_BASE;
-    public int coins = 0;
+    //public int coins = 0;
     private int status = STATUS_RUNNING;
     private Random rand = new Random();
     private TextureRegion background;
     private float stateTime = 0;
     private Label scoreLabel;
+    private Label coinLabel;
     private Mediator mediator;
     OrthographicCamera camera;
 
@@ -96,12 +99,12 @@ public class GameStage extends Stage {
 
     /**get Height*/
     public float getCurrentHeight(){
-        return currentHeight;
+        return doctor.currentHeight;
     }
 
     /**get coins*/
     public int getCoins(){
-        return coins;
+        return doctor.coins;
     }
 
     /**
@@ -114,6 +117,7 @@ public class GameStage extends Stage {
         updateMonsters(deltaTime);
         updateItems(deltaTime);
         updateBullets(deltaTime);
+        updateCoins(deltaTime);
         if (!doctor.isHit())
             checkCollisions();
         updateStatus();
@@ -158,7 +162,7 @@ public class GameStage extends Stage {
         for (int i = 0; i < len; ++i) {
             Item it = items.get(i);
             it.update(deltaTime);
-            if (it.getY() < currentHeight) {
+            if (it.getY() < getCurrentHeight()) {
                 // the item should be removed.
                 items.remove(it);
                 len--;
@@ -184,7 +188,6 @@ public class GameStage extends Stage {
             Bullet bullet = bullets.get(i);
             bullet.update(deltaTime);
             if (!bullet.isNormal()) {
-                // the floor is broken and should be removed.
                 bullets.remove(bullet);
                 len--;
             }
@@ -192,25 +195,39 @@ public class GameStage extends Stage {
         genBullet();
     }
 
+    public void updateCoins(float deltaTime) {
+        int len = coins.size();
+        for (int i = 0; i < len; ++i) {
+            Coin cn = coins.get(i);
+            cn.update(deltaTime);
+            if (cn.isHit()) {
+                coins.remove(cn);
+                len--;
+            }
+        }
+    }
+
+
     /**Calls when height changed*/
     protected void updateHeights(){
         if ( camera.position.y < doctor.getY()+2){
             updateCamera();
-            updateLevelandScore();
+            updateLevelAndLabel();
         }
     }
 
     /**
      * Update level and score, and update the score display
      */
-    public void updateLevelandScore() {
-        if (currentHeight > next_level_height) {
+    public void updateLevelAndLabel() {
+        if (getCurrentHeight() > next_level_height) {
             level++;
             next_level_height *= 2;
         }
-        score = (int) (currentHeight*SCORE_SCALE);
-        scoreLabel.setY(currentHeight+19f);
+        score = (int) (getCurrentHeight()*SCORE_SCALE);
+        scoreLabel.setY(getCurrentHeight()+19f);
         scoreLabel.setText(SCORE+score);
+        coinLabel.setY(getCurrentHeight()+19f);
     }
 
 
@@ -219,7 +236,7 @@ public class GameStage extends Stage {
      */
     public void updateCamera() {
         camera.position.y = doctor.getY()+2;
-        currentHeight =  camera.position.y - WORLD_HEIGHT/2;
+        doctor.currentHeight =  camera.position.y - WORLD_HEIGHT/2;
     }
 
     /**
@@ -235,9 +252,22 @@ public class GameStage extends Stage {
 
     /**Calls when objects should be generate*/
     protected void generateObjects(){
-        while (floorHeight < currentHeight + WORLD_HEIGHT) {
+        while (floorHeight < getCurrentHeight() + WORLD_HEIGHT) {
             generateFloor();
             genItem();
+            genCoin();
+        }
+    }
+
+    /**
+     * Generate Coins*/
+    private void genCoin(){
+        float toll = rand.nextFloat();
+        if (toll < Coin.RATE){
+            float X = rand.nextFloat()*(WORLD_WIDTH-Coin.WIDTH);
+            float Y = rand.nextFloat()*5 + floorHeight;
+            Coin c = new Coin(X,Y);
+            coins.add(c);
         }
     }
 
@@ -257,7 +287,7 @@ public class GameStage extends Stage {
         // Randomize floor's type
         float toll = rand.nextFloat();
         if (toll < FloorBreakable.RATE_BASE){   // Breakable Floor
-            FloorBreakable fl = new FloorBreakable(floorX,floorY);
+            FloorBreakable fl = new FloorBreakable(floorX,floorY+2);
             floors.add(fl);
             generateFloor();
             return;
@@ -319,10 +349,6 @@ public class GameStage extends Stage {
 
     }
 
-    private void genCoin(){
-        float rate = Coin.RATE;
-    }
-
     /**
      * Check all kinds of collisions
      */
@@ -330,13 +356,14 @@ public class GameStage extends Stage {
         checkHittingFloor();
         checkHittingMonster();
         checkHittingItem();
+        checkHittingCoin();
     }
 
     /**
      * Check whether doctor hits a floor and update doctor and floor status
      */
     public boolean checkHittingFloor() {
-        if (!doctor.isFalling() || doctor.getY()<currentHeight)
+        if (!doctor.isFalling() || doctor.isLowerCurrentHeight())
             return false;
         for (Floor fl : floors) {
             if (doctor.getY() > fl.getY()) {
@@ -377,6 +404,13 @@ public class GameStage extends Stage {
         }
     }
 
+    public void checkHittingCoin(){
+        for (Coin cn: coins){
+           cn.checkhitDoctor(doctor);
+        }
+        coinLabel.setText(COIN+getCoins());
+    }
+
     /**
      * Return true if the game is over.
      */
@@ -388,7 +422,7 @@ public class GameStage extends Stage {
      * Check whether the game is over (the doctor falls under current height) and update the status
      */
     public void updateStatus(){
-        if (doctor.getTop() < currentHeight || doctor.isHit()) {
+        if (doctor.getTop() < getCurrentHeight() || doctor.isHit()) {
             status = STATUS_GAME_OVER;
         }
     }
@@ -402,7 +436,7 @@ public class GameStage extends Stage {
         if (batch != null) {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            batch.draw(background,0,currentHeight,WORLD_WIDTH,WORLD_HEIGHT);
+            batch.draw(background,0,getCurrentHeight(),WORLD_WIDTH,WORLD_HEIGHT);
             for (Floor fl:floors){
                 fl.draw(batch,1);
             }
@@ -411,6 +445,9 @@ public class GameStage extends Stage {
             }
             for(Item it:items){
                 it.draw(batch,1);
+            }
+            for (Coin cn:coins){
+                cn.draw(batch,1);
             }
             for (Bullet blt:bullets){
                 blt.draw(batch,1);
@@ -426,11 +463,18 @@ public class GameStage extends Stage {
         BitmapFont font1 = Assets.getDefaultFont();
         Label.LabelStyle ls = new Label.LabelStyle(font1, Color.WHITE);
         scoreLabel = new Label(SCORE+score,ls);
-        scoreLabel.setAlignment(Align.bottomLeft);
         scoreLabel.setColor(Settings.myDarkBlue);
         scoreLabel.setFontScale(0.020f,0.015f);
         scoreLabel.setPosition(0.2f, 19f);
+        scoreLabel.setAlignment(Align.bottomLeft);
         this.addActor(scoreLabel);
+
+        coinLabel = new Label(COIN+0,ls);
+        coinLabel.setAlignment(Align.bottomLeft);
+        coinLabel.setColor(Settings.myGoldYellow);
+        coinLabel.setFontScale(0.020f,0.015f);
+        coinLabel.setPosition(5f, 19f);
+        this.addActor(coinLabel);
     }
 
     @Override
@@ -440,7 +484,7 @@ public class GameStage extends Stage {
 
     /**When the game is over, call this function to show game over animation*/
     public void GameOver(){
-        GameOverActor gameOverActor = new GameOverActor(currentHeight+9);
+        GameOverActor gameOverActor = new GameOverActor(getCurrentHeight()+9);
         this.addActor(gameOverActor);
         //String scoreString = SCORE+score;
         //int stringLen = scoreString.length();
@@ -449,8 +493,9 @@ public class GameStage extends Stage {
         finalscore.setColor(Settings.myGoldYellow);
         finalscore.setFontScale(0.04f,0.03f);
         float strwidth = finalscore.getPrefWidth();
-        finalscore.setPosition(6-strwidth/2,6+currentHeight);
+        finalscore.setPosition(6-strwidth/2,6+getCurrentHeight());
         this.addActor(finalscore);
         this.scoreLabel.remove();
     }
+
 }
