@@ -91,9 +91,9 @@ public class Doctor extends GameObject {
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
-        this.acceleration = GameStage.GRAVITY;
+        this.acceleration.set(0,-GameStage.GRAVITY_ABS);
         this.velocity.set(0,0);
-        maxjumpheight = -JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY.y * 2);
+        maxjumpheight = JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY_ABS * 2);
         XMin = -WIDTH/2;
         XMax = GameStage.WORLD_WIDTH-WIDTH/2;
     }

@@ -42,7 +42,7 @@ public class GameStage extends Stage {
 
     // GAME PARAMETERS
     public static final float[] HEIGHT_INTERVAL = {0.5f,0.6f,0.7f,0.8f,0.9f};
-    static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
+    //static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 3;
     public static float SHOOTING_SPEED = 0.5f;  // shooting speed of the doctor
 
@@ -56,7 +56,7 @@ public class GameStage extends Stage {
     final static int SCORE_SCALE = 10;
 
     // class fields
-    private final Doctor doctor = new Doctor();
+    private final Doctor doctor;
     private final ArrayList<Floor> floors = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();
@@ -92,6 +92,7 @@ public class GameStage extends Stage {
         initializeFloor();
         background = Assets.getBackground();
         addScoreLabel();
+        doctor = new Doctor();
     }
 
     /**Several public get functions*/
