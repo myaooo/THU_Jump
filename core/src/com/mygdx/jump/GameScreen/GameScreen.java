@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.jump.MenuScreen.MainMenuScreen;
+import com.mygdx.jump.Record.GameRecord;
+import com.mygdx.jump.Record.Recorder;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
@@ -43,6 +45,7 @@ public class GameScreen extends ScreenAdapter {
     private GameStage gameStage;
     private Stage coverStage;
     private TsinghuaJump game;
+    private GameRecord record;
     private int status;
     private Mediator mediator;
     private Button pauseButton;
@@ -56,9 +59,14 @@ public class GameScreen extends ScreenAdapter {
 
     /**constructor*/
     public GameScreen(TsinghuaJump inGame){
+        // set game
         this.game = inGame;
+        Recorder.addRecord();
+        record = Recorder.currentRecord;
+        // set gamstage
         mediator = new Mediator();
         gameStage = new GameStage(mediator);
+        // set cover and backstage
         coverStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
         backStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
         Gdx.input.setInputProcessor(coverStage);
@@ -206,6 +214,7 @@ public class GameScreen extends ScreenAdapter {
         float strwidth = scoreLabel.getPrefWidth();
         scoreLabel.setColor(Settings.myGoldYellow);
         scoreLabel.setPosition(240-strwidth/2,240);
+        record.setRecord(gameStage.getScore(),gameStage.getCoins());
     }
 
     @Override

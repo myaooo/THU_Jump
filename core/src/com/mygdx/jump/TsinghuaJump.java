@@ -10,11 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.mygdx.jump.MenuScreen.ShopScreen;
 import com.mygdx.jump.MenuScreen.StartScreen;
+import com.mygdx.jump.Record.GameRecord;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
+import java.util.ArrayList;
+
 public class TsinghuaJump extends Game {
+
 	StartScreen startScreen;
+	//public ArrayList<GameRecord> records = new ArrayList<>();
 	@Override
 	public void create()
 	{
