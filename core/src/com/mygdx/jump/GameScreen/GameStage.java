@@ -9,24 +9,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.jump.GameScreen.GameItem.Item;
-import com.mygdx.jump.GameScreen.GameItem.Shield;
-import com.mygdx.jump.GameScreen.GameItem.Spring;
+import com.mygdx.jump.GameScreen.GameItem.*;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.GameScreen.Monster.MonsterBoss;
 import com.mygdx.jump.GameScreen.Monster.MonsterHole;
-import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 // This is a class that contains all the objects in a game
@@ -45,7 +37,7 @@ public class GameStage extends Stage {
     public static final float[] HEIGHT_INTERVAL = {0.5f,0.6f,0.7f,0.8f,0.9f};
     //static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 3;
-    public static float SHOOTING_SPEED = 0.5f;  // shooting speed of the doctor
+    public static float SHOOTING_SPEED = 0.3f;  // shooting speed of the doctor
 
     // STATUS PARAMS
     public static final int STATUS_RUNNING = 0;
@@ -164,7 +156,7 @@ public class GameStage extends Stage {
         for(int i = 0; i < len; ++i){
             Monster ms = monsters.get(i);
             ms.update(deltaTime);
-            if (ms.isDied()) {
+            if (ms.isDied() || ms.getTop()< getCurrentHeight()) {
                 monsters.remove(ms);
                 len--;
             }
@@ -261,14 +253,14 @@ public class GameStage extends Stage {
         Floor fl = new Floor(getWidth()/2,0.5f);
         floors.add(fl);
         floorHeight = fl.getY();
-        generateFloor();
+        genFloor();
     }
 
 
     /**Calls when objects should be generate*/
     protected void generateObjects(){
         while (floorHeight < getCurrentHeight() + WORLD_HEIGHT) {
-            generateFloor();
+            genFloor();
             genMonster();
             genItem();
             genCoin();
@@ -290,7 +282,7 @@ public class GameStage extends Stage {
     /**
      * Generate Floors
      */
-    private void generateFloor(){
+    private void genFloor(){
         float floorX = rand.nextFloat() * (WORLD_WIDTH-Floor.FLOOR_WIDTH);
         float floorY = MAX_JUMP_HEIGHT*0.9f;
         // Randomize floor's Y coordinates
@@ -348,7 +340,9 @@ public class GameStage extends Stage {
         if (mediator.isShootBullet()&&(stateTime > SHOOTING_SPEED)){
             stateTime = 0; // reset time
             Bullet blt;
-            for (Monster ms:monsters) {
+            int len = monsters.size();
+            for (int i = len-1; i >= 0; --i) {
+                Monster ms = monsters.get(i);
                 if (ms.isShootable()) {
                     blt = new Bullet(doctor, monsters.get(0));
                     bullets.add(blt);
@@ -363,29 +357,43 @@ public class GameStage extends Stage {
     /**Generate Item*/
     private void genItem(){
         // generate springs
-        float rateSpring = Spring.GENERATE_RATE;
+        float rateJumper = Jumper.rate;
+        float rateSpring = Spring.rate+rateJumper;
         float rateShield = Shield.rate+rateSpring;
+        float rateReversor = Reversor.rate+rateShield;
         float toll = rand.nextFloat();
-        if (toll < rateShield) {
-            if (toll < rateSpring) genSpring();
-            else{
+        if (toll < rateReversor) {
+            if (toll < rateJumper){
+                genJumper();
+            }
+            else if (toll < rateSpring){
+                genSpring();
+            }
+            else if (toll < rateShield){
                 genShield();
+            }
+            else{
+                genReversor();
             }
         }
     }
 
     private void genSpring(){
         Floor fl = floors.get(floors.size()-1);
-        Spring spr = new Spring(fl);
+        Item spr = new Spring(fl);
         items.add(spr);
     }
 
     private void genJumper(){
-
+        Floor fl = floors.get(floors.size()-1);
+        Item jp = new Jumper(fl);
+        items.add(jp);
     }
 
     private void genReversor(){
-
+        Floor fl = floors.get(floors.size()-1);
+        Item spr = new Reversor(fl);
+        items.add(spr);
     }
 
     private void genRocket(){
@@ -502,44 +510,10 @@ public class GameStage extends Stage {
         super.draw();
     }
 
-    /**Add a score label which is in the top left corner of the screen to the stage*/
-    public void addScoreLabel(){
-        BitmapFont font1 = Assets.getDefaultFont();
-        Label.LabelStyle ls = new Label.LabelStyle(font1, Color.WHITE);
-        scoreLabel = new Label(SCORE+score,ls);
-        scoreLabel.setColor(Settings.myDarkBlue);
-        scoreLabel.setFontScale(0.020f,0.015f);
-        scoreLabel.setPosition(0.2f, 19f);
-        scoreLabel.setAlignment(Align.bottomLeft);
-        this.addActor(scoreLabel);
-
-        coinLabel = new Label(COIN+0,ls);
-        coinLabel.setAlignment(Align.bottomLeft);
-        coinLabel.setColor(Settings.myGoldYellow);
-        coinLabel.setFontScale(0.020f,0.015f);
-        coinLabel.setPosition(5f, 19f);
-        this.addActor(coinLabel);
-    }
-
     @Override
     public void dispose(){
         super.dispose();
     }
 
-//    /**When the game is over, call this function to show game over animation*/
-//    public void GameOver(){
-//        GameOverActor gameOverActor = new GameOverActor(getCurrentHeight()+9);
-//        this.addActor(gameOverActor);
-//        //String scoreString = SCORE+score;
-//        //int stringLen = scoreString.length();
-//        Label finalscore = new Label(SCORE+score, scoreLabel.getStyle());
-//        finalscore.setAlignment(Align.bottomLeft);
-//        finalscore.setColor(Settings.myGoldYellow);
-//        finalscore.setFontScale(0.04f,0.03f);
-//        float strwidth = finalscore.getPrefWidth();
-//        finalscore.setPosition(6-strwidth/2,6+getCurrentHeight());
-//        this.addActor(finalscore);
-//        this.scoreLabel.remove();
-//    }
 
 }

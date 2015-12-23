@@ -34,7 +34,7 @@ public class Doctor extends GameObject {
     /**
      * The jumping velocity of Doctor. max_v = sqrt(2*g*h)
      */
-    public static final float JUMP_VELOCITY = GameStage.NORMAL_JUMP_VELOCITY;
+    public static float JUMP_VELOCITY = GameStage.NORMAL_JUMP_VELOCITY;
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */

@@ -1,10 +1,8 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.jump.GameScreen.Doctor;
 import com.mygdx.jump.GameScreen.Floor;
-import com.mygdx.jump.GameScreen.GameObject;
 import com.mygdx.jump.Resource.Assets;
 
 /**
@@ -12,7 +10,7 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Spring extends Item{
 
-    static public final float GENERATE_RATE = 0.05f;
+    static public final float rate = 0.05f;
     // active
     private TextureRegion activeTexture;
 
@@ -37,7 +35,7 @@ public class Spring extends Item{
     }
 
     public static float getRate(){
-        return GENERATE_RATE;
+        return rate;
     }
 
     @Override

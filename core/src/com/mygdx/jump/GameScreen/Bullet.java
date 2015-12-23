@@ -13,12 +13,12 @@ import com.mygdx.jump.Resource.Assets;
 public class Bullet extends GameObject {
     // static fields
     // the width and height of a bullet
-    public static final float WIDTH = 0.2f;
-    public static final float HEIGHT = 0.2f;
+    public static final float WIDTH = 0.3f;
+    public static final float HEIGHT = 0.3f;
     public static final int STATUS_NORMAL = 0;
     public static final int STATUS_HIT_MONSTER = 1;
     public static final int STATUS_MISSED = 2;
-    public static final float BULLET_VELOCITY = 30;
+    public static final float BULLET_VELOCITY = 25;
 
     //private fields
     private TextureRegion keyFrame;

@@ -10,9 +10,10 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Reversor extends Item {
 
-    static final float REVERSE_TIME = 5f;
-    static final float REVERSOR_WIDTH = 1f;
-    static final float REVERSOR_HEIGHT = 0.5f;
+    static public final float REVERSE_TIME = 5f;
+    static public final float REVERSOR_WIDTH = 1.5f;
+    static public final float REVERSOR_HEIGHT = 0.8f;
+    static public final float rate = 0.05f;
 
     private float originVelocity;
     private Animation animation;
@@ -46,7 +47,7 @@ public class Reversor extends Item {
         if (mark > 0) {
             this.setColor(1,1,1,2 < mark ? 1 : (mark)/2);
             this.setPosition(doctor.getX(),doctor.getTop());
-            keyFrame = animation.getKeyFrame(stateTime);
+            keyFrame = animation.getKeyFrame(stateTime,true);
             stateTime += delta;
         }
         else this.powerOff();
