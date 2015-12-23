@@ -46,7 +46,7 @@ public class Assets {
         //curSkin = skin;
         // load other data
         BULLET = new Image("data/bullet.png");
-        defaultFont = new Font("data/4.ttf",50, Color.BLACK);
+        defaultFont = new Font("data/4.ttf",30, Color.BLACK);
         GameOverAnimation = new AnimatedImage("data/game_over3.png",3);
         ITEM_PACKAGE = new Image("data/item_pack.png");
         PAUSE = new AnimatedImage("data/pause2.png",2);

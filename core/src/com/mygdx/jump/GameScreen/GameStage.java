@@ -72,7 +72,7 @@ public class GameStage extends Stage {
     //public int coins = 0;
     private int status = STATUS_RUNNING;
     private Random rand = new Random();
-    private Image background;
+    //private Image background;
     private float stateTime = 0;
     private Label scoreLabel;
     private Label coinLabel;
@@ -96,11 +96,9 @@ public class GameStage extends Stage {
 
     protected void initialize(){
         initializeFloor();
-        background = new Image(Assets.getBackground());
-        background.setBounds(0,0,WORLD_WIDTH,WORLD_HEIGHT);
         itemPackage = new ItemPackage(this);
         doctor = new Doctor(this,itemPackage);
-        addScoreLabel();
+        //addScoreLabel();
         this.addActor(itemPackage);
     }
 
@@ -245,10 +243,6 @@ public class GameStage extends Stage {
             next_level_height *= 2;
         }
         score = (int) (getCurrentHeight()*SCORE_SCALE);
-        scoreLabel.setY(getCurrentHeight()+19f);
-        scoreLabel.setText(SCORE+score);
-        coinLabel.setY(getCurrentHeight()+19f);
-        background.setY(getCurrentHeight());
     }
 
 
@@ -459,7 +453,7 @@ public class GameStage extends Stage {
         for (Coin cn: coins){
            cn.checkhitDoctor(doctor);
         }
-        coinLabel.setText(COIN+getCoins());
+        //coinLabel.setText(COIN+getCoins());
     }
 
     /**
@@ -487,7 +481,6 @@ public class GameStage extends Stage {
         if (batch != null) {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            background.draw(batch,1);
             for (Floor fl:floors){
                 fl.draw(batch,1);
             }
@@ -533,20 +526,20 @@ public class GameStage extends Stage {
         super.dispose();
     }
 
-    /**When the game is over, call this function to show game over animation*/
-    public void GameOver(){
-        GameOverActor gameOverActor = new GameOverActor(getCurrentHeight()+9);
-        this.addActor(gameOverActor);
-        //String scoreString = SCORE+score;
-        //int stringLen = scoreString.length();
-        Label finalscore = new Label(SCORE+score, scoreLabel.getStyle());
-        finalscore.setAlignment(Align.bottomLeft);
-        finalscore.setColor(Settings.myGoldYellow);
-        finalscore.setFontScale(0.04f,0.03f);
-        float strwidth = finalscore.getPrefWidth();
-        finalscore.setPosition(6-strwidth/2,6+getCurrentHeight());
-        this.addActor(finalscore);
-        this.scoreLabel.remove();
-    }
+//    /**When the game is over, call this function to show game over animation*/
+//    public void GameOver(){
+//        GameOverActor gameOverActor = new GameOverActor(getCurrentHeight()+9);
+//        this.addActor(gameOverActor);
+//        //String scoreString = SCORE+score;
+//        //int stringLen = scoreString.length();
+//        Label finalscore = new Label(SCORE+score, scoreLabel.getStyle());
+//        finalscore.setAlignment(Align.bottomLeft);
+//        finalscore.setColor(Settings.myGoldYellow);
+//        finalscore.setFontScale(0.04f,0.03f);
+//        float strwidth = finalscore.getPrefWidth();
+//        finalscore.setPosition(6-strwidth/2,6+getCurrentHeight());
+//        this.addActor(finalscore);
+//        this.scoreLabel.remove();
+//    }
 
 }

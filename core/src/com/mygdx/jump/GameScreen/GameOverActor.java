@@ -17,9 +17,13 @@ public class GameOverActor extends Actor {
     TextureRegion keyFrame;
     private float stateTime = 0;
 
-    public GameOverActor(float height){
+    public GameOverActor(){
+        this(40,350,400,300);
+    }
+
+    public GameOverActor(float x, float y, float width, float height){
         anim = Assets.getGameOverAnim();
-        setBounds(1,height,10,7.5f);
+        setBounds(x,y,width,height);
     }
 
     public void update(float delta){

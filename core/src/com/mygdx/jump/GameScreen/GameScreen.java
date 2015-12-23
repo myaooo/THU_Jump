@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.jump.MenuScreen.MainMenuScreen;
@@ -31,8 +34,11 @@ public class GameScreen extends ScreenAdapter {
     final static int GAME_OVER = 2;
     final static int GAME_PAUSE = 3;
 
+    final static String SCORE = "SCORE ";
+    final static String COIN = "COIN ";
 
     // private class fields
+    private Stage backStage;
     private GameStage gameStage;
     private Stage coverStage;
     private TsinghuaJump game;
@@ -40,6 +46,10 @@ public class GameScreen extends ScreenAdapter {
     private Mediator mediator;
     private Button pauseButton;
     private float stateTime = 0;
+    private Image background;
+
+    private Label scoreLabel;
+    private Label coinLabel;
 
 
     /**constructor*/
@@ -47,23 +57,51 @@ public class GameScreen extends ScreenAdapter {
         this.game = inGame;
         mediator = new Mediator();
         gameStage = new GameStage(mediator);
+        coverStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
+        backStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
+        Gdx.input.setInputProcessor(coverStage);
         status = GAME_RUNNING;
-        initialize();
+        initializeCover();
+        initializeBack();
     }
 
-    /**Initializing*/
-    private void initialize(){
-        coverStage = new Stage(new ScalingViewport(Scaling.stretch, 12, 20, new OrthographicCamera()));
+    /**Initializing Cover Stage*/
+    private void initializeCover(){
+        // Set Button
         Button.ButtonStyle stl = new Button.ButtonStyle();
         stl.up = new TextureRegionDrawable(Assets.getPauseUp());
         stl.checked = new TextureRegionDrawable(Assets.getPauseUp());
         stl.down = new TextureRegionDrawable(Assets.getPauseDown());
         pauseButton = new Button(stl);
-        pauseButton.setBounds(10.8f, 18.8f, 1f, 1f);
+        pauseButton.setBounds(410, 730, 50, 50);
         coverStage.addActor(pauseButton);
-        Gdx.input.setInputProcessor(coverStage);
-        Label.LabelStyle ls = new Label.LabelStyle(Assets.defaultFont.getFont(), Color.WHITE);
-        Label scoreLabel = new Label("SCORE:", ls);
+        addScoreLabel();
+    }
+
+    /**Initializing Back Stage*/
+    private void initializeBack(){
+        background = new Image(Assets.getBackground());
+        background.setBounds(0,0,480,800);
+        backStage.addActor(background);
+    }
+
+    /**Add a score label which is in the top left corner of the screen to the stage*/
+    public void addScoreLabel(){
+        BitmapFont font1 = Assets.getDefaultFont();
+        Label.LabelStyle ls = new Label.LabelStyle(font1, Color.WHITE);
+        scoreLabel = new Label(SCORE+0,ls);
+        scoreLabel.setColor(Settings.myDarkBlue);
+        scoreLabel.setFontScale(1.2f,1);
+        scoreLabel.setPosition(10, 760);
+        scoreLabel.setAlignment(Align.bottomLeft);
+        coverStage.addActor(scoreLabel);
+
+        coinLabel = new Label(COIN+0,ls);
+        coinLabel.setAlignment(Align.bottomLeft);
+        coinLabel.setColor(Settings.myGoldYellow);
+        coinLabel.setFontScale(1.2f,1);
+        coinLabel.setPosition(200, 760);
+        coverStage.addActor(coinLabel);
     }
 
 
@@ -86,21 +124,17 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         update(delta);
         switch(status){
-            case GAME_RUNNING:
-                gameStage.draw();
-                coverStage.draw();
-                break;
-            case GAME_PAUSE:
-                gameStage.draw();
-                coverStage.draw();
-                break;
             case GAME_OVER:
-                gameStage.draw();
+                drawOver();
+                break;
+            default:
+                drawRunning();
                 break;
         }
     }
 
     public void updateRunning(float delta){
+        // check inputs
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
             mediator.setLeft();
         if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
@@ -114,12 +148,17 @@ public class GameScreen extends ScreenAdapter {
             status = GAME_PAUSE;
             stateTime = 0;
         }
-
+        // update game stage
         gameStage.update(delta);
         mediator.reset();
+
+        // update score and coin label
+        scoreLabel.setText(SCORE+gameStage.getScore());
+        coinLabel.setText(COIN+gameStage.getCoins());
+
+        // check game over
         if (gameStage.isGameOver()) {
-            status = GAME_OVER;
-            gameStage.GameOver();
+            this.setGameOver();
         }
         stateTime += delta;
     }
@@ -137,6 +176,28 @@ public class GameScreen extends ScreenAdapter {
     public void updateOver(){
         if (Gdx.input.isTouched())
             game.setScreen(new MainMenuScreen(game));
+    }
+
+    public void drawRunning(){
+        backStage.draw();
+        gameStage.draw();
+        coverStage.draw();
+    }
+
+    public void drawOver(){
+        backStage.draw();
+        gameStage.draw();
+        coverStage.draw();
+    }
+
+    public void setGameOver(){
+        status = GAME_OVER;
+        GameOverActor gameOverActor = new GameOverActor();
+        coverStage.addActor(gameOverActor);
+        scoreLabel.setFontScale(2.5f,2f);
+        float strwidth = scoreLabel.getPrefWidth();
+        scoreLabel.setColor(Settings.myGoldYellow);
+        scoreLabel.setPosition(240-strwidth/2,240);
     }
 
     @Override
