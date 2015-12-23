@@ -179,7 +179,7 @@ public class Doctor extends GameObject {
         if (this.overlaps(fl)) {
             // change status, current_animation, and y velocity
             fl.hitDoctor();
-            jumpsound.play(1.0f);
+
             if (fl.isBreakable())
                 return false;
             jump(JUMP_VELOCITY);
@@ -193,6 +193,7 @@ public class Doctor extends GameObject {
         status = STATUS_JUMP;
         current_anim = animation_jump;
         velocity.y = jumpVelocity;
+        jumpsound.play(1.0f);
         resetTime();
     }
 
