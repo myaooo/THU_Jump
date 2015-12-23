@@ -12,7 +12,7 @@ public class Floater extends Item{
     static public final float FLOAT_TIME = 5f;
     static public final float FLOATER_WIDTH = 1.5f;
     static public final float FLOATER_HEIGHT = 0.5f;
-    static public final float rate = 0.1f;
+    static public final float rate = 0.02f;
 
     private float originAcceleration;
     private Animation animation;

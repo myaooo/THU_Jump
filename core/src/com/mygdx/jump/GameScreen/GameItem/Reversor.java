@@ -13,7 +13,7 @@ public class Reversor extends Item {
     static public final float REVERSE_TIME = 5f;
     static public final float REVERSOR_WIDTH = 1.5f;
     static public final float REVERSOR_HEIGHT = 0.8f;
-    static public final float rate = 0.02f;
+    static public final float rate = 0.01f;
 
     private float originVelocity;
     private Animation animation;

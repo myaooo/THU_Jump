@@ -10,7 +10,7 @@ public class Jumper extends Item {
     static public final float JUMP_TIME = 5f;
     static public final float JUMPER_WIDTH = 1.5f;
     static public final float JUMPER_HEIGHT = 0.5f;
-    static public final float rate = 0.03f;
+    static public final float rate = 0.02f;
 
     private float originVelocity;
 
@@ -27,6 +27,7 @@ public class Jumper extends Item {
         keyFrame = Assets.getJumperAct();
         this.setWidth(JUMPER_WIDTH);
         this.setHeight(JUMPER_HEIGHT);
+        this.setOrigin(JUMPER_WIDTH/2, JUMPER_HEIGHT/2);
         this.setPosition(doctor.getX(),doctor.getY());
     }
 
@@ -42,7 +43,7 @@ public class Jumper extends Item {
         if (mark > 0) {
             this.setColor(1,1,1,1 < mark ? 1 : (mark));
             this.setPosition(doctor.getX(),doctor.getY());
-            this.setScale(doctor.getScaleX(), 1);
+            this.setScale(doctor.getScaleX(),1);
             stateTime += delta;
         }
         else this.powerOff();
