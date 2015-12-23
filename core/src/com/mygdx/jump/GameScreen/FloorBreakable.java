@@ -15,7 +15,7 @@ public class FloorBreakable extends Floor {
     public static final int STATUS_BREAKING = 1;
     public static final float FLOOR_BREAKING_TIME = Settings.ANIMATION_INTERVAL * 3;
     public static final float RATE_BASE = 0.1f;
-    private Sound brokesound = Gdx.audio.newSound(Gdx.files.internal("data/sound/hit.wav"));
+    private Sound brokesound = Gdx.audio.newSound(Gdx.files.internal("data/sound/brokenfloor.mp3"));
 
     private Animation breakingAnim;
 

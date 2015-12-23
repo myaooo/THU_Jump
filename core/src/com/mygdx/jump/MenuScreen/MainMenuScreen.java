@@ -7,6 +7,7 @@ package com.mygdx.jump.MenuScreen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
@@ -50,6 +51,7 @@ public class MainMenuScreen implements Screen{
     private TsinghuaJump game;
     private Stage stage;
     private Array<Button> button;
+    private Music backmusic=Gdx.audio.newMusic(Gdx.files.internal("data/sound/background.mp3"));
 
     private float time;
 
@@ -60,6 +62,9 @@ public class MainMenuScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         button = new Array<Button>();
         loadAssets();
+        backmusic.play();
+        backmusic.setLooping(true);
+        backmusic.setVolume(15);
     }
 
     @Override
@@ -78,25 +83,30 @@ public class MainMenuScreen implements Screen{
         {
             GameScreen gameScreen = new GameScreen(game);
             game.setScreen(gameScreen);
+            backmusic.stop();
         }
         else if (button.get(1).isPressed()==true)
         {
             ScoreScreen scoreScreen = new ScoreScreen(game);
             game.setScreen(scoreScreen);
+            backmusic.stop();
         }
         else if (button.get(2).isPressed()==true)
         {
             ShopScreen shopScreen = new ShopScreen(game);
             game.setScreen(shopScreen);
+            backmusic.stop();
         }
         else if (button.get(3).isPressed()==true)
         {
             SettingsScreen settingsScreen = new SettingsScreen(game);
             game.setScreen(settingsScreen);
+            backmusic.stop();
         }
         else if (button.get(4).isPressed()==true)
         {
             Gdx.app.exit();
+            backmusic.stop();
         }
         else
         {

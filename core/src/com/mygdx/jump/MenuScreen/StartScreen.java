@@ -25,7 +25,7 @@ import com.mygdx.jump.TsinghuaJump;
 import com.mygdx.jump.MenuScreen.MainMenuScreen;
 
 /**
- * @author zhu ao
+ * @author wang yuehan
  */
 public class StartScreen implements Screen{
 
@@ -43,7 +43,6 @@ public class StartScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         loadAssets();
     }
-//    public ProgressBar(float min, float max,float stepSize,boolean vertical,Skin skin)
 
     @Override
     // A methods that render the screen, calls whenever the screen should be rendered

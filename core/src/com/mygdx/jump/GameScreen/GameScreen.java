@@ -2,6 +2,7 @@ package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -37,6 +38,7 @@ public class GameScreen extends ScreenAdapter {
     private TsinghuaJump game;
     private int status;
     private Mediator mediator;
+
 
     /**constructor*/
     public GameScreen(TsinghuaJump inGame){

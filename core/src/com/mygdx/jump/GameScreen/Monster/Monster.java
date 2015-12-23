@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen.Monster;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,6 +29,7 @@ public class Monster extends GameObject {
     protected float health;
     protected float moveLb = 0;
     protected float moveUb = GameStage.WORLD_WIDTH-MONSTER_WIDTH;
+    private Sound monstersound = Gdx.audio.newSound(Gdx.files.internal("data/sound/monster.mp3"));
 
     protected Monster(float x, float y) {
         super(x, y, MONSTER_WIDTH, MONSTER_HEIGHT);
@@ -79,6 +82,7 @@ public class Monster extends GameObject {
         if (!doctor.isHit() && this.overlaps(doctor)) {
             {
                 hitDoctor(doctor);
+                monstersound.play(1.0f);
                 return true;
             }
         }
