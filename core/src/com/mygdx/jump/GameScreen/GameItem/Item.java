@@ -1,5 +1,6 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
@@ -22,11 +23,14 @@ public abstract class Item extends GameObject {
     /**The size of the item when it is on a floor*/
     static public final float STATIC_WIDTH = 1f;
     static public final float STATIC_HEIGHT = 1f;
+
+    static public final float HOLD_WIDTH = 1.5f;
+    static public final float HOLD_HEIGHT =1.5f;
     // class fields
     protected Doctor doctor = null;
     protected Floor attachedFloor;
     protected TextureRegion keyFrame;
-    protected boolean usable = false;
+    protected boolean usable = true;
 
     public Item(){
         super();
@@ -66,12 +70,19 @@ public abstract class Item extends GameObject {
     public void hitDoctor(Doctor doc){
         status = STATUS_TOUCHED;
         this.doctor = doc;
+        if (this.isUsable()){
+            doctor.getItem(this);
+            setWidth(HOLD_WIDTH);
+            setHeight(HOLD_HEIGHT);
+        }
     }
 
     /**The item is activated by the doctor*/
     public void activate(){
         if (doctor == null)
             return;
+        status = STATUS_ACTIVE;
+        stateTime = 0;
     }
 
     /**The item is powered off*/
@@ -106,7 +117,7 @@ public abstract class Item extends GameObject {
     }
 
     public void updateHold(float delta){
-
+        setPosition(doctor.itemPackage.getX()+0.25f,doctor.currentHeight+0.3f+0.25f);
     }
 
     @Override
@@ -119,6 +130,8 @@ public abstract class Item extends GameObject {
     }
 
     public boolean checkHitDoctor(Doctor doc){
+        if (isUntouched() && !doc.hasItem())
+            return doc.overlaps(this);
         return false;
     }
 

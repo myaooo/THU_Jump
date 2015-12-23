@@ -14,13 +14,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.jump.GameScreen.GameItem.Item;
+import com.mygdx.jump.GameScreen.GameItem.Shield;
 import com.mygdx.jump.GameScreen.GameItem.Spring;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.GameScreen.Monster.MonsterBoss;
@@ -56,7 +56,7 @@ public class GameStage extends Stage {
     final static int SCORE_SCALE = 10;
 
     // class fields
-    private final Doctor doctor;
+    private Doctor doctor;
     private final ArrayList<Floor> floors = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Monster> monsters = new ArrayList<>();
@@ -75,6 +75,7 @@ public class GameStage extends Stage {
     private float stateTime = 0;
     private Label scoreLabel;
     private Label coinLabel;
+    private ItemPackage itemPackage;
     private Mediator mediator;
     OrthographicCamera camera;
 
@@ -89,10 +90,16 @@ public class GameStage extends Stage {
         viewport.setScreenBounds(0,0,Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
         this.setViewport(viewport);
         mediator = media;
+        initialize();
+    }
+
+    protected void initialize(){
         initializeFloor();
         background = Assets.getBackground();
+        itemPackage = new ItemPackage(this);
+        doctor = new Doctor(this,itemPackage);
         addScoreLabel();
-        doctor = new Doctor();
+        this.addActor(itemPackage);
     }
 
     /**Several public get functions*/
@@ -172,7 +179,7 @@ public class GameStage extends Stage {
         for (int i = 0; i < len; ++i) {
             Item it = items.get(i);
             it.update(deltaTime);
-            if (it.getY() < getCurrentHeight()) {
+            if (it.isUntouched() && it.getY() < getCurrentHeight() || it.isPowerOff()) {
                 // the item should be removed.
                 items.remove(it);
                 len--;
@@ -184,8 +191,10 @@ public class GameStage extends Stage {
      * Update Doctor's position and velocity
      */
     public void updateDoctor(float deltaTime) {
-        int moveDirection = mediator.getDirection();
+        int moveDirection = mediator.getxDirection();
         doctor.update(deltaTime, moveDirection);
+        if (mediator.isActivateItem())
+            doctor.useItem();
     }
 
     /**
@@ -357,8 +366,15 @@ public class GameStage extends Stage {
     /**Generate Item*/
     private void genItem(){
         // generate springs
-        float rate = Spring.getRate();
-        if (rand.nextFloat() < rate) genSpring();
+        float rateSpring = Spring.GENERATE_RATE;
+        float rateShield = Shield.rate+rateSpring;
+        float toll = rand.nextFloat();
+        if (toll < rateShield) {
+            if (toll < rateSpring) genSpring();
+            else{
+                genShield();
+            }
+        }
     }
 
     private void genSpring(){
@@ -380,7 +396,9 @@ public class GameStage extends Stage {
     }
 
     private void genShield(){
-
+        Floor fl = floors.get(floors.size()-1);
+        Shield shield = new Shield(fl);
+        items.add(shield);
     }
     private void genFloater(){
 
@@ -429,9 +447,7 @@ public class GameStage extends Stage {
         for (Item it: items){
             if (it.checkHitDoctor(doctor)) {
                 it.hitDoctor(doctor);
-                if (it.isUsable()){
-                    doctor.getItem(it);
-                }
+
             }
         }
     }

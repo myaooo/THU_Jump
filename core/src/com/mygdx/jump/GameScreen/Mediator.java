@@ -4,15 +4,19 @@ package com.mygdx.jump.GameScreen;
  * Created by Yao on 15/12/11.
  */
 public class Mediator {
-    private int direction;
+    private int xDirection;
+    private int yDirection;
     private boolean shootBullet;
+    private boolean activateItem;
 
     public Mediator(){
         reset();
     }
 
     public void reset(){
-        direction = 0;
+        xDirection = 0;
+        yDirection = 0;
+        activateItem = false;
         shootBullet = false;
     }
 
@@ -24,23 +28,31 @@ public class Mediator {
         return shootBullet;
     }
 
-    public int getDirection(){
-        return direction;
+    public int getxDirection(){
+        return xDirection;
     }
 
     public boolean isRight(){
-        return 0 < direction;
+        return 0 < xDirection;
     }
 
     public boolean isLeft(){
-        return direction < 0;
+        return xDirection < 0;
     }
 
     public void setRight(){
-        direction = 1;
+        xDirection = 1;
     }
 
     public void setLeft(){
-        direction = -1;
+        xDirection = -1;
+    }
+
+    public void useItem(){
+        activateItem = true;
+    }
+
+    public boolean isActivateItem(){
+        return activateItem;
     }
 }

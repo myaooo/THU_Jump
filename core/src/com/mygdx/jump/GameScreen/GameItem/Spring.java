@@ -20,6 +20,7 @@ public class Spring extends Item{
         super(floor);
         keyFrame = Assets.getSpring();
         activeTexture = Assets.getSpringAct();
+        usable = false;
     }
 
     @Override
@@ -30,9 +31,10 @@ public class Spring extends Item{
 
     @Override
     public void activate(){
+        super.activate();
         keyFrame = activeTexture;
         this.doctor.jump(2f*doctor.JUMP_VELOCITY);
-}
+    }
 
     public static float getRate(){
         return GENERATE_RATE;

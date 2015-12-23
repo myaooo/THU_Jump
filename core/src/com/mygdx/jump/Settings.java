@@ -27,6 +27,9 @@ public class Settings {
     public static int KEY_LEFT = Keys.LEFT;
     public static int KEY_RIGHT = Keys.RIGHT;
     public static int KEY_SHOOT = Keys.SPACE;
+    public static int KRY_USE_ITEM = Keys.ENTER;
+    public static int KEY_UP = Keys.UP;
+    public static int KEY_DOWN = Keys.DOWN;
 
     // Methods
     /** Load settings from path*/

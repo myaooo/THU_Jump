@@ -43,7 +43,7 @@ public class Doctor extends GameObject {
     /**
      * The width of Doctor
      */
-    public static final float WIDTH = GameStage.WORLD_WIDTH/8;
+    public static final float WIDTH = 1.5f;
     /**
      * The height of Doctor
      */
@@ -57,8 +57,8 @@ public class Doctor extends GameObject {
     //private int status = STATUS_FALL; // the status of doctor inherited from object
     //private float stateTime = 0;    // a timer that stores the time
     private TextureRegion keyFrame;
-    private ArrayList<Item> itemPacakage;
-    private Item item = null;  // the item that the doctor get with him
+
+    public Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
     private float maxjumpheight = 0;
     private float XMin;
@@ -71,22 +71,25 @@ public class Doctor extends GameObject {
     public int coins = 0;
     public float updateScale = 0;
     public float updateRotate = 10;
+    public GameStage stage;
+    public ItemPackage itemPackage;
     // methods
 
     /**
      * Default constructor
      */
-    public Doctor() {
-        // copy fields from resources
-        this(Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
+    public Doctor(GameStage gameStage, ItemPackage itemPack) {
+        this(gameStage, Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
+        itemPackage = itemPack;
     }
 
     /**
      * Constructor, setting the image and animation to a loaded Image and Animation
      */
-    public Doctor(Animation anim_f, Animation anim_j, Animation anim_h) {
+    public Doctor(GameStage gameStage, Animation anim_f, Animation anim_j, Animation anim_h) {
         super(GameStage.WORLD_WIDTH/2, 5f, WIDTH,HEIGHT);
         this.setOrigin(WIDTH/2,HEIGHT/2);
+        this.stage = gameStage;
         status = STATUS_FALL;
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
@@ -96,6 +99,7 @@ public class Doctor extends GameObject {
         maxjumpheight = JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY_ABS * 2);
         XMin = -WIDTH/2;
         XMax = GameStage.WORLD_WIDTH-WIDTH/2;
+
     }
 
     /**
@@ -244,18 +248,14 @@ public class Doctor extends GameObject {
     /**
      * Calls when the doctor hits an item and get the item*/
     public void getItem(Item it){
-        itemPacakage.add(it);
+        item = it;
     }
 
     /**
      * Calls when the doctor uses this item*/
     public void useItem(){
-        item.activate();
-    }
-
-    /**Calls when the item is power off*/
-    public void itemPowerOff(){
-        item.powerOff();
+        if (item != null && item.isTouched())
+            item.activate();
     }
 
     public void changeShield(){
@@ -272,8 +272,6 @@ public class Doctor extends GameObject {
                 getOriginX(), getOriginY(), // rotate and scale center x,y
                 getWidth(), getHeight(), // texture width and height
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
-        if (item != null)
-            item.draw(batch, parentAlpha);
 
     }
 
@@ -286,6 +284,10 @@ public class Doctor extends GameObject {
             this.scaleBy(updateScale*deltaTime);
             this.rotateBy(updateRotate);
         }
+    }
+
+    public boolean hasItem(){
+        return item != null;
     }
 
 }

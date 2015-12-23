@@ -29,6 +29,7 @@ public class Assets {
     public static Image BULLET;
     public static Font defaultFont;
     public static AnimatedImage GameOverAnimation;
+    public static Image ITEM_PACKAGE;
     /*
     Other Assets here
      */
@@ -46,6 +47,7 @@ public class Assets {
         BULLET = new Image("data/bullet.png");
         defaultFont = new Font("data/4.ttf",50, Color.BLACK);
         GameOverAnimation = new AnimatedImage("data/game_over3.png",3);
+        ITEM_PACKAGE = new Image("data/item_pack.png");
     }
 
     public static Animation getDoctorJumpAnim(){
@@ -154,4 +156,8 @@ public class Assets {
     }
 
     public static Animation getGameOverAnim(){return GameOverAnimation.getAnimation();}
+
+    public static TextureRegion getItemPackage(){
+        return ITEM_PACKAGE.getTextureRegion();
+    }
 }
