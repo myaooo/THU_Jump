@@ -259,6 +259,10 @@ public class Doctor extends GameObject {
             item.activate();
     }
 
+    public void itemPowerOff(){
+        item = null;
+    }
+
     public void changeShield(){
         shield = shield ? false : true;
     }

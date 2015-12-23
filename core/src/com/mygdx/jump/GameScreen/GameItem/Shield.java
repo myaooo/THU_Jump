@@ -44,8 +44,8 @@ public class Shield extends Item {
     @Override
     public void powerOff(){
         super.powerOff();
-        doctor.item = null;
         doctor.changeShield();
+        doctor.itemPowerOff();
     }
 
 

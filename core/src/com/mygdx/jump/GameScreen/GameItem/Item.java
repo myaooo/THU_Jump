@@ -89,6 +89,8 @@ public abstract class Item extends GameObject {
     /**The item is powered off*/
     public void powerOff(){
         status = STATUS_POWER_OFF;
+        if (doctor != null)
+            doctor.itemPowerOff();
     }
 
     /**Update function*/

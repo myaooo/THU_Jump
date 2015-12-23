@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.jump.GameScreen.Floor;
 import com.mygdx.jump.Resource.Assets;
 
@@ -9,8 +11,11 @@ import com.mygdx.jump.Resource.Assets;
 public class Reversor extends Item {
 
     static final float REVERSE_TIME = 5f;
+    static final float REVERSOR_WIDTH = 1f;
+    static final float REVERSOR_HEIGHT = 0.5f;
 
     private float originVelocity;
+    private Animation animation;
 
     public Reversor(Floor floor){
         super(floor);
@@ -22,10 +27,28 @@ public class Reversor extends Item {
         super.activate();
         originVelocity = doctor.MOVE_VELOCITY;
         doctor.MOVE_VELOCITY = -originVelocity;
+        animation = Assets.getReversorAct();
+        keyFrame = animation.getKeyFrame(0,true);
+        this.setWidth(REVERSOR_WIDTH);
+        this.setHeight(REVERSOR_HEIGHT);
+        this.setPosition(doctor.getX(),doctor.getTop());
     }
 
     @Override
     public void powerOff(){
         doctor.MOVE_VELOCITY = originVelocity;
+        super.powerOff();
+    }
+
+    @Override
+    public void updateActive(float delta){
+        float mark = REVERSE_TIME-stateTime;
+        if (mark > 0) {
+            this.setColor(1,1,1,2 < mark ? 1 : (mark)/2);
+            this.setPosition(doctor.getX(),doctor.getTop());
+            keyFrame = animation.getKeyFrame(stateTime);
+            stateTime += delta;
+        }
+        else this.powerOff();
     }
 }
