@@ -40,21 +40,23 @@ public class GameScreen extends ScreenAdapter {
     final static String SCORE = "SCORE ";
     final static String COIN = "COIN ";
 
-    // private class fields
-    private Stage backStage;
-    private GameStage gameStage;
-    private Stage coverStage;
-    private TsinghuaJump game;
-    private GameRecord record;
-    private int status;
-    private Mediator mediator;
-    private Button pauseButton;
-    private float stateTime = 0;
-    private Image background;
-    private Music BGM =Gdx.audio.newMusic(Gdx.files.internal("data/sound/background.mp3"));
+    // protected class fields
+    protected Stage backStage;
+    protected GameStage gameStage;
+    protected Stage coverStage;
+    protected Stage coverStage2 = null;
+    protected TsinghuaJump game;
+    protected GameRecord record;
+    protected int status;
+    protected Mediator mediator;
+    protected Button pauseButton;
+    protected float stateTime = 0;
+    protected Image background;
+    protected Image itemPackage;
+    protected Music BGM =Gdx.audio.newMusic(Gdx.files.internal("data/sound/background.mp3"));
 
-    private Label scoreLabel;
-    private Label coinLabel;
+    protected Label scoreLabel;
+    protected Label coinLabel;
 
 
     /**constructor*/
@@ -64,20 +66,23 @@ public class GameScreen extends ScreenAdapter {
         Recorder.addRecord();
         record = Recorder.currentRecord;
         // set gamstage
-        mediator = new Mediator();
-        gameStage = new GameStage(mediator);
+        initialzeGame();
         // set cover and backstage
-        coverStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
-        backStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
-        Gdx.input.setInputProcessor(coverStage);
-        status = GAME_RUNNING;
         initializeCover();
         initializeBack();
+        Gdx.input.setInputProcessor(coverStage);
+        status = GAME_RUNNING;
         Assets.playMusic(BGM);
     }
 
+    protected void initialzeGame(){
+        mediator = new Mediator();
+        gameStage = new GameStage(this,mediator);
+    }
+
     /**Initializing Cover Stage*/
-    private void initializeCover(){
+    protected void initializeCover(){
+        coverStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
         // Set Button
         Button.ButtonStyle stl = new Button.ButtonStyle();
         stl.up = new TextureRegionDrawable(Assets.getPauseUp());
@@ -86,11 +91,16 @@ public class GameScreen extends ScreenAdapter {
         pauseButton = new Button(stl);
         pauseButton.setBounds(410, 730, 50, 50);
         coverStage.addActor(pauseButton);
+        // set item package
+        itemPackage = new Image(Assets.getItemPackage());
+        itemPackage.setBounds(12, 12, 80, 80);
+        coverStage.addActor(itemPackage);
         addScoreLabel();
     }
 
     /**Initializing Back Stage*/
-    private void initializeBack(){
+    protected void initializeBack(){
+        backStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
         background = new Image(Assets.getBackground());
         background.setBounds(0,0,480,800);
         backStage.addActor(background);
@@ -117,7 +127,7 @@ public class GameScreen extends ScreenAdapter {
 
 
     /**Calls before rendering*/
-    private void update(float delta){
+    protected void update(float delta){
         switch(status){
             case GAME_RUNNING:
                 updateRunning(delta);
@@ -168,8 +178,7 @@ public class GameScreen extends ScreenAdapter {
         mediator.reset();
 
         // update score and coin label
-        scoreLabel.setText(SCORE+gameStage.getScore());
-        coinLabel.setText(COIN+gameStage.getCoins());
+        updateLabels();
 
         // check game over
         if (gameStage.isGameOver()) {
@@ -191,6 +200,11 @@ public class GameScreen extends ScreenAdapter {
     public void updateOver(){
         if (Gdx.input.isTouched())
             game.setScreen(new MainMenuScreen(game));
+    }
+
+    public void updateLabels(){
+        scoreLabel.setText(SCORE+gameStage.getScore());
+        coinLabel.setText(COIN+gameStage.getCoins());
     }
 
     public void drawRunning(){
@@ -219,7 +233,6 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-
         Settings.setScreen(width, height);
     }
 

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.mygdx.jump.GameScreen.BattleScreen;
 import com.mygdx.jump.GameScreen.GameScreen;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;

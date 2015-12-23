@@ -28,7 +28,7 @@ public abstract class Item extends GameObject {
     static public final float HOLD_WIDTH = 1.5f;
     static public final float HOLD_HEIGHT =1.5f;
     // class fields
-    protected Doctor doctor = null;
+    public Doctor doctor = null;
     protected Floor attachedFloor;
     protected TextureRegion keyFrame;
     protected boolean usable = true;
@@ -120,7 +120,7 @@ public abstract class Item extends GameObject {
     }
 
     public void updateHold(float delta){
-        setPosition(doctor.itemPackage.getX()+0.25f,doctor.currentHeight+0.3f+0.25f);
+        setPosition(0.3f+0.25f,doctor.currentHeight+0.3f+0.25f);
     }
 
     @Override

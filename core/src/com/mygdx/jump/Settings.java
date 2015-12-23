@@ -26,9 +26,13 @@ public class Settings {
 
     // Keys
     public static int KEY_LEFT = Keys.LEFT;
+    public static int KEY_LEFT2 = Keys.A;
     public static int KEY_RIGHT = Keys.RIGHT;
+    public static int KEY_RIGHT2 = Keys.D;
     public static int KEY_SHOOT = Keys.SPACE;
+    public static int KEY_SHOOT2 = Keys.F;
     public static int KRY_USE_ITEM = Keys.ENTER;
+    public static int KEY_USE_ITEM2 = Keys.G;
     public static int KEY_UP = Keys.UP;
     public static int KEY_DOWN = Keys.DOWN;
 

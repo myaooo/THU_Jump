@@ -72,7 +72,7 @@ public class Doctor extends GameObject {
     public float updateScale = 0;
     public float updateRotate = 10;
     public GameStage stage;
-    public ItemPackage itemPackage;
+    //public ItemPackage itemPackage = null;
     public float jumpVelocity;
     public float moveVelocity;
     public boolean Floating;
@@ -81,9 +81,8 @@ public class Doctor extends GameObject {
     /**
      * Default constructor
      */
-    public Doctor(GameStage gameStage, ItemPackage itemPack) {
+    public Doctor(GameStage gameStage) {
         this(gameStage, Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
-        itemPackage = itemPack;
     }
 
     /**
@@ -97,6 +96,7 @@ public class Doctor extends GameObject {
         stateTime = 0;
         this.setAnimation(anim_f, anim_j, anim_h);
         this.current_anim = animation_fall;
+        keyFrame = current_anim.getKeyFrame(stateTime, true);
         this.acceleration.set(0,-GameStage.GRAVITY_ABS);
         this.velocity.set(0,0);
         maxjumpheight = jumpVelocity * jumpVelocity / (GameStage.GRAVITY_ABS * 2);
@@ -115,6 +115,11 @@ public class Doctor extends GameObject {
         this.animation_fall = anim_f;
         this.animation_jump = anim_j;
         this.animation_hit = anim_h;
+    }
+
+    /***/
+    public void setItemPackage(ItemPackage itpkg){
+        //this.itemPackage = itpkg;
     }
 
     /**

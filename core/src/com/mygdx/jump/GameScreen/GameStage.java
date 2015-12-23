@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -52,12 +53,12 @@ public class GameStage extends Stage {
     final static int SCORE_SCALE = 10;
 
     // class fields
-    private Doctor doctor;
-    private final ArrayList<Floor> floors = new ArrayList<>();
-    private final ArrayList<Item> items = new ArrayList<>();
-    private final ArrayList<Monster> monsters = new ArrayList<>();
-    private final ArrayList<Bullet> bullets = new ArrayList<>();
-    private final ArrayList<Coin> coins = new ArrayList<>();
+    public Doctor doctor;
+    protected final ArrayList<Floor> floors = new ArrayList<>();
+    protected final ArrayList<Item> items = new ArrayList<>();
+    protected final ArrayList<Monster> monsters = new ArrayList<>();
+    protected final ArrayList<Bullet> bullets = new ArrayList<>();
+    protected final ArrayList<Coin> coins = new ArrayList<>();
     public Sound FALLSOUND = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
     public int score = 0;
     //public float currentHeight = 0;
@@ -66,20 +67,22 @@ public class GameStage extends Stage {
     public int level = 1;
     public float next_level_height = HEIGHT_LEVEL_BASE;
     //public int coins = 0;
-    private int status = STATUS_RUNNING;
-    private Random rand = new Random();
-    //private Image background;
-    private float stateTime = 0;
-    private Label scoreLabel;
-    private Label coinLabel;
-    private ItemPackage itemPackage;
-    private Mediator mediator;
-    OrthographicCamera camera;
+    protected int status = STATUS_RUNNING;
+    protected Random rand = new Random();
+    //protected Image background;
+    protected float stateTime = 0;
+    protected Label scoreLabel;
+    protected Label coinLabel;
+    //protected ItemPackage itemPackage;
+    protected Mediator mediator;
+    protected GameScreen gameScreen;
+    protected OrthographicCamera camera;
 
     /**
      * Default constructor set the viewport to scalingViewport and screen dimension
      */
-    public GameStage(Mediator media) {
+    public GameStage(GameScreen screen, Mediator media) {
+        gameScreen = screen;
         camera = new OrthographicCamera(WORLD_WIDTH,WORLD_HEIGHT);
         camera.position.set(WORLD_WIDTH/2,WORLD_HEIGHT/2,0);
         FitViewport viewport =
@@ -92,10 +95,11 @@ public class GameStage extends Stage {
 
     protected void initialize(){
         initializeFloor();
-        itemPackage = new ItemPackage(this);
-        doctor = new Doctor(this,itemPackage);
+        //itemPackage = new ItemPackage(doctor);
         //addScoreLabel();
-        this.addActor(itemPackage);
+        doctor = new Doctor(this);
+        //doctor.setItemPackage(itemPackage);
+        //this.addActor(itemPackage);
     }
 
     /**Several public get functions*/
@@ -105,8 +109,14 @@ public class GameStage extends Stage {
         return score;
     }
 
+    public int getScore2(){return 0;}
+
     /**get Height*/
     public float getCurrentHeight(){
+        return doctor.currentHeight;
+    }
+
+    public float getCurrentHeight2(){
         return doctor.currentHeight;
     }
 
@@ -114,6 +124,8 @@ public class GameStage extends Stage {
     public int getCoins(){
         return doctor.coins;
     }
+
+    public int getCoins2(){return 0;}
 
     /**
      * Update
@@ -144,7 +156,7 @@ public class GameStage extends Stage {
         for (int i = 0; i < len; ++i) {
             Floor fli = floors.get(i);
             fli.update(deltaTime);
-            if (fli.isBroken() || fli.getTop() < getCurrentHeight()) {
+            if (fli.isBroken()) {
                 // the floor is broken and should be removed.
                 floors.remove(fli);
                 len--;
@@ -253,7 +265,7 @@ public class GameStage extends Stage {
     /**
      * Initialize floors
      */
-    private void initializeFloor() {
+    protected void initializeFloor() {
         Floor fl = new Floor(getWidth()/2,0.5f);
         floors.add(fl);
         floorHeight = fl.getY();
@@ -273,7 +285,7 @@ public class GameStage extends Stage {
 
     /**
      * Generate Coins*/
-    private void genCoin(){
+    protected void genCoin(){
         float toll = rand.nextFloat();
         if (toll < Coin.RATE){
             float X = rand.nextFloat()*(WORLD_WIDTH-Coin.WIDTH);
@@ -286,7 +298,7 @@ public class GameStage extends Stage {
     /**
      * Generate Floors
      */
-    private void genFloor(){
+    protected void genFloor(){
         float floorX = rand.nextFloat() * (WORLD_WIDTH-Floor.FLOOR_WIDTH);
         float floorY = MAX_JUMP_HEIGHT*0.9f;
         // Randomize floor's Y coordinates
@@ -316,7 +328,7 @@ public class GameStage extends Stage {
     }
 
     /**Generate Monster, calls when the currentHeight has been updated*/
-    private void genMonster(){
+    protected void genMonster(){
         if (monsterHeight + 20 < getCurrentHeight()) {
             float toll = rand.nextFloat();
             if (toll < 0.05f){
@@ -339,7 +351,7 @@ public class GameStage extends Stage {
     }
 
     /**Generate Bullet, calls when the doctor shot a bullet*/
-    private void genBullet(){
+    protected void genBullet(){
         // in case that the doctor shoot bullet too quickly
         if (mediator.isShootBullet()&&(stateTime > SHOOTING_SPEED)){
             stateTime = 0; // reset time
@@ -359,7 +371,7 @@ public class GameStage extends Stage {
     }
 
     /**Generate Item*/
-    private void genItem(){
+    protected void genItem(){
         // generate springs
         float rateFloater = Floater.rate;
         float rateJumper = Jumper.rate + rateFloater;
@@ -386,34 +398,34 @@ public class GameStage extends Stage {
         }
     }
 
-    private void genSpring(){
+    protected void genSpring(){
         Floor fl = floors.get(floors.size()-1);
         Item spr = new Spring(fl);
         items.add(spr);
     }
 
-    private void genJumper(){
+    protected void genJumper(){
         Floor fl = floors.get(floors.size()-1);
         Item jp = new Jumper(fl);
         items.add(jp);
     }
 
-    private void genReversor(){
+    protected void genReversor(){
         Floor fl = floors.get(floors.size()-1);
         Item spr = new Reversor(fl);
         items.add(spr);
     }
 
-    private void genRocket(){
+    protected void genRocket(){
 
     }
 
-    private void genShield(){
+    protected void genShield(){
         Floor fl = floors.get(floors.size()-1);
         Shield shield = new Shield(fl);
         items.add(shield);
     }
-    private void genFloater(){
+    protected void genFloater(){
         Floor fl = floors.get(floors.size()-1);
         Item fltr = new Floater(fl);
         items.add(fltr);
@@ -424,53 +436,53 @@ public class GameStage extends Stage {
      * Check all kinds of collisions
      */
     public void checkCollisions(){
-        checkHittingFloor();
-        checkHittingMonster();
-        checkHittingItem();
-        checkHittingCoin();
+        checkHittingFloor(doctor);
+        checkHittingMonster(doctor);
+        checkHittingItem(doctor);
+        checkHittingCoin(doctor);
     }
 
     /**
      * Check whether doctor hits a floor and update doctor and floor status
      */
-    public boolean checkHittingFloor() {
-        if (!doctor.isFalling() || doctor.isLowerCurrentHeight())
-            return false;
+    public void checkHittingFloor(Doctor doc) {
+        if (!doc.isFalling() || doc.isLowerCurrentHeight())
+            return;
         for (Floor fl : floors) {
-            if (doctor.getY() > fl.getY()) {
-                if(doctor.hitFloor(fl))
-                    return true;
+            if (doc.getY() > fl.getY()) {
+                if(doc.hitFloor(fl))
+                    return;
             }
         }
-        return false;
+        return;
     }
 
     /**
      * Check whether doctor hits a monster and update doctor status
      */
-    public boolean checkHittingMonster() {
-        if (doctor.isShielded())
+    public boolean checkHittingMonster(Doctor doc) {
+        if (doc.isShielded())
             // the doctor is shielded
             return false;
         for (Monster mst : monsters) {
-            if(mst.checkHitDoctor(doctor))
+            if(mst.checkHitDoctor(doc))
                 return true;
         }
         return false;
     }
 
-    public void checkHittingItem(){
+    public void checkHittingItem(Doctor doc){
         for (Item it: items){
-            if (it.checkHitDoctor(doctor)) {
-                it.hitDoctor(doctor);
+            if (it.checkHitDoctor(doc)) {
+                it.hitDoctor(doc);
 
             }
         }
     }
 
-    public void checkHittingCoin(){
+    public void checkHittingCoin(Doctor doc){
         for (Coin cn: coins){
-           cn.checkhitDoctor(doctor);
+           cn.checkhitDoctor(doc);
         }
         //coinLabel.setText(COIN+getCoins());
     }
@@ -494,7 +506,6 @@ public class GameStage extends Stage {
 
     @Override
     public void draw(){
-        Camera camera = getCamera();
         camera.update();
 
         Batch batch = getBatch();

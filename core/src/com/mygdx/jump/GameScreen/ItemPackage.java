@@ -14,20 +14,20 @@ public class ItemPackage extends Actor {
     public static float WIDTH = 2f;
     public static float HEIGHT = 2f;
     TextureRegion keyFrame;
-    GameStage theGame;
+    Doctor doctor;
 
-    public ItemPackage(GameStage game){
-        this(game,0.3f,0.3f);
+    public ItemPackage(Doctor doc){
+        this(doc,0.3f,0.3f);
     }
 
-    public ItemPackage(GameStage game, float x, float y){
-        theGame = game;
+    public ItemPackage(Doctor doc, float x, float y){
+        doctor = doc;
         keyFrame = Assets.getItemPackage();
         setBounds(x,y,WIDTH,HEIGHT);
     }
 
     public void update(){
-        setY(theGame.getCurrentHeight()+0.3f);
+        setY(doctor.currentHeight+0.3f);
     }
 
     @Override

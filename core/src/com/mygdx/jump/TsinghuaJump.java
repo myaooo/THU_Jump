@@ -2,13 +2,8 @@ package com.mygdx.jump;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.mygdx.jump.MenuScreen.MainMenuScreen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.mygdx.jump.MenuScreen.ShopScreen;
 import com.mygdx.jump.MenuScreen.StartScreen;
 import com.mygdx.jump.Record.GameRecord;
 import com.mygdx.jump.Resource.Assets;
@@ -35,5 +30,10 @@ public class TsinghuaJump extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
 	}
+
+    @Override
+    public void resize(int width, int height){
+        Settings.setScreen(width,height);
+    }
 
 }
