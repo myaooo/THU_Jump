@@ -3,6 +3,7 @@ package com.mygdx.jump.GameScreen.GameItem;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.jump.GameScreen.Doctor;
 import com.mygdx.jump.GameScreen.Floor;
+import com.mygdx.jump.GameScreen.GameStage;
 import com.mygdx.jump.Resource.Assets;
 
 /**
@@ -10,7 +11,7 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Spring extends Item{
 
-    static public final float rate = 0.05f;
+    static public final float rate = 0.04f;
     // active
     private TextureRegion activeTexture;
 
@@ -23,6 +24,8 @@ public class Spring extends Item{
 
     @Override
     public void hitDoctor(Doctor doc){
+        if (doc.getVelocity().y > GameStage.NORMAL_JUMP_VELOCITY)
+            return;
         super.hitDoctor(doc);
         activate();
     }
@@ -31,7 +34,7 @@ public class Spring extends Item{
     public void activate(){
         super.activate();
         keyFrame = activeTexture;
-        this.doctor.jump(2f*doctor.JUMP_VELOCITY);
+        this.doctor.jump(2f*doctor.jumpVelocity);
     }
 
     public static float getRate(){

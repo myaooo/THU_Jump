@@ -1,6 +1,5 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.jump.GameScreen.Floor;
 import com.mygdx.jump.Resource.Assets;
 
@@ -11,7 +10,7 @@ public class Jumper extends Item {
     static public final float JUMP_TIME = 5f;
     static public final float JUMPER_WIDTH = 1.5f;
     static public final float JUMPER_HEIGHT = 0.5f;
-    static public final float rate = 0.1f;
+    static public final float rate = 0.03f;
 
     private float originVelocity;
 
@@ -23,8 +22,8 @@ public class Jumper extends Item {
     @Override
     public void activate(){
         super.activate();
-        originVelocity = doctor.JUMP_VELOCITY;
-        doctor.JUMP_VELOCITY = 1.5f*originVelocity;
+        originVelocity = doctor.jumpVelocity;
+        doctor.jumpVelocity = 1.5f*originVelocity;
         keyFrame = Assets.getJumperAct();
         this.setWidth(JUMPER_WIDTH);
         this.setHeight(JUMPER_HEIGHT);
@@ -33,7 +32,7 @@ public class Jumper extends Item {
 
     @Override
     public void powerOff(){
-        doctor.JUMP_VELOCITY = originVelocity;
+        doctor.jumpVelocity = originVelocity;
         super.powerOff();
     }
 
@@ -43,7 +42,7 @@ public class Jumper extends Item {
         if (mark > 0) {
             this.setColor(1,1,1,1 < mark ? 1 : (mark));
             this.setPosition(doctor.getX(),doctor.getY());
-            this.setScale(doctor.getScaleY(),1);
+            this.setScale(doctor.getScaleX(), 1);
             stateTime += delta;
         }
         else this.powerOff();

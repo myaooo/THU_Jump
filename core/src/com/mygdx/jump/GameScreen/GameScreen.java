@@ -142,6 +142,10 @@ public class GameScreen extends ScreenAdapter {
             mediator.setLeft();
         if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
             mediator.setRight();
+        if (Gdx.input.isKeyPressed(Settings.KEY_UP))
+            mediator.setUp();
+        if (Gdx.input.isKeyPressed(Settings.KEY_DOWN))
+            mediator.setDown();
         if (Gdx.input.isKeyPressed(Settings.KEY_SHOOT))
             mediator.doctorShoot();
         if (Gdx.input.isKeyPressed(Settings.KRY_USE_ITEM))

@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
 
-import java.util.ArrayList;
-
 /**
  * Class Doctor, which is the main character in the game, represents the doctor in Tsinghua
  *
@@ -34,13 +32,13 @@ public class Doctor extends GameObject {
     /**
      * The jumping velocity of Doctor. max_v = sqrt(2*g*h)
      */
-    public static float JUMP_VELOCITY = GameStage.NORMAL_JUMP_VELOCITY;
+    public static final float JUMP_VELOCITY = GameStage.NORMAL_JUMP_VELOCITY;
     /**
      * The moving velocity of Doctor, when moving key was pressed
      */
-    public static float MOVE_VELOCITY = 10;
+    public static final float MOVE_VELOCITY = 10;
 
-    public static final float MOVE_ACCELERATION = 30;
+    public static final float MOVE_VELOCITY_Y = 22;
     /**
      * The width of Doctor
      */
@@ -62,7 +60,7 @@ public class Doctor extends GameObject {
 
 
     public Item item = null;  // the item that the doctor get with him
-    private boolean shield = false;
+    private boolean shield;
     private float maxjumpheight = 0;
     private float XMin;
     private float XMax;
@@ -75,6 +73,9 @@ public class Doctor extends GameObject {
     public float updateRotate = 10;
     public GameStage stage;
     public ItemPackage itemPackage;
+    public float jumpVelocity;
+    public float moveVelocity;
+    public boolean Floating;
     // methods
 
     /**
@@ -98,10 +99,13 @@ public class Doctor extends GameObject {
         this.current_anim = animation_fall;
         this.acceleration.set(0,-GameStage.GRAVITY_ABS);
         this.velocity.set(0,0);
-        maxjumpheight = JUMP_VELOCITY * JUMP_VELOCITY / (GameStage.GRAVITY_ABS * 2);
+        maxjumpheight = jumpVelocity * jumpVelocity / (GameStage.GRAVITY_ABS * 2);
         XMin = -WIDTH/2;
         XMax = GameStage.WORLD_WIDTH-WIDTH/2;
-
+        jumpVelocity = JUMP_VELOCITY;
+        moveVelocity = MOVE_VELOCITY;
+        shield = false;
+        Floating = false;
     }
 
     /**
@@ -121,8 +125,11 @@ public class Doctor extends GameObject {
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         // update velocity
-        if (!isHit())
-            setMoveDirection(moveDirection);
+        if (!isHit()) {
+            setMoveDirectionX(moveDirection);
+            if (Floating)
+                setMoveDirectionY(1);
+        }
         this.velocity.add(acceleration.x*deltaTime,acceleration.y*deltaTime);
 
         // check for illegal X position
@@ -137,9 +144,15 @@ public class Doctor extends GameObject {
 
     /**
      * Set the X direction's velocity into MOVE_VELOCITY*/
-    public void setMoveDirection(int direction){
-        velocity.x = direction * MOVE_VELOCITY;
-        if (direction != 0) this.setScale(direction,1);
+    public void setMoveDirectionX(int direction){
+        velocity.x = direction * moveVelocity;
+        if (direction != 0) this.setScale(direction*moveVelocity/Math.abs(moveVelocity),1);
+    }
+
+    /**
+     * Set the Y direction's velocity into MOVE_VELOCITY*/
+    public void setMoveDirectionY(int direction){
+        velocity.y = direction * MOVE_VELOCITY_Y;
     }
 
     /**
@@ -188,7 +201,7 @@ public class Doctor extends GameObject {
 
             if (fl.isBreakable())
                 return false;
-            jump(JUMP_VELOCITY);
+            jump(jumpVelocity);
             return true;
         }
         return false;
@@ -239,7 +252,7 @@ public class Doctor extends GameObject {
                 break;
             case STATUS_JUMP:
                 current_anim = animation_jump;
-                velocity.y = JUMP_VELOCITY;
+                velocity.y = jumpVelocity;
                 break;
             default:
                 break;

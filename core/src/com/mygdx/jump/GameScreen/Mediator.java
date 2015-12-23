@@ -48,6 +48,14 @@ public class Mediator {
         xDirection = -1;
     }
 
+    public void setUp(){
+        yDirection = 1;
+    }
+
+    public void setDown(){
+        yDirection = -1;
+    }
+
     public void useItem(){
         activateItem = true;
     }

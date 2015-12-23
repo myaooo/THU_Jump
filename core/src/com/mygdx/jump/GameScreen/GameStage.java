@@ -361,13 +361,17 @@ public class GameStage extends Stage {
     /**Generate Item*/
     private void genItem(){
         // generate springs
-        float rateJumper = Jumper.rate;
+        float rateFloater = Floater.rate;
+        float rateJumper = Jumper.rate + rateFloater;
         float rateSpring = Spring.rate+rateJumper;
         float rateShield = Shield.rate+rateSpring;
         float rateReversor = Reversor.rate+rateShield;
         float toll = rand.nextFloat();
         if (toll < rateReversor) {
-            if (toll < rateJumper){
+            if (toll < rateFloater){
+                genFloater();
+            }
+            else if (toll < rateJumper){
                 genJumper();
             }
             else if (toll < rateSpring){
@@ -410,6 +414,9 @@ public class GameStage extends Stage {
         items.add(shield);
     }
     private void genFloater(){
+        Floor fl = floors.get(floors.size()-1);
+        Item fltr = new Floater(fl);
+        items.add(fltr);
 
     }
 
@@ -500,9 +507,6 @@ public class GameStage extends Stage {
             for(Monster ms:monsters){
                 ms.draw(batch,1);
             }
-            for(Item it:items){
-                it.draw(batch,1);
-            }
             for (Coin cn:coins){
                 cn.draw(batch,1);
             }
@@ -510,6 +514,9 @@ public class GameStage extends Stage {
                 blt.draw(batch,1);
             }
             doctor.draw(batch,1);
+            for(Item it:items){
+                it.draw(batch,1);
+            }
             batch.end();
         }
         super.draw();

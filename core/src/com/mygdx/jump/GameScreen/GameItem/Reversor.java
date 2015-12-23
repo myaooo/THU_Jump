@@ -13,7 +13,7 @@ public class Reversor extends Item {
     static public final float REVERSE_TIME = 5f;
     static public final float REVERSOR_WIDTH = 1.5f;
     static public final float REVERSOR_HEIGHT = 0.8f;
-    static public final float rate = 0.05f;
+    static public final float rate = 0.02f;
 
     private float originVelocity;
     private Animation animation;
@@ -26,8 +26,8 @@ public class Reversor extends Item {
     @Override
     public void activate(){
         super.activate();
-        originVelocity = doctor.MOVE_VELOCITY;
-        doctor.MOVE_VELOCITY = -originVelocity;
+        originVelocity = doctor.moveVelocity;
+        doctor.moveVelocity = -originVelocity;
         animation = Assets.getReversorAct();
         keyFrame = animation.getKeyFrame(0,true);
         this.setWidth(REVERSOR_WIDTH);
@@ -37,7 +37,7 @@ public class Reversor extends Item {
 
     @Override
     public void powerOff(){
-        doctor.MOVE_VELOCITY = originVelocity;
+        doctor.moveVelocity = originVelocity;
         super.powerOff();
     }
 
