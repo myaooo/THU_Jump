@@ -32,7 +32,9 @@ public class Shield extends Item {
 
     @Override
     public void updateActive(float delta){
-        if (stateTime < SHIELD_TIME) {
+        float mark = SHIELD_TIME-stateTime;
+        if (mark > 0) {
+            this.setColor(1,1,1,2 < mark ? 1 : (mark)/2);
             this.setPosition(doctor.getX(Align.center), doctor.getY(Align.center), Align.center);
             stateTime += delta;
         }

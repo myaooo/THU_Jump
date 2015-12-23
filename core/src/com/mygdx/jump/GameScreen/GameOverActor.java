@@ -1,6 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,13 +23,13 @@ public class GameOverActor extends Actor {
     }
 
     public void update(float delta){
-        if (stateTime <= 1) {
+        if (stateTime <= 1.5) {
             keyFrame = anim.getKeyFrame(stateTime, true);
-            setColor(0,0,0,stateTime);
+            setColor(1,1,1,stateTime);
         }
         else{
             keyFrame = anim.getKeyFrame(stateTime, false);
-            setColor(0,0,0,1);
+            setColor(1,1,1,1);
         }
         stateTime +=delta;
     }
@@ -36,6 +37,8 @@ public class GameOverActor extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha){
         update(Gdx.graphics.getDeltaTime());
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 getOriginX(), getOriginY(), // rotate and scale center x,y

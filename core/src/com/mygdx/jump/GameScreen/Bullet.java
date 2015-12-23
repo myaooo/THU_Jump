@@ -1,5 +1,6 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
@@ -93,6 +94,8 @@ public class Bullet extends GameObject {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         // call draw function using batch
         batch.draw(keyFrame, getX(), getY(),    // position
                 getOriginX(), getOriginY(), // rotate and scale center x,y

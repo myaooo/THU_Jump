@@ -30,6 +30,7 @@ public class Assets {
     public static Font defaultFont;
     public static AnimatedImage GameOverAnimation;
     public static Image ITEM_PACKAGE;
+    public static AnimatedImage PAUSE;
     /*
     Other Assets here
      */
@@ -48,6 +49,7 @@ public class Assets {
         defaultFont = new Font("data/4.ttf",50, Color.BLACK);
         GameOverAnimation = new AnimatedImage("data/game_over3.png",3);
         ITEM_PACKAGE = new Image("data/item_pack.png");
+        PAUSE = new AnimatedImage("data/pause2.png",2);
     }
 
     public static Animation getDoctorJumpAnim(){
@@ -159,5 +161,12 @@ public class Assets {
 
     public static TextureRegion getItemPackage(){
         return ITEM_PACKAGE.getTextureRegion();
+    }
+
+    public static TextureRegion getPauseUp(){
+        return PAUSE.getAnimation().getKeyFrame(0f);
+    }
+    public static TextureRegion getPauseDown(){
+        return PAUSE.getAnimation().getKeyFrame(0.2f);
     }
 }

@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -71,7 +72,7 @@ public class GameStage extends Stage {
     //public int coins = 0;
     private int status = STATUS_RUNNING;
     private Random rand = new Random();
-    private TextureRegion background;
+    private Image background;
     private float stateTime = 0;
     private Label scoreLabel;
     private Label coinLabel;
@@ -95,7 +96,8 @@ public class GameStage extends Stage {
 
     protected void initialize(){
         initializeFloor();
-        background = Assets.getBackground();
+        background = new Image(Assets.getBackground());
+        background.setBounds(0,0,WORLD_WIDTH,WORLD_HEIGHT);
         itemPackage = new ItemPackage(this);
         doctor = new Doctor(this,itemPackage);
         addScoreLabel();
@@ -246,6 +248,7 @@ public class GameStage extends Stage {
         scoreLabel.setY(getCurrentHeight()+19f);
         scoreLabel.setText(SCORE+score);
         coinLabel.setY(getCurrentHeight()+19f);
+        background.setY(getCurrentHeight());
     }
 
 
@@ -484,7 +487,7 @@ public class GameStage extends Stage {
         if (batch != null) {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            batch.draw(background,0,getCurrentHeight(),WORLD_WIDTH,WORLD_HEIGHT);
+            background.draw(batch,1);
             for (Floor fl:floors){
                 fl.draw(batch,1);
             }

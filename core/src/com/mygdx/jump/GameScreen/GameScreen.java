@@ -2,12 +2,12 @@ package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.jump.MenuScreen.MainMenuScreen;
@@ -34,10 +34,12 @@ public class GameScreen extends ScreenAdapter {
 
     // private class fields
     private GameStage gameStage;
-    private Stage overStage;
+    private Stage coverStage;
     private TsinghuaJump game;
     private int status;
     private Mediator mediator;
+    private Button pauseButton;
+    private float stateTime = 0;
 
 
     /**constructor*/
@@ -46,12 +48,20 @@ public class GameScreen extends ScreenAdapter {
         mediator = new Mediator();
         gameStage = new GameStage(mediator);
         status = GAME_RUNNING;
-
+        initialize();
     }
 
     /**Initializing*/
     private void initialize(){
-        overStage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
+        coverStage = new Stage(new ScalingViewport(Scaling.stretch, 12, 20, new OrthographicCamera()));
+        Button.ButtonStyle stl = new Button.ButtonStyle();
+        stl.up = new TextureRegionDrawable(Assets.getPauseUp());
+        stl.checked = new TextureRegionDrawable(Assets.getPauseUp());
+        stl.down = new TextureRegionDrawable(Assets.getPauseDown());
+        pauseButton = new Button(stl);
+        pauseButton.setBounds(10.8f, 18.8f, 1f, 1f);
+        coverStage.addActor(pauseButton);
+        Gdx.input.setInputProcessor(coverStage);
         Label.LabelStyle ls = new Label.LabelStyle(Assets.defaultFont.getFont(), Color.WHITE);
         Label scoreLabel = new Label("SCORE:", ls);
     }
@@ -64,7 +74,7 @@ public class GameScreen extends ScreenAdapter {
                 updateRunning(delta);
                 break;
             case GAME_PAUSE:
-                updatePause();
+                updatePause(delta);
                 break;
             case GAME_OVER:
                 updateOver();
@@ -78,9 +88,11 @@ public class GameScreen extends ScreenAdapter {
         switch(status){
             case GAME_RUNNING:
                 gameStage.draw();
+                coverStage.draw();
                 break;
             case GAME_PAUSE:
-                //
+                gameStage.draw();
+                coverStage.draw();
                 break;
             case GAME_OVER:
                 gameStage.draw();
@@ -97,6 +109,11 @@ public class GameScreen extends ScreenAdapter {
             mediator.doctorShoot();
         if (Gdx.input.isKeyPressed(Settings.KRY_USE_ITEM))
             mediator.useItem();
+        if (pauseButton.isChecked() && stateTime > 0.5f) {
+            pauseButton.toggle();
+            status = GAME_PAUSE;
+            stateTime = 0;
+        }
 
         gameStage.update(delta);
         mediator.reset();
@@ -104,10 +121,17 @@ public class GameScreen extends ScreenAdapter {
             status = GAME_OVER;
             gameStage.GameOver();
         }
+        stateTime += delta;
     }
 
-    public void updatePause(){
-
+    public void updatePause(float delta){
+        if (pauseButton.isChecked() && stateTime > 0.5f) {
+            pauseButton.toggle();
+            status = GAME_RUNNING;
+            stateTime = 0;
+        }
+        gameStage.update(0);
+        stateTime += delta;
     }
 
     public void updateOver(){
