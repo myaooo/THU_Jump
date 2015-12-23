@@ -1,9 +1,13 @@
 package com.mygdx.jump.Resource;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.jump.Settings;
 
 import java.util.ArrayList;
 
@@ -31,6 +35,7 @@ public class Assets {
     public static AnimatedImage GameOverAnimation;
     public static Image ITEM_PACKAGE;
     public static AnimatedImage PAUSE;
+    public static Sound JUMPSOUND;
     /*
     Other Assets here
      */
@@ -50,6 +55,7 @@ public class Assets {
         GameOverAnimation = new AnimatedImage("data/game_over3.png",3);
         ITEM_PACKAGE = new Image("data/item_pack.png");
         PAUSE = new AnimatedImage("data/pause2.png",2);
+
     }
 
     public static Animation getDoctorJumpAnim(){
@@ -169,4 +175,12 @@ public class Assets {
     public static TextureRegion getPauseDown(){
         return PAUSE.getAnimation().getKeyFrame(0.2f);
     }
+    public static void playSound(Sound sound){if (Settings.SOUNDOPEN) sound.play(1.0f);}
+    public static void playMusic(Music music){
+        if (Settings.SOUNDOPEN)
+            music.play();
+            music.setLooping(true);
+            music.setVolume(15);
+    }
+    public static void stopMusic(Music music){ music.stop();}
 }

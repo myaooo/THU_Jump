@@ -18,6 +18,7 @@ public class Settings {
     public static int SCREEN_HEIGHT = 800;
     public static final float ANIMATION_INTERVAL = 0.2f;
     public static final String settingsfile = ".settings";
+    public static boolean SOUNDOPEN =true;
 
     // Constant fields
     public static final Color myGoldYellow = new Color(1, 222/255f,0,1);

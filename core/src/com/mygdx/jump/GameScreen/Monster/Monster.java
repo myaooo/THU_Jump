@@ -82,7 +82,7 @@ public class Monster extends GameObject {
         if (!doctor.isHit() && this.overlaps(doctor)) {
             {
                 hitDoctor(doctor);
-                monstersound.play(1.0f);
+                Assets.playSound(monstersound);
                 return true;
             }
         }

@@ -58,14 +58,15 @@ public class Doctor extends GameObject {
     //private int status = STATUS_FALL; // the status of doctor inherited from object
     //private float stateTime = 0;    // a timer that stores the time
     private TextureRegion keyFrame;
+    public Sound JUMPSOUND = Gdx.audio.newSound(Gdx.files.internal("data/sound/jump.wav"));
+
 
     public Item item = null;  // the item that the doctor get with him
     private boolean shield = false;
     private float maxjumpheight = 0;
     private float XMin;
     private float XMax;
-    private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("data/sound/jump.wav"));
-    private Sound fallsound = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
+
 
     // public fields
     public float currentHeight = 0;
@@ -198,7 +199,7 @@ public class Doctor extends GameObject {
         status = STATUS_JUMP;
         current_anim = animation_jump;
         velocity.y = jumpVelocity;
-        jumpsound.play(1.0f);
+        Assets.playSound(JUMPSOUND);
         resetTime();
     }
 

@@ -2,6 +2,7 @@ package com.mygdx.jump.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -47,6 +48,7 @@ public class GameScreen extends ScreenAdapter {
     private Button pauseButton;
     private float stateTime = 0;
     private Image background;
+    private Music BGM =Gdx.audio.newMusic(Gdx.files.internal("data/sound/background.mp3"));
 
     private Label scoreLabel;
     private Label coinLabel;
@@ -63,6 +65,7 @@ public class GameScreen extends ScreenAdapter {
         status = GAME_RUNNING;
         initializeCover();
         initializeBack();
+        Assets.playMusic(BGM);
     }
 
     /**Initializing Cover Stage*/
@@ -192,6 +195,7 @@ public class GameScreen extends ScreenAdapter {
 
     public void setGameOver(){
         status = GAME_OVER;
+        Assets.stopMusic(BGM);
         GameOverActor gameOverActor = new GameOverActor();
         coverStage.addActor(gameOverActor);
         scoreLabel.setFontScale(2.5f,2f);

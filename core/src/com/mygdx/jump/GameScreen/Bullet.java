@@ -1,5 +1,7 @@
 package com.mygdx.jump.GameScreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +21,7 @@ public class Bullet extends GameObject {
     public static final int STATUS_HIT_MONSTER = 1;
     public static final int STATUS_MISSED = 2;
     public static final float BULLET_VELOCITY = 25;
+    private Sound SHOOT = Gdx.audio.newSound(Gdx.files.internal("data/sound/shoot.mp3"));
 
     //private fields
     private TextureRegion keyFrame;
@@ -42,6 +45,7 @@ public class Bullet extends GameObject {
     public Bullet(Doctor doctor){
         super(doctor.getX(Align.center),doctor.getY(Align.center),WIDTH,HEIGHT);
         createBullet();
+        Assets.playSound(SHOOT);
         // set bullet velocity
         velocity.set(0,BULLET_VELOCITY);
     }

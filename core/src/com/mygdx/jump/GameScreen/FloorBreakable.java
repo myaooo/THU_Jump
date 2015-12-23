@@ -45,7 +45,7 @@ public class FloorBreakable extends Floor {
      */
     public void floorBreak() {
         status = STATUS_BREAKING;
-        brokesound.play(1.0f);
+        Assets.playSound(brokesound);
         stateTime = 0;
     }
 

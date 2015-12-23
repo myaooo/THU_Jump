@@ -8,6 +8,8 @@ package com.mygdx.jump.GameScreen;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +21,7 @@ import com.mygdx.jump.GameScreen.GameItem.*;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.GameScreen.Monster.MonsterBoss;
 import com.mygdx.jump.GameScreen.Monster.MonsterHole;
+import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 // This is a class that contains all the objects in a game
@@ -55,6 +58,7 @@ public class GameStage extends Stage {
     private final ArrayList<Monster> monsters = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
     private final ArrayList<Coin> coins = new ArrayList<>();
+    public Sound FALLSOUND = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
     public int score = 0;
     //public float currentHeight = 0;
     public float floorHeight = 0;
@@ -476,6 +480,7 @@ public class GameStage extends Stage {
      */
     public void updateStatus(){
         if (doctor.getTop() < getCurrentHeight() || doctor.isDied()) {
+            Assets.playSound(FALLSOUND);
             status = STATUS_GAME_OVER;
         }
     }
