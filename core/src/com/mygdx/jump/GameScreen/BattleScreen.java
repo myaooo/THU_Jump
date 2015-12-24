@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.mygdx.jump.MenuScreen.MainMenuScreen;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
@@ -25,12 +26,17 @@ public class BattleScreen extends GameScreen {
 
     public static float SCREEN_WIDTH = 480;
     public static float SCREEN_HEIGHT = 800;
+    public static int STATUS_DIED = 1;
 
     protected Label scoreLabel2;
     protected Label coinLabel2;
     protected Image itemPackage2;
     protected Image background2;
     protected Mediator mediator2;
+    private GameOverActor gameOverActor = new GameOverActor();
+    private GameOverActor gameOverActor2 = new GameOverActor();
+    private int status1 = GAME_RUNNING;
+    private int status2 = GAME_RUNNING;
 
     public BattleScreen(TsinghuaJump inGame){
         super(inGame);
@@ -109,26 +115,23 @@ public class BattleScreen extends GameScreen {
     public void updateRunning(float delta){
         // check inputs
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
-            mediator.setLeft();
+            mediator2.setLeft();
         if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT))
-            mediator.setRight();
-        //if (Gdx.input.isKeyPressed(Settings.KEY_UP))
-            //mediator.setUp();
-        //if (Gdx.input.isKeyPressed(Settings.KEY_DOWN))
-            //mediator.setDown();
+            mediator2.setRight();
         if (Gdx.input.isKeyPressed(Settings.KEY_SHOOT))
-            mediator.doctorShoot();
+            mediator2.doctorShoot();
         if (Gdx.input.isKeyPressed(Settings.KRY_USE_ITEM))
-            mediator.useItem();
+            mediator2.useItem();
 
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT2))
-            mediator2.setLeft();
+            mediator.setLeft();
         if (Gdx.input.isKeyPressed(Settings.KEY_RIGHT2))
-            mediator2.setRight();
+            mediator.setRight();
         if (Gdx.input.isKeyPressed(Settings.KEY_SHOOT2))
-            mediator2.doctorShoot();
+            mediator.doctorShoot();
         if (Gdx.input.isKeyPressed(Settings.KEY_USE_ITEM2))
-            mediator2.useItem();
+            mediator.useItem();
+
         if (pauseButton.isChecked() && stateTime > 0.5f) {
             pauseButton.toggle();
             status = GAME_PAUSE;
@@ -143,20 +146,45 @@ public class BattleScreen extends GameScreen {
         updateLabels();
 
         // check game over
-        if (gameStage.isGameOver()) {
+        if (status1 == GAME_RUNNING && gameStage.status == GameStage.STATUS_GAME_OVER){
+            this.setGameOver1();
+            //System.out.print(gameStage.status2);
+        }
+        if (status2 == GAME_RUNNING && gameStage.status2 == GameStage.STATUS_GAME_OVER){
+            this.setGameOver2();
+        }
+        if (status1 == STATUS_DIED && status2 == STATUS_DIED) {
             this.setGameOver();
         }
         stateTime += delta;
     }
 
+    @Override
+    public void updateOver(){
+        if (Gdx.input.isTouched()){
+            Gdx.graphics.setDisplayMode(480,800,false);
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_BOX);
+            game.setScreen(new MainMenuScreen(game));
+        }
+    }
+
     /**Calls when the game is over, set game over actor*/
+    @Override
     public void setGameOver(){
         status = GAME_OVER;
         Assets.stopMusic(BGM);
-        GameOverActor gameOverActor = new GameOverActor();
-        if (gameStage.status == BattleStage.STATUS_GAME_OVER)
-            coverStage.addActor(gameOverActor);
-        else    coverStage2.addActor(gameOverActor);
+        gameOverActor.stateTime = 0;
+        gameOverActor2.stateTime = 0;
+        if (gameStage.getScore() == gameStage.getScore2()) {
+            gameOverActor.anim = Assets.getYouWinAinm();
+            gameOverActor2.anim = Assets.getYouWinAinm();
+        }
+        else if (gameStage.getScore() < gameStage.getScore2()){
+            gameOverActor2.anim = Assets.getYouWinAinm();
+        }
+        else{
+            gameOverActor.anim = Assets.getYouWinAinm();
+        }
         scoreLabel.setFontScale(2.5f,2f);
         float strwidth = scoreLabel.getPrefWidth();
         scoreLabel.setColor(Settings.myGoldYellow);
@@ -165,9 +193,30 @@ public class BattleScreen extends GameScreen {
         scoreLabel2.setFontScale(2.5f,2f);
         float strwidth2 = scoreLabel2.getPrefWidth();
         scoreLabel2.setColor(Settings.myGoldYellow);
-        scoreLabel2.setPosition(240-strwidth/2,240);
-        //record.setRecord(gameStage.getScore(),gameStage.getCoins());
+        scoreLabel2.setPosition(240-strwidth2/2,240);
     }
+
+    /**Calls when the game is over, set game over actor*/
+    public void setGameOver1(){
+        status1 = STATUS_DIED;
+        coverStage.addActor(gameOverActor);
+        scoreLabel.setFontScale(2.5f,2f);
+        float strwidth = scoreLabel.getPrefWidth();
+        scoreLabel.setColor(Settings.myGoldYellow);
+        scoreLabel.setPosition(240-strwidth/2,240);
+        itemPackage.remove();
+    }
+
+    public void setGameOver2(){
+        this.status2 = STATUS_DIED;
+        coverStage2.addActor(gameOverActor2);
+        scoreLabel2.setFontScale(2.5f,2f);
+        float strwidth = scoreLabel2.getPrefWidth();
+        scoreLabel2.setColor(Settings.myGoldYellow);
+        scoreLabel2.setPosition(240-strwidth/2,240);
+        itemPackage2.remove();
+    }
+
 
 
 

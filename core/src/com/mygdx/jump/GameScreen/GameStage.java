@@ -61,19 +61,14 @@ public class GameStage extends Stage {
     protected final ArrayList<Coin> coins = new ArrayList<>();
     public Sound FALLSOUND = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
     public int score = 0;
-    //public float currentHeight = 0;
     public float floorHeight = 0;
     public float monsterHeight = 0;
     public int level = 1;
     public float next_level_height = HEIGHT_LEVEL_BASE;
-    //public int coins = 0;
     protected int status = STATUS_RUNNING;
+    protected int status2 = STATUS_RUNNING;
     protected Random rand = new Random();
-    //protected Image background;
     protected float stateTime = 0;
-    protected Label scoreLabel;
-    protected Label coinLabel;
-    //protected ItemPackage itemPackage;
     protected Mediator mediator;
     protected GameScreen gameScreen;
     protected OrthographicCamera camera;
@@ -140,7 +135,7 @@ public class GameStage extends Stage {
         updateBullets(deltaTime);
         updateCoins(deltaTime);
         if (!doctor.isHit()) {
-            checkCollisions();
+            checkCollisions(doctor);
         }
         updateStatus();
         // generate objects
@@ -200,10 +195,13 @@ public class GameStage extends Stage {
      * Update Doctor's position and velocity
      */
     public void updateDoctor(float deltaTime) {
-        int moveDirection = mediator.getxDirection();
+        int moveDirection = 0;
+        if (!doctor.isDied()) {
+            moveDirection = mediator.getxDirection();
+            if (mediator.isActivateItem())
+                doctor.useItem();
+        }
         doctor.update(deltaTime, moveDirection);
-        if (mediator.isActivateItem())
-            doctor.useItem();
     }
 
     /**
@@ -442,11 +440,11 @@ public class GameStage extends Stage {
     /**
      * Check all kinds of collisions
      */
-    public void checkCollisions(){
-        checkHittingFloor(doctor);
-        checkHittingMonster(doctor);
-        checkHittingItem(doctor);
-        checkHittingCoin(doctor);
+    public void checkCollisions(Doctor doc){
+        checkHittingFloor(doc);
+        checkHittingMonster(doc);
+        checkHittingItem(doc);
+        checkHittingCoin(doc);
     }
 
     /**

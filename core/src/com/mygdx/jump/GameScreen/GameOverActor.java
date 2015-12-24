@@ -15,7 +15,7 @@ public class GameOverActor extends Actor {
 
     Animation anim;
     TextureRegion keyFrame;
-    private float stateTime = 0;
+    public float stateTime = 0;
 
     public GameOverActor(){
         this(40,350,400,300);

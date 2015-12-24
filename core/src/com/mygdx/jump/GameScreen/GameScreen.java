@@ -32,13 +32,12 @@ public class GameScreen extends ScreenAdapter {
 
     // fields
     // static fields
-    final static int GAME_READY = 0;
-    final static int GAME_RUNNING = 1;
-    final static int GAME_OVER = 2;
-    final static int GAME_PAUSE = 3;
+    public final static int GAME_RUNNING = 0;
+    public final static int GAME_OVER = 1;
+    public final static int GAME_PAUSE = 2;
 
-    final static String SCORE = "SCORE ";
-    final static String COIN = "COIN ";
+    public final static String SCORE = "SCORE ";
+    public final static String COIN = "COIN ";
 
     // protected class fields
     protected Stage backStage;

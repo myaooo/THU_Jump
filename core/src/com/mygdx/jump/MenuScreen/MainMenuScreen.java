@@ -82,7 +82,7 @@ public class MainMenuScreen implements Screen{
 
         if(button.get(0).isPressed()==true)
         {
-            GameScreen gameScreen = new GameScreen(game);
+            GameScreen gameScreen = new BattleScreen(game);
             game.setScreen(gameScreen);
             Assets.stopMusic(BGM);
         }

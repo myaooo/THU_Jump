@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.jump.GameScreen.GameItem.Item;
+import com.mygdx.jump.GameScreen.GameItem.Reversor;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
@@ -22,7 +23,8 @@ public class BattleStage extends GameStage {
 
     public static float MAX_HEIGHT_DIFF = 500;
 
-    public static final int STATUS_GAME_OVER2 = 2;
+    //public static final int STATUS_GAME_OVER2 = 2;
+    //public static final int
 
     protected OrthographicCamera camera2;
     public Doctor doctor2;
@@ -68,7 +70,7 @@ public class BattleStage extends GameStage {
         draw(camera,doctor);
         gameScreen.coverStage.draw();
 
-        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glEnable(GL20.GL_SCISSOR_BOX);
         Gdx.gl.glScissor((int) FRUSTUM_WIDHT, 0, (int)FRUSTUM_WIDHT, (int)FRUSTUM_HEIGHT);
         Gdx.gl.glViewport((int) FRUSTUM_WIDHT, 0, (int)FRUSTUM_WIDHT, (int)FRUSTUM_HEIGHT);
         gameScreen.backStage.draw();
@@ -110,25 +112,35 @@ public class BattleStage extends GameStage {
     }
 
     protected void updateDoctor2(float deltaTime){
-        int moveDirection = mediator2.getxDirection();
+        int moveDirection = 0;
+        if (!doctor2.isDied()) {
+            moveDirection = mediator2.getxDirection();
+            if (mediator2.isActivateItem())
+                doctor2.useItem();
+        }
         doctor2.update(deltaTime, moveDirection);
-        if (mediator2.isActivateItem())
-            doctor2.useItem();
-    }
-
-    @Override
-    public void checkCollisions() {
-        super.checkCollisions();
-        checkHittingFloor(doctor2);
-        checkHittingMonster(doctor2);
-        checkHittingItem(doctor2);
-        checkHittingCoin(doctor2);
     }
 
     @Override
     public void update(float deltaTime) {
+        updateHeights(deltaTime);
+        updateDoctor(deltaTime);
         updateDoctor2(deltaTime);
-        super.update(deltaTime);
+        updateFloors(deltaTime);
+        updateMonsters(deltaTime);
+        updateItems(deltaTime);
+        updateBullets(deltaTime);
+        updateCoins(deltaTime);
+        if (!doctor.isHit()) {
+            checkCollisions(doctor);
+        }
+        if (!doctor2.isHit()) {
+            checkCollisions(doctor2);
+        }
+        updateStatus();
+        // generate objects
+        generateObjects();
+        stateTime += deltaTime;
     }
 
     /**
@@ -175,24 +187,30 @@ public class BattleStage extends GameStage {
         }
     }
 
+    protected void genReversor(){
+        Floor fl = floors.get(floors.size()-1);
+        Item spr = new Reversor(this,fl);
+        items.add(spr);
+    }
+
     /**
      * Check whether the game is over (the doctor falls under current height) and update the status
      */
     @Override
     public void updateStatus(){
-        if (doctor.getTop() < getCurrentHeight() || doctor.isDied()) {
+        if (status == STATUS_RUNNING && (doctor.getTop() < getCurrentHeight() || doctor.isDied())) {
             Assets.playSound(FALLSOUND);
             status = STATUS_GAME_OVER;
+            //System.out.print(status);
         }
-        else if (doctor2.getTop() < getCurrentHeight2() || doctor2.isDied()) {
+        if (this.status2 == STATUS_RUNNING && (doctor2.getTop() < getCurrentHeight2() || doctor2.isDied())) {
             Assets.playSound(FALLSOUND);
-            status = STATUS_GAME_OVER2;
+            this.status2 = STATUS_GAME_OVER;
+            System.out.print(status2);
         }
-        else if (doctor.currentHeight < doctor2.currentHeight-MAX_HEIGHT_DIFF){
+        if (Math.abs(getCurrentHeight2()-getCurrentHeight()) > MAX_HEIGHT_DIFF){
             status = STATUS_GAME_OVER;
-        }
-        else if (doctor2.currentHeight < doctor.currentHeight-MAX_HEIGHT_DIFF){
-            status = STATUS_GAME_OVER2;
+            status2 = STATUS_GAME_OVER;
         }
     }
 
@@ -201,7 +219,7 @@ public class BattleStage extends GameStage {
      */
     @Override
     public boolean isGameOver() {
-        return status != STATUS_RUNNING;
+        return status == STATUS_GAME_OVER && status2 == STATUS_GAME_OVER;
     }
 
 

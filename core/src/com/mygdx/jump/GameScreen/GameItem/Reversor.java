@@ -2,6 +2,7 @@ package com.mygdx.jump.GameScreen.GameItem;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.jump.GameScreen.BattleStage;
 import com.mygdx.jump.GameScreen.Floor;
 import com.mygdx.jump.Resource.Assets;
 
@@ -17,14 +18,27 @@ public class Reversor extends Item {
 
     private float originVelocity;
     private Animation animation;
+    private BattleStage stage = null;
 
     public Reversor(Floor floor){
         super(floor);
         keyFrame = Assets.getReversor();
     }
 
+    public Reversor(BattleStage stg, Floor floor){
+        super(floor);
+        keyFrame = Assets.getReversor();
+        stage = stg;
+
+    }
+
     @Override
     public void activate(){
+        if (stage != null){
+            if (doctor == stage.doctor)
+                doctor = stage.doctor2;
+            else    doctor = stage.doctor;
+        }
         super.activate();
         originVelocity = doctor.moveVelocity;
         doctor.moveVelocity = -originVelocity;
