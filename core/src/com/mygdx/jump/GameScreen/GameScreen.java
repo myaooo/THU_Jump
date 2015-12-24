@@ -219,6 +219,7 @@ public class GameScreen extends ScreenAdapter {
         coverStage.draw();
     }
 
+    /**Calls when the game is over, set game over actor*/
     public void setGameOver(){
         status = GAME_OVER;
         Assets.stopMusic(BGM);

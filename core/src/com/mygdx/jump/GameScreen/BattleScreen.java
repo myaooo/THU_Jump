@@ -43,6 +43,11 @@ public class BattleScreen extends GameScreen {
     }
 
     @Override
+    public void drawOver(){
+        gameStage.draw();
+    }
+
+    @Override
     protected void initialzeGame(){
         mediator = new Mediator();
         mediator2 = new Mediator();
@@ -67,7 +72,7 @@ public class BattleScreen extends GameScreen {
         itemPackage.setBounds(12,12,80,80);
         coverStage.addActor(itemPackage);
         itemPackage2 = new Image(Assets.getItemPackage());
-        itemPackage2.setBounds(SCREEN_WIDTH+12,12,80,80);
+        itemPackage2.setBounds(12,12,80,80);
         coverStage2.addActor(itemPackage2);
         addScoreLabel();
     }
@@ -143,5 +148,27 @@ public class BattleScreen extends GameScreen {
         }
         stateTime += delta;
     }
+
+    /**Calls when the game is over, set game over actor*/
+    public void setGameOver(){
+        status = GAME_OVER;
+        Assets.stopMusic(BGM);
+        GameOverActor gameOverActor = new GameOverActor();
+        if (gameStage.status == BattleStage.STATUS_GAME_OVER)
+            coverStage.addActor(gameOverActor);
+        else    coverStage2.addActor(gameOverActor);
+        scoreLabel.setFontScale(2.5f,2f);
+        float strwidth = scoreLabel.getPrefWidth();
+        scoreLabel.setColor(Settings.myGoldYellow);
+        scoreLabel.setPosition(240-strwidth/2,240);
+
+        scoreLabel2.setFontScale(2.5f,2f);
+        float strwidth2 = scoreLabel2.getPrefWidth();
+        scoreLabel2.setColor(Settings.myGoldYellow);
+        scoreLabel2.setPosition(240-strwidth/2,240);
+        //record.setRecord(gameStage.getScore(),gameStage.getCoins());
+    }
+
+
 
 }

@@ -89,6 +89,7 @@ public class GameStage extends Stage {
                 new FitViewport(WORLD_WIDTH, 10000*WORLD_HEIGHT,camera);
         viewport.setScreenBounds(0,0,Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
         this.setViewport(viewport);
+        //status = STATUS_RUNNING;
         mediator = media;
         initialize();
     }

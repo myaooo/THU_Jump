@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.GameScreen.Monster.Monster;
+import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 import javax.print.Doc;
@@ -18,6 +19,10 @@ public class BattleStage extends GameStage {
 
     private static float FRUSTUM_WIDHT = Settings.SCREEN_WIDTH;
     private static float FRUSTUM_HEIGHT = Settings.SCREEN_HEIGHT;
+
+    public static float MAX_HEIGHT_DIFF = 500;
+
+    public static final int STATUS_GAME_OVER2 = 2;
 
     protected OrthographicCamera camera2;
     public Doctor doctor2;
@@ -91,6 +96,10 @@ public class BattleStage extends GameStage {
                 blt.draw(batch,1);
             }
             doc.draw(batch, 1);
+            if (doc == doctor)
+                doctor2.draw(batch,1);
+            else
+                doctor.draw(batch,1);
             for(Item it:items){
                 if (it.doctor != null && it.doctor != doc)
                     continue;
@@ -166,6 +175,34 @@ public class BattleStage extends GameStage {
         }
     }
 
+    /**
+     * Check whether the game is over (the doctor falls under current height) and update the status
+     */
+    @Override
+    public void updateStatus(){
+        if (doctor.getTop() < getCurrentHeight() || doctor.isDied()) {
+            Assets.playSound(FALLSOUND);
+            status = STATUS_GAME_OVER;
+        }
+        else if (doctor2.getTop() < getCurrentHeight2() || doctor2.isDied()) {
+            Assets.playSound(FALLSOUND);
+            status = STATUS_GAME_OVER2;
+        }
+        else if (doctor.currentHeight < doctor2.currentHeight-MAX_HEIGHT_DIFF){
+            status = STATUS_GAME_OVER;
+        }
+        else if (doctor2.currentHeight < doctor.currentHeight-MAX_HEIGHT_DIFF){
+            status = STATUS_GAME_OVER2;
+        }
+    }
+
+    /**
+     * Return true if the game is over.
+     */
+    @Override
+    public boolean isGameOver() {
+        return status != STATUS_RUNNING;
+    }
 
 
 }
