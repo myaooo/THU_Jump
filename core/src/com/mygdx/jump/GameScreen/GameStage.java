@@ -373,14 +373,18 @@ public class GameStage extends Stage {
     /**Generate Item*/
     protected void genItem(){
         // generate springs
-        float rateFloater = Floater.rate;
+        float rateRocket = Rocket.rate;
+        float rateFloater = Floater.rate+rateRocket;
         float rateJumper = Jumper.rate + rateFloater;
         float rateSpring = Spring.rate+rateJumper;
         float rateShield = Shield.rate+rateSpring;
         float rateReversor = Reversor.rate+rateShield;
         float toll = rand.nextFloat();
         if (toll < rateReversor) {
-            if (toll < rateFloater){
+            if (toll < rateRocket){
+                genRocket();
+            }
+            else if (toll < rateFloater){
                 genFloater();
             }
             else if (toll < rateJumper){
@@ -417,7 +421,9 @@ public class GameStage extends Stage {
     }
 
     protected void genRocket(){
-
+        Floor fl = floors.get(floors.size()-1);
+        Item rkt = new Rocket(fl);
+        items.add(rkt);
     }
 
     protected void genShield(){

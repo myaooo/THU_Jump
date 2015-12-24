@@ -13,6 +13,7 @@ public class Floater extends Item{
     static public final float FLOATER_WIDTH = 1.5f;
     static public final float FLOATER_HEIGHT = 0.5f;
     static public final float rate = 0.02f;
+    static public final float FLOATER_VELOCITY = 20;
 
     private float originAcceleration;
     private Animation animation;
@@ -25,9 +26,10 @@ public class Floater extends Item{
     @Override
     public void activate(){
         super.activate();
-        doctor.Floating = true;
+        //doctor.Floating = true;
         originAcceleration = doctor.getAcceleration().y;
         doctor.setAcceleration(0,0);
+        doctor.setVelocity(0,FLOATER_VELOCITY);
         doctor.changeStatus(Doctor.STATUS_JUMP);
         animation = Assets.getFloaterAct();
         keyFrame = animation.getKeyFrame(0,true);
@@ -38,7 +40,7 @@ public class Floater extends Item{
 
     @Override
     public void powerOff(){
-        doctor.Floating = false;
+        //doctor.Floating = false;
         doctor.setAcceleration(0,originAcceleration);
         super.powerOff();
     }

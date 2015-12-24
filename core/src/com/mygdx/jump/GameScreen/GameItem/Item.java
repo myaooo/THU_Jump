@@ -29,6 +29,7 @@ public abstract class Item extends GameObject {
     static public final float HOLD_HEIGHT =1.5f;
     // class fields
     public Doctor doctor = null;
+    public Doctor targetDoctor = null;
     protected Floor attachedFloor;
     protected TextureRegion keyFrame;
     protected boolean usable = true;

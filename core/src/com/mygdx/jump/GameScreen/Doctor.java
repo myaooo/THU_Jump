@@ -75,7 +75,7 @@ public class Doctor extends GameObject {
     //public ItemPackage itemPackage = null;
     public float jumpVelocity;
     public float moveVelocity;
-    public boolean Floating;
+    //public boolean Floating;
     // methods
 
     /**
@@ -105,7 +105,7 @@ public class Doctor extends GameObject {
         jumpVelocity = JUMP_VELOCITY;
         moveVelocity = MOVE_VELOCITY;
         shield = false;
-        Floating = false;
+        //Floating = false;
     }
 
     /**
@@ -132,8 +132,8 @@ public class Doctor extends GameObject {
         // update velocity
         if (!isHit()) {
             setMoveDirectionX(moveDirection);
-            if (Floating)
-                setMoveDirectionY(1);
+            //if (Floating)
+                //setMoveDirectionY(1);
         }
         this.velocity.add(acceleration.x*deltaTime,acceleration.y*deltaTime);
 
@@ -257,7 +257,7 @@ public class Doctor extends GameObject {
                 break;
             case STATUS_JUMP:
                 current_anim = animation_jump;
-                velocity.y = jumpVelocity;
+                //velocity.y = jumpVelocity;
                 break;
             default:
                 break;
