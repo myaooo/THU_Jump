@@ -28,8 +28,9 @@ public class SettingsScreen extends ScreenAdapter {
     private Stage stage;
     private Array<Button> button;
     private Array<Button> dialog;
+    private Array<Label> dialog_label;
     private Image dialog_image;
-    private Label dialog_label;
+    //private Label dialog_label;
     private Button returnButton;
 
     private float time;
@@ -41,6 +42,7 @@ public class SettingsScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         button = new Array<Button>();
         dialog = new Array<Button>();
+        dialog_label = new Array<Label>();
         loadAssets();
     }
 
@@ -71,7 +73,7 @@ public class SettingsScreen extends ScreenAdapter {
                 stage.addActor(dialog_image);
                 stage.addActor(dialog.get(0));
                 stage.addActor(dialog.get(1));
-                stage.addActor(dialog_label);
+                stage.addActor(dialog_label.get(i));
             }
         }
 
@@ -80,7 +82,7 @@ public class SettingsScreen extends ScreenAdapter {
             dialog.get(0).remove();
             dialog.get(1).remove();
             dialog_image.remove();
-            dialog_label.remove();
+            dialog_label.get(0).remove();
         }
 
         if (dialog.get(1).isPressed()==true)
@@ -88,7 +90,7 @@ public class SettingsScreen extends ScreenAdapter {
             dialog.get(0).remove();
             dialog.get(1).remove();
             dialog_image.remove();
-            dialog_label.remove();
+            dialog_label.get(1).remove();
         }
 
         //returnButton
@@ -151,12 +153,18 @@ public class SettingsScreen extends ScreenAdapter {
         dialog.get(1).setPosition(240+dialog_image.getWidth()/4-dialog.get(0).getWidth()/2,400-dialog_image.getHeight()/4-dialog.get(0).getHeight()/2);
 
         //dialog_labels
+        BitmapFont font0 = new BitmapFont();
+        Label.LabelStyle ls0 = new Label.LabelStyle(font0, Color.YELLOW);
+        dialog_label.add(new Label("Do you want to turn off the music?",ls0));
+        dialog_label.get(0).setColor(1f, 99 / 255f, 71 / 255f, 1f);
+        dialog_label.get(0).setPosition((480 - dialog_label.get(0).getWidth()) / 2, (800 - dialog_label.get(0).getHeight()) / 2);
+/*
         BitmapFont font1 = new BitmapFont();
-        Label.LabelStyle ls = new Label.LabelStyle(font1, Color.YELLOW);
-        dialog_label = new Label("Do you want to buy this skin?",ls);
-        dialog_label.setColor(1f,99/255f,71/255f,1f);
-        dialog_label.setPosition((480-dialog_label.getWidth())/2,(800-dialog_label.getHeight())/2);
-
+        Label.LabelStyle ls1 = new Label.LabelStyle(font1, Color.YELLOW);
+        dialog_label.add(new Label("Do you want to turn off the sound?",ls1));
+        dialog_label.get(1).setColor(1f, 99 / 255f, 71 / 255f, 1f);
+        dialog_label.get(1).setPosition((480 - dialog_label.get(1).getWidth()) / 2, (800 - dialog_label.get(1).getHeight()) / 2);
+*/
         //returnButton
         Texture actor3 = new Texture(Gdx.files.internal("data/cloud.png"));
         TextButton.TextButtonStyle tbs3 = new TextButton.TextButtonStyle();
