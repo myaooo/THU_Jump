@@ -1,4 +1,4 @@
-package com.mygdx.jump.GameScreen;
+package com.mygdx.jump.GameScreen.Floor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

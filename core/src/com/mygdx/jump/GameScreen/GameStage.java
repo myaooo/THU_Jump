@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.jump.GameScreen.Floor.Floor;
+import com.mygdx.jump.GameScreen.Floor.FloorBreakable;
+import com.mygdx.jump.GameScreen.Floor.FloorMovable;
 import com.mygdx.jump.GameScreen.GameItem.*;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.GameScreen.Monster.MonsterBoss;

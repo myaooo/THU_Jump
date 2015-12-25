@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.GameScreen.GameItem.Reversor;
 import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
-
-import javax.print.Doc;
 
 /**
  * Created by Yao on 15/12/24.

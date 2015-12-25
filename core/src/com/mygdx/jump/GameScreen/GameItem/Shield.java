@@ -2,7 +2,7 @@ package com.mygdx.jump.GameScreen.GameItem;
 
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.jump.GameScreen.Doctor;
-import com.mygdx.jump.GameScreen.Floor;
+import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.Resource.Assets;
 
 /**

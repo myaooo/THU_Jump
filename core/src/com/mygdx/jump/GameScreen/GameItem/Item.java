@@ -1,12 +1,11 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.jump.GameScreen.Doctor;
-import com.mygdx.jump.GameScreen.Floor;
+import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.GameScreen.GameObject;
 
 /**

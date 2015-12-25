@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.mygdx.jump.GameScreen.GameItem</OriginalElement>
+  <nodes>
+    <node x="874.0" y="993.0">com.mygdx.jump.GameScreen.GameItem.Reversor</node>
+    <node x="1254.0" y="728.0">com.mygdx.jump.GameScreen.Floor.FloorMovable</node>
+    <node x="971.0" y="673.0">com.mygdx.jump.GameScreen.Floor.FloorBreakable</node>
+    <node x="382.0" y="585.0">com.mygdx.jump.GameScreen.GameItem.Item</node>
+    <node x="200.0" y="993.0">com.mygdx.jump.GameScreen.GameItem.Jumper</node>
+    <node x="120.0" y="0.0">com.mygdx.jump.GameScreen.Doctor</node>
+    <node x="400.0" y="993.0">com.mygdx.jump.GameScreen.GameItem.Floater</node>
+    <node x="600.0" y="982.0">com.mygdx.jump.GameScreen.GameItem.Spring</node>
+    <node x="1074.0" y="993.0">com.mygdx.jump.GameScreen.GameItem.Rocket</node>
+    <node x="0.0" y="993.0">com.mygdx.jump.GameScreen.GameItem.Shield</node>
+    <node x="981.0" y="198.0">com.mygdx.jump.GameScreen.Floor.Floor</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Shield" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-47.5" />
+      <point x="90.0" y="942.0" />
+      <point x="419.75" y="942.0" />
+      <point x="-188.75" y="168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Jumper" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-47.5" />
+      <point x="290.0" y="952.0" />
+      <point x="495.25" y="952.0" />
+      <point x="-113.25" y="168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Spring" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-58.5" />
+      <point x="727.0" y="962.0" />
+      <point x="646.25" y="962.0" />
+      <point x="37.75" y="168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Reversor" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-47.5" />
+      <point x="964.0" y="952.0" />
+      <point x="721.75" y="952.0" />
+      <point x="113.25" y="168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.Floor.FloorMovable" target="com.mygdx.jump.GameScreen.Floor.Floor">
+      <point x="0.0" y="-25.5" />
+      <point x="1335.5" y="560.0" />
+      <point x="1183.5" y="560.0" />
+      <point x="81.0" y="69.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.Doctor" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="206.5" y="267.5" />
+      <point x="739.5" y="560.0" />
+      <point x="608.5" y="560.0" />
+      <point x="0.0" y="-168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Item" target="com.mygdx.jump.GameScreen.Doctor">
+      <point x="-151.0" y="-168.5" />
+      <point x="457.5" y="560.0" />
+      <point x="326.5" y="560.0" />
+      <point x="-206.5" y="267.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Item" target="com.mygdx.jump.GameScreen.Floor.Floor">
+      <point x="151.0" y="-168.5" />
+      <point x="759.5" y="560.0" />
+      <point x="1021.5" y="560.0" />
+      <point x="-81.0" y="69.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Rocket" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-47.5" />
+      <point x="1164.0" y="942.0" />
+      <point x="797.25" y="942.0" />
+      <point x="188.75" y="168.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.Floor.FloorBreakable" target="com.mygdx.jump.GameScreen.Floor.Floor">
+      <point x="0.0" y="-80.5" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="com.mygdx.jump.GameScreen.GameItem.Floater" target="com.mygdx.jump.GameScreen.GameItem.Item">
+      <point x="0.0" y="-47.5" />
+      <point x="490.0" y="962.0" />
+      <point x="570.75" y="962.0" />
+      <point x="-37.75" y="168.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.4879356568364611" x="708.5" y="549.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

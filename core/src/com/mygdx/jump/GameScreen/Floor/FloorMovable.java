@@ -1,5 +1,6 @@
-package com.mygdx.jump.GameScreen;
+package com.mygdx.jump.GameScreen.Floor;
 
+import com.mygdx.jump.GameScreen.GameStage;
 import com.mygdx.jump.Resource.Assets;
 
 /**

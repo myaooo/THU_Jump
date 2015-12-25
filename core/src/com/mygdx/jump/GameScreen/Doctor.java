@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.Resource.Assets;
 
@@ -115,11 +116,6 @@ public class Doctor extends GameObject {
         this.animation_fall = anim_f;
         this.animation_jump = anim_j;
         this.animation_hit = anim_h;
-    }
-
-    /***/
-    public void setItemPackage(ItemPackage itpkg){
-        //this.itemPackage = itpkg;
     }
 
     /**
