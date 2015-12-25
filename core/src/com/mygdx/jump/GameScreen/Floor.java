@@ -9,6 +9,8 @@ import com.mygdx.jump.Resource.Image;
 import com.mygdx.jump.Settings;
 
 /**
+ * Floor class which is also abase class for special floors
+ * @author Yao
  * Created by Yao on 15/12/2.
  */
 // This is a class floor which the doodle step on
@@ -21,9 +23,6 @@ public class Floor extends GameObject {
     public static final float FLOOR_VELOCITY = 4;
 
     // private class fields
-    private int type;
-    //private int status;
-    //private float stateTime;
     protected TextureRegion keyFrame;
 
     /**

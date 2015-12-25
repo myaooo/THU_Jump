@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * A coin class which can be hit by a doctor and add coins
+ * @author Yao
  * Created by Yao on 15/12/18.
  */
 public class Coin extends GameObject {
@@ -17,7 +19,7 @@ public class Coin extends GameObject {
     public static final float HEIGHT = 1f;
     public static final int STATUS_UNTOUCHED = 0;
     public static final int STATUS_TOUCHED = 1;
-    public static final int VALUE = 10;
+    public static final int VALUE = 10; // coin value
     public static final float RATE = 0.1f;
 
     private Animation animation;
@@ -25,6 +27,7 @@ public class Coin extends GameObject {
     private float value;
     private Sound coinsound = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.mp3"));
 
+    /**Constructor*/
     public Coin(float x, float y){
         super(x,y,WIDTH,HEIGHT);
         status = STATUS_UNTOUCHED;

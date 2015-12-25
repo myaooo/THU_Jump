@@ -7,6 +7,8 @@ import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
 /**
+ * A breakable floor
+ * @author Yao
  * Created by Yao on 15/12/21.
  */
 public class FloorBreakable extends Floor {
@@ -19,6 +21,7 @@ public class FloorBreakable extends Floor {
 
     private Animation breakingAnim;
 
+    /**Constructor*/
     public FloorBreakable(float x, float y){
         super(x,y);
         status = STATUS_NORMAL;
@@ -27,6 +30,7 @@ public class FloorBreakable extends Floor {
         velocity.set(0, 0);
     }
 
+    /**Override update function, set animating keyFrame*/
     @Override
     public void update(float deltaTime){
         if (isBreaking()){
@@ -35,6 +39,7 @@ public class FloorBreakable extends Floor {
         stateTime += deltaTime;
     }
 
+    /**Breakable floor will break immediately after it is hit by a doctor*/
     @Override
     public void hitDoctor(){
         floorBreak();

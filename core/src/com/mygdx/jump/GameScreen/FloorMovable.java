@@ -3,6 +3,8 @@ package com.mygdx.jump.GameScreen;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * A movable floor
+ * @author Yao
  * Created by Yao on 15/12/21.
  */
 public class FloorMovable extends Floor {

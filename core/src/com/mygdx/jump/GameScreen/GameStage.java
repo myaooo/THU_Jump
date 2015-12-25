@@ -53,12 +53,14 @@ public class GameStage extends Stage {
     final static int SCORE_SCALE = 10;
 
     // class fields
+    // Game Objects
     public Doctor doctor;
     protected final ArrayList<Floor> floors = new ArrayList<>();
     protected final ArrayList<Item> items = new ArrayList<>();
     protected final ArrayList<Monster> monsters = new ArrayList<>();
     protected final ArrayList<Bullet> bullets = new ArrayList<>();
     protected final ArrayList<Coin> coins = new ArrayList<>();
+    // other params
     public Sound FALLSOUND = Gdx.audio.newSound(Gdx.files.internal("data/sound/fall.wav"));
     public int score = 0;
     public float floorHeight = 0;
@@ -89,13 +91,10 @@ public class GameStage extends Stage {
         initialize();
     }
 
+    /**Initialize function, calls when the stage should be initialize*/
     protected void initialize(){
         initializeFloor();
-        //itemPackage = new ItemPackage(doctor);
-        //addScoreLabel();
         doctor = new Doctor(this);
-        //doctor.setItemPackage(itemPackage);
-        //this.addActor(itemPackage);
     }
 
     /**Several public get functions*/
@@ -105,6 +104,7 @@ public class GameStage extends Stage {
         return score;
     }
 
+    /**Empty api for battle stage*/
     public int getScore2(){return 0;}
 
     /**get Height*/
@@ -112,6 +112,7 @@ public class GameStage extends Stage {
         return doctor.currentHeight;
     }
 
+    /**Empty api for battle stage*/
     public float getCurrentHeight2(){
         return doctor.currentHeight;
     }
@@ -121,6 +122,7 @@ public class GameStage extends Stage {
         return doctor.coins;
     }
 
+    /**Empty api for battle stage*/
     public int getCoins2(){return 0;}
 
     /**
@@ -220,6 +222,9 @@ public class GameStage extends Stage {
         genBullet();
     }
 
+    /**
+     * Update coins' position
+     */
     public void updateCoins(float deltaTime) {
         int len = coins.size();
         for (int i = 0; i < len; ++i) {
@@ -401,35 +406,42 @@ public class GameStage extends Stage {
         }
     }
 
+    /**Generate spring*/
     protected void genSpring(){
         Floor fl = floors.get(floors.size()-1);
         Item spr = new Spring(fl);
         items.add(spr);
     }
 
+    /**Generate jumper*/
     protected void genJumper(){
         Floor fl = floors.get(floors.size()-1);
         Item jp = new Jumper(fl);
         items.add(jp);
     }
 
+    /**Generate reversor*/
     protected void genReversor(){
         Floor fl = floors.get(floors.size()-1);
         Item spr = new Reversor(fl);
         items.add(spr);
     }
 
+    /**Generate rocket*/
     protected void genRocket(){
         Floor fl = floors.get(floors.size()-1);
         Item rkt = new Rocket(fl);
         items.add(rkt);
     }
 
+    /**Generate sheild*/
     protected void genShield(){
         Floor fl = floors.get(floors.size()-1);
         Shield shield = new Shield(fl);
         items.add(shield);
     }
+
+    /**Generate floater*/
     protected void genFloater(){
         Floor fl = floors.get(floors.size()-1);
         Item fltr = new Floater(fl);
@@ -476,6 +488,9 @@ public class GameStage extends Stage {
         return false;
     }
 
+    /**
+     * Check whether doctor hits a item
+     */
     public void checkHittingItem(Doctor doc){
         for (Item it: items){
             if (it.checkHitDoctor(doc)) {
@@ -485,11 +500,13 @@ public class GameStage extends Stage {
         }
     }
 
+    /**
+     * Check whether doctor hits a coin
+     */
     public void checkHittingCoin(Doctor doc){
         for (Coin cn: coins){
            cn.checkhitDoctor(doc);
         }
-        //coinLabel.setText(COIN+getCoins());
     }
 
     /**

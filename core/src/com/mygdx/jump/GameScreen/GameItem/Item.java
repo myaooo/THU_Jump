@@ -34,36 +34,44 @@ public abstract class Item extends GameObject {
     protected TextureRegion keyFrame;
     protected boolean usable = true;
 
+    /**Default Constructor*/
     public Item(){
         super();
     }
 
+    /**Constructor with a floor, set the item's position the the up-center to the floor*/
     public Item(Floor floor){
         this(floor, STATIC_WIDTH, STATIC_HEIGHT);
     }
 
+    /**Constructor with a floor and a specific dimension*/
     public Item(Floor floor, float width, float height){
         super(floor.getX(Align.center)-width/2, floor.getTop(),width, height);
         attachedFloor = floor;
         status = STATUS_UNTOUCHED;
     }
 
+    /**Test whether the item is untouched by a doctor or not*/
     public boolean isUntouched(){
         return status == STATUS_UNTOUCHED;
     }
 
+    /**Test whether the item is hold by a doctor or not*/
     public boolean isTouched(){
         return status == STATUS_TOUCHED;
     }
 
+    /**Test whether the item is active or not*/
     public boolean isActive(){
         return status == STATUS_ACTIVE;
     }
 
+    /**Test whether the item has powered off or not*/
     public boolean isPowerOff(){
         return status == STATUS_POWER_OFF;
     }
 
+    /**Test whether the item is usable*/
     public boolean isUsable(){
         return usable;
     }
@@ -112,18 +120,22 @@ public abstract class Item extends GameObject {
         }
     }
 
+    /**default update function, the item is still untouched*/
     public void updateUntouched(float delta){
         this.setPosition(attachedFloor.getX(Align.center)-getWidth()/2, attachedFloor.getTop());
     }
 
+    /**Active update function, the item is active now*/
     public void updateActive(float delta){
 
     }
 
+    /**Hold update function, the item has been touched by a doctor and is now holding by it */
     public void updateHold(float delta){
         setPosition(0.3f+0.25f,doctor.currentHeight+0.3f+0.25f);
     }
 
+    /**Override draw function*/
     @Override
     public void draw(Batch batch, float parentAlpha){
         Color color = getColor();
@@ -135,6 +147,7 @@ public abstract class Item extends GameObject {
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
     }
 
+    /**Check whether the item is touched by a doctor*/
     public boolean checkHitDoctor(Doctor doc){
         if (isUntouched() && !doc.hasItem())
             return doc.overlaps(this);

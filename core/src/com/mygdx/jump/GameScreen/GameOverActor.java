@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * A game over actor with animations which will be shown in a specific place in the screen
+ * @author Yao
  * Created by Yao on 15/12/21.
  */
 public class GameOverActor extends Actor {
@@ -17,17 +19,21 @@ public class GameOverActor extends Actor {
     TextureRegion keyFrame;
     public float stateTime = 0;
 
+    /**Constructor*/
     public GameOverActor(){
         this(40,350,400,300);
     }
 
+    /**Constructor will specific position and width and height*/
     public GameOverActor(float x, float y, float width, float height){
         anim = Assets.getGameOverAnim();
         setBounds(x,y,width,height);
     }
 
+    /**update function, calls before draw*/
     public void update(float delta){
         if (stateTime <= 1.5) {
+            // animation
             keyFrame = anim.getKeyFrame(stateTime, true);
             setColor(1,1,1,stateTime);
         }

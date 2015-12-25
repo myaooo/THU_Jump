@@ -22,6 +22,8 @@ import com.mygdx.jump.Settings;
 import com.mygdx.jump.TsinghuaJump;
 
 /**
+ * Game screen, main class for the game
+ * @author Yao
  * Created by Yao on 15/12/2.
  */
 
@@ -74,6 +76,7 @@ public class GameScreen extends ScreenAdapter {
         Assets.playMusic(BGM);
     }
 
+    /**Calls when the game is initialized*/
     protected void initialzeGame(){
         mediator = new Mediator();
         gameStage = new GameStage(this,mediator);
@@ -140,6 +143,7 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**Render function*/
     @Override
     public void render(float delta) {
         update(delta);
@@ -153,6 +157,7 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**Update function when the game is running*/
     public void updateRunning(float delta){
         // check inputs
         if (Gdx.input.isKeyPressed(Settings.KEY_LEFT))
@@ -186,6 +191,7 @@ public class GameScreen extends ScreenAdapter {
         stateTime += delta;
     }
 
+    /**Update function when the game is paused*/
     public void updatePause(float delta){
         if (pauseButton.isChecked() && stateTime > 0.5f) {
             pauseButton.toggle();
@@ -196,22 +202,26 @@ public class GameScreen extends ScreenAdapter {
         stateTime += delta;
     }
 
+    /**Update function when the game is over*/
     public void updateOver(){
         if (Gdx.input.isTouched())
             game.setScreen(new MainMenuScreen(game));
     }
 
+    /**Update labels*/
     public void updateLabels(){
         scoreLabel.setText(SCORE+gameStage.getScore());
         coinLabel.setText(COIN+gameStage.getCoins());
     }
 
+    /**Draw when the game is still running*/
     public void drawRunning(){
         backStage.draw();
         gameStage.draw();
         coverStage.draw();
     }
 
+    /**Draw when the game is over*/
     public void drawOver(){
         backStage.draw();
         gameStage.draw();

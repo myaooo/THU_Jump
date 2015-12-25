@@ -14,16 +14,18 @@ public class Jumper extends Item {
 
     private float originVelocity;
 
+    /**Constructor*/
     public Jumper(Floor floor){
         super(floor);
         keyFrame = Assets.getJumper();
     }
 
+    /**Override activate function, set the doctor's jump velocity to a larger scale*/
     @Override
     public void activate(){
         super.activate();
         originVelocity = doctor.jumpVelocity;
-        doctor.jumpVelocity = 1.5f*originVelocity;
+        doctor.jumpVelocity = 1.6f*originVelocity;
         keyFrame = Assets.getJumperAct();
         this.setWidth(JUMPER_WIDTH);
         this.setHeight(JUMPER_HEIGHT);
@@ -37,6 +39,7 @@ public class Jumper extends Item {
         super.powerOff();
     }
 
+    /**Override updateActive function, set the item's position to attach doctor*/
     @Override
     public void updateActive(float delta){
         float mark = JUMP_TIME-stateTime;

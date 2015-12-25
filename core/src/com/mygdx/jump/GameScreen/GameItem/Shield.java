@@ -6,6 +6,8 @@ import com.mygdx.jump.GameScreen.Floor;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * Shield item, shield the doctor from hurt of monsters
+ * @author Yao
  * Created by Yao on 15/12/7.
  */
 public class Shield extends Item {

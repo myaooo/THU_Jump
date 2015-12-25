@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * Just a image actor
+ * Will be deprecated.
+ * @author Yao
  * Created by Yao on 15/12/23.
  */
 public class ItemPackage extends Actor {

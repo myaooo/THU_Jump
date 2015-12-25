@@ -1,6 +1,8 @@
 package com.mygdx.jump.GameScreen;
 
 /**
+ * A mediator class which listen the application's input and transfer the params to game stage
+ * @author Yao
  * Created by Yao on 15/12/11.
  */
 public class Mediator {

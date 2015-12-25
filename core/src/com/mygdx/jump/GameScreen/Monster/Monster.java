@@ -12,6 +12,7 @@ import com.mygdx.jump.GameScreen.GameStage;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * Monster class, also a base class for special monsters
  * Created by Yao on 15/12/2.
  */
 public class Monster extends GameObject {
@@ -31,6 +32,7 @@ public class Monster extends GameObject {
     protected float moveUb = GameStage.WORLD_WIDTH-MONSTER_WIDTH;
     private Sound monstersound = Gdx.audio.newSound(Gdx.files.internal("data/sound/monster.mp3"));
 
+    /**Constructor*/
     protected Monster(float x, float y) {
         super(x, y, MONSTER_WIDTH, MONSTER_HEIGHT);
         status = STATUS_NORMAL;
@@ -39,6 +41,7 @@ public class Monster extends GameObject {
         keyFrame = animation.getKeyFrame(stateTime);
     }
 
+    /**movable monster constructor*/
     public Monster(float x, float y, boolean movable){
         this(x,y);
         health = 1;
@@ -72,12 +75,14 @@ public class Monster extends GameObject {
                 getScaleX(), getScaleY(), getRotation());   // scale and rotation parameters
     }
 
+    /***/
     public void hitBullet(){
         health--;
         if (health <= 0)
             status = STATUS_DIED;
     }
 
+    /**Check hit*/
     public boolean checkHitDoctor(Doctor doctor){
         if (!doctor.isHit() && this.overlaps(doctor)) {
             {
@@ -89,6 +94,7 @@ public class Monster extends GameObject {
         return false;
     }
 
+    /**overlaps doctor*/
     public boolean overlaps(Doctor doctor){
         float x1 = getX()+getWidth()*0.15f;
         float x2 = x1 + getWidth()*0.7f;
@@ -100,16 +106,20 @@ public class Monster extends GameObject {
         float _y2 = _y1 + doctor.getHeight();
         return x1 < _x2 && _x1 < x2 && y1 < _y2 && _y1 < y2;
     }
+
+    /**Calls when the doctor is hit*/
     protected void hitDoctor(Doctor doctor){
         doctor.hitMonster();
         doctor.setAcceleration(0,0);
         doctor.setVelocity(0,-10);
     }
 
+    /**a hole is not shootable*/
     public boolean isShootable(){
         return true;
     }
 
+    /**test whether a monster is died or not*/
     public boolean isDied(){
         return status == STATUS_DIED;
     }

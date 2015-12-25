@@ -40,8 +40,9 @@ public class BattleStage extends GameStage {
 
     @Override
     protected void initialize(){
-        super.initialize();
-        doctor2 = new Doctor(this);
+        initializeFloor();
+        doctor = new Doctor(this, Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
+        doctor2 = new Doctor(this, Assets.getDoctorFallAnim(), Assets.getDoctorJumpAnim(), Assets.getDoctorHitAnim());
 
     }
 
@@ -99,9 +100,9 @@ public class BattleStage extends GameStage {
             }
             doc.draw(batch, 1);
             if (doc == doctor)
-                doctor2.draw(batch,1);
+                doctor2.draw(batch,0.6f);
             else
-                doctor.draw(batch,1);
+                doctor.draw(batch,0.6f);
             for(Item it:items){
                 if (it.doctor != null && it.doctor != doc)
                     continue;

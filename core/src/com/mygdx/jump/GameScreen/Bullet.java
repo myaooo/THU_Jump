@@ -10,6 +10,8 @@ import com.mygdx.jump.GameScreen.Monster.Monster;
 import com.mygdx.jump.Resource.Assets;
 
 /**
+ * A bullet class which is shoot by a doctor towards a monster
+ * @author Yao
  * Created by Yao on 15/12/9.
  */
 public class Bullet extends GameObject {
@@ -50,6 +52,7 @@ public class Bullet extends GameObject {
         velocity.set(0,BULLET_VELOCITY);
     }
 
+    /**Initialize function*/
     protected void createBullet(){
         stateTime = 0;
         status = STATUS_NORMAL;
