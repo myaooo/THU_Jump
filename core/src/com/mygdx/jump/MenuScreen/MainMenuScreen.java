@@ -214,7 +214,7 @@ public class MainMenuScreen implements Screen{
         else
         {
             if(ScreenCounter==1) {
-                DoctorMove(time, 423, 700, 20, 3, 100);
+                DoctorMove(time, 423, 700, 20, 3, 250);
             }
             else
             {
