@@ -1,5 +1,6 @@
 package com.mygdx.jump.GameScreen.Monster;
 
+import com.mygdx.jump.GameScreen.GameStage;
 import com.mygdx.jump.Resource.Assets;
 
 /**
@@ -16,6 +17,7 @@ public class MonsterBoss extends Monster {
         animation = Assets.getMonsterBoss();
         health = 10;
         velocity.set(MOVE_SPEED*1.5f,0);
+        moveUb = GameStage.WORLD_WIDTH-BOSS_WIDTH;
     }
 
 

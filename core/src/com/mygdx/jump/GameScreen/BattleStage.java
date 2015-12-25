@@ -9,6 +9,8 @@ import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.GameScreen.GameItem.Item;
 import com.mygdx.jump.GameScreen.GameItem.Reversor;
 import com.mygdx.jump.GameScreen.Monster.Monster;
+import com.mygdx.jump.GameScreen.Monster.MonsterBoss;
+import com.mygdx.jump.GameScreen.Monster.MonsterHole;
 import com.mygdx.jump.Resource.Assets;
 import com.mygdx.jump.Settings;
 
@@ -177,13 +179,16 @@ public class BattleStage extends GameStage {
     /**Calls when objects should be generate*/
     @Override
     protected void generateObjects(){
-        float maxHeight = getCurrentHeight();
-        maxHeight = maxHeight < getCurrentHeight2() ? getCurrentHeight2() : maxHeight;
+        float maxHeight;
+        if (getCurrentHeight() < getCurrentHeight2())
+            maxHeight = getCurrentHeight2();
+        else
+            maxHeight = getCurrentHeight();
         while (floorHeight < maxHeight + WORLD_HEIGHT) {
-            genFloor();
-            genMonster();
+            genMonster(maxHeight);
             genItem();
             genCoin();
+            genFloor();
         }
     }
 

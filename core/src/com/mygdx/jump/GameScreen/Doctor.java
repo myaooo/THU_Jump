@@ -303,7 +303,9 @@ public class Doctor extends GameObject {
 
     private void updateScale(float deltaTime){
         if (isHit()) {
-            this.scaleBy(updateScale*deltaTime);
+            if (updateScale > 0) {
+                this.scaleBy(updateScale * deltaTime);
+            }
             this.rotateBy(updateRotate);
         }
     }

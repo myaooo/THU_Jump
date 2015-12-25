@@ -58,7 +58,7 @@ public class Monster extends GameObject {
         // update position
         this.moveBy(velocity.x * deltaTime, velocity.y * deltaTime);
         keyFrame = animation.getKeyFrame(stateTime, true);
-        if (this.getX() < moveLb || this.getX() > moveUb)
+        if (this.getX() <= moveLb || this.getX() >= moveUb)
             velocity.x = -velocity.x;
         stateTime += deltaTime;
     }

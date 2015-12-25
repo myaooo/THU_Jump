@@ -36,6 +36,7 @@ public class Reversor extends Item {
     /**A reversor reverses a doctor's moving velocity, if this is in a battle stage, set the target different to its holder*/
     @Override
     public void activate(){
+        doctor.itemPowerOff();
         if (stage != null){
             if (doctor == stage.doctor)
                 doctor = stage.doctor2;
@@ -55,7 +56,7 @@ public class Reversor extends Item {
     @Override
     public void powerOff(){
         doctor.moveVelocity = originVelocity;
-        super.powerOff();
+        status = STATUS_POWER_OFF;
     }
 
     /**Override updateActive function, set the item's position to attach doctor*/

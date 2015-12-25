@@ -42,7 +42,7 @@ public class GameStage extends Stage {
     //static final Vector2 GRAVITY = new Vector2(0, -GRAVITY_ABS);
     public static final float HEIGHT_LEVEL_BASE = WORLD_HEIGHT * 3;
     public static float SHOOTING_SPEED = 0.3f;  // shooting speed of the doctor
-
+    public static float MONSTER_GEN_RATE = 0.05f;
     // STATUS PARAMS
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_GAME_OVER = 1;
@@ -279,9 +279,9 @@ public class GameStage extends Stage {
 
     /**Calls when objects should be generate*/
     protected void generateObjects(){
-        while (floorHeight < getCurrentHeight() + WORLD_HEIGHT) {
+        while (floorHeight < getCurrentHeight() + WORLD_HEIGHT ) {
             genFloor();
-            genMonster();
+            genMonster(getCurrentHeight());
             genItem();
             genCoin();
         }
@@ -332,21 +332,21 @@ public class GameStage extends Stage {
     }
 
     /**Generate Monster, calls when the currentHeight has been updated*/
-    protected void genMonster(){
-        if (monsterHeight + 20 < getCurrentHeight()) {
+    protected void genMonster(float maxHeight){
+        if (monsterHeight + 20 < maxHeight) {
             float toll = rand.nextFloat();
-            if (toll < 0.05f){
+            if (toll < MONSTER_GEN_RATE){
                 float X = rand.nextFloat()*(WORLD_WIDTH-Monster.MONSTER_WIDTH);
-                if (toll < 0.01f) {
-                    MonsterBoss mstBoss = new MonsterBoss(X, getCurrentHeight() + WORLD_HEIGHT);
+                if (toll < 0.15*MONSTER_GEN_RATE) {
+                    MonsterBoss mstBoss = new MonsterBoss(X, maxHeight + WORLD_HEIGHT*1.1f);
                     monsters.add(mstBoss);
                 }
-                else if (toll < 0.02f){
-                    MonsterHole mst = new MonsterHole(X, getCurrentHeight() + WORLD_HEIGHT);
+                else if (toll < 0.4*MONSTER_GEN_RATE){
+                    MonsterHole mst = new MonsterHole(X, maxHeight + WORLD_HEIGHT*1.1f);
                     monsters.add(mst);
                 }
                 else{
-                    Monster mst = new Monster(X, getCurrentHeight() + WORLD_HEIGHT, rand.nextFloat()>0.5f);
+                    Monster mst = new Monster(X, maxHeight + WORLD_HEIGHT*1.1f, rand.nextFloat()>0.5f);
                     monsters.add(mst);
                 }
                 monsterHeight = monsters.get(monsters.size()-1).getY();
