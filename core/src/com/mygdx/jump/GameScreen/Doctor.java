@@ -64,7 +64,7 @@ public class Doctor extends GameObject {
     private boolean shield;
     private float maxjumpheight = 0;
     private float XMin;
-    private float XMax;
+    public float XMax;
 
 
     // public fields
@@ -91,7 +91,7 @@ public class Doctor extends GameObject {
      */
     public Doctor(GameStage gameStage, Animation anim_f, Animation anim_j, Animation anim_h) {
         super(GameStage.WORLD_WIDTH/2, 5f, WIDTH,HEIGHT);
-        this.setOrigin(WIDTH/2,HEIGHT/2);
+        this.setOrigin(getWidth()/2,getHeight()/2);
         this.stage = gameStage;
         status = STATUS_FALL;
         stateTime = 0;
@@ -101,7 +101,7 @@ public class Doctor extends GameObject {
         this.acceleration.set(0,-GameStage.GRAVITY_ABS);
         this.velocity.set(0,0);
         maxjumpheight = jumpVelocity * jumpVelocity / (GameStage.GRAVITY_ABS * 2);
-        XMin = -WIDTH/2;
+        XMin = -getWidth()/2;
         XMax = GameStage.WORLD_WIDTH-WIDTH/2;
         jumpVelocity = JUMP_VELOCITY;
         moveVelocity = MOVE_VELOCITY;
