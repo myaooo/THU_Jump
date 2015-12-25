@@ -96,6 +96,7 @@ public class MainMenuScreen implements Screen{
         if(ScreenCounter==1)
         {
             Recorder.load();
+            Settings.load();
         }
     }
 
