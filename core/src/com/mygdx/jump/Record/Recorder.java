@@ -6,6 +6,15 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.mygdx.jump.MenuScreen.ScoreScreen;
+import com.mygdx.jump.Settings;
+import com.badlogic.gdx.utils.Array;
+import java.util.Collections;
+import java.util.Comparator;
+
+
 /**
  * @author Ming Yao
  */
@@ -16,40 +25,71 @@ public class Recorder {
 
     public static GameRecord currentRecord;
 
-    public static ArrayList<GameRecord> records = new ArrayList<>();
+    public static Array<GameRecord> records = new Array<>();
 
     public static void load(){
-        try {
-            File file = new File(recordfile);
-            if (file.isFile() && file.exists()) {
-                InputStreamReader read = new InputStreamReader(new FileInputStream(file));
-                BufferedReader bufferedReader = new BufferedReader(read);
-                String lineTxt = null;
-                while ((lineTxt = bufferedReader.readLine()) != null) {
-                    System.out.println(lineTxt);
-                }
-                read.close();
-                /*
-                Load records here
-                */
-            }
-            else{
-                coinSum = 0;
-            }
+
+        for(int i=0;i<5;i++)
+        {
+            records.add(new GameRecord(0,0));
         }
-        catch(Exception e) {
-            System.out.println("读取文件内容出错");
-            e.printStackTrace();
-        }
+
+
+
+        records.get(0).score = Settings.preferences.getInteger("score0",0);
+        records.get(1).score = Settings.preferences.getInteger("score1",0);
+        records.get(2).score = Settings.preferences.getInteger("score2",0);
+        records.get(3).score = Settings.preferences.getInteger("score3",0);
+        records.get(4).score = Settings.preferences.getInteger("score4",0);
+
+        records.get(0).coin = Settings.preferences.getInteger("coin0",0);
+        records.get(1).coin = Settings.preferences.getInteger("coin1",0);
+        records.get(2).coin = Settings.preferences.getInteger("coin2",0);
+        records.get(3).coin = Settings.preferences.getInteger("coin3",0);
+        records.get(4).coin = Settings.preferences.getInteger("coin4",0);
+
+        ScoreSort();
+
     }
 
     public static void save(){
 
+
+        ScoreSort();
+
+        Settings.preferences.putInteger("score0",records.get(0).score);
+        Settings.preferences.putInteger("score1",records.get(1).score);
+        Settings.preferences.putInteger("score2",records.get(2).score);
+        Settings.preferences.putInteger("score3",records.get(3).score);
+        Settings.preferences.putInteger("score4",records.get(4).score);
+
+        Settings.preferences.putInteger("coin0",records.get(0).coin);
+        Settings.preferences.putInteger("coin1",records.get(1).coin);
+        Settings.preferences.putInteger("coin2",records.get(2).coin);
+        Settings.preferences.putInteger("coin3",records.get(3).coin);
+        Settings.preferences.putInteger("coin4",records.get(4).coin);
+
+        Settings.preferences.flush();
+
+    }
+
+
+    public static void ScoreSort(){
+        for(int i=0; i<records.size-1; i++)
+            for (int j = 0; j<records.size - 1 - i; j++)
+            {
+                if(records.get(j).score<records.get(j+1).score)
+                {
+                    records.swap(j,j+1);
+                }
+            }
+
     }
 
     public static void addRecord(){
+        System.out.println(records.size);
         records.add(new GameRecord());
-        currentRecord = records.get(records.size()-1);
+        currentRecord = records.get(records.size-1);
     }
 
 }

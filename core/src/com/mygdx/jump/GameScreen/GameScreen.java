@@ -239,6 +239,11 @@ public class GameScreen extends ScreenAdapter {
         scoreLabel.setColor(Settings.myGoldYellow);
         scoreLabel.setPosition(240-strwidth/2,240);
         record.setRecord(gameStage.getScore(),gameStage.getCoins());
+
+        //
+        Recorder.save();
+        Settings.TotalCoins = Settings.TotalCoins + gameStage.getCoins();
+        Settings.save();
     }
 
     @Override

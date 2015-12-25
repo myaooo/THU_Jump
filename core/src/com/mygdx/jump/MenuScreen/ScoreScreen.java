@@ -17,6 +17,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.jump.TsinghuaJump;
+import com.mygdx.jump.Settings;
+import com.mygdx.jump.Resource.Resource;
+import com.mygdx.jump.Record.Recorder;
+import com.sun.org.apache.xpath.internal.operations.String;
 
 /**
  * Created by ordly on 15/12/15.
@@ -25,14 +29,25 @@ public class ScoreScreen extends ScreenAdapter{
     private TsinghuaJump game;
     private Stage stage;
     private Button returnButton;
+    private Button scoreButton;
 
     private float time;
+
+    private Array<Label> scores;
+    private Array<Label> coins;
+
+    private Image image_doctor;
+    private Image image_balloon;
+
+    private int scoresShow = 5;
 
     public ScoreScreen(final TsinghuaJump agame){
         this.game = agame;
         time = 0;
         stage = new Stage(new ScalingViewport(Scaling.stretch, 480, 800, new OrthographicCamera()));
         Gdx.input.setInputProcessor(stage);
+        scores = new Array<Label>();
+        coins = new Array<Label>();
         loadAssets();
     }
 
@@ -44,12 +59,17 @@ public class ScoreScreen extends ScreenAdapter{
 
     private void update(float delta){
 
-        time = time + delta/3;
+        time = time + delta/2;
 
         //update the data
 
+
+        //doctor
+
+        DoctorMove(time,400,650,20,4);
+
         //reuturnButton
-        lineMove(returnButton,time,(int)(450-returnButton.getWidth()),30,20);
+        Resource.lineMove(returnButton,time,(int)(450-returnButton.getWidth()),30,20);
         if(returnButton.isPressed()==true)
         {
             MainMenuScreen mainMenuScreen = new MainMenuScreen(game);
@@ -64,27 +84,121 @@ public class ScoreScreen extends ScreenAdapter{
         image.setSize(480,800);
         stage.addActor(image);
 
-        //returnButtons
-        BitmapFont font = new BitmapFont();
-        Texture actor = new Texture(Gdx.files.internal("data/cloud.png"));
+
+        //balloon
+        Texture logo_balloon = new Texture(Gdx.files.internal("data/balloon.png"));
+        image_balloon = new Image(new TextureRegionDrawable( new TextureRegion(logo_balloon) ));
+        image_balloon.setSize(100,120);
+        stage.addActor(image_balloon);
+
+        //doctor
+
+        Texture logo_doctor = new Texture(Gdx.files.internal("data/image_doctor1.png"));
+        image_doctor = new Image(new TextureRegionDrawable( new TextureRegion(logo_doctor) ));
+        image_doctor.setSize(50,60);
+        stage.addActor(image_doctor);
+
+
+        //scores
+        logo = new Texture(Gdx.files.internal("data/cloud_background.png"));
+        Image image_scores = new Image(new TextureRegionDrawable( new TextureRegion(logo) ));
+        image_scores.setSize(420,500);
+        image_scores.setPosition(30,150);
+        stage.addActor(image_scores);
+
+        //scoresbutton
+        Texture actor = new Texture(Gdx.files.internal("data/cloud_button.png"));
         TextButton.TextButtonStyle tbs = new TextButton.TextButtonStyle();
-        tbs.font = font;
+        tbs.font = Resource.font.getFont();
+        tbs.fontColor = new Color(44/255f,114/255f,227/255f,0.5f);
         tbs.up = new TextureRegionDrawable( new TextureRegion(actor) );
 
-        returnButton = new TextButton("return",tbs);
+        scoreButton = new TextButton("High Scores",tbs);
+       // scoreButton.setSize(200,130);
+        scoreButton.setPosition((480-scoreButton.getWidth())/2,600);
+        stage.addActor(scoreButton);
+
+        //returnButtons
+
+        Texture actor1 = new Texture(Gdx.files.internal("data/cloud.png"));
+        TextButton.TextButtonStyle tbs1 = new TextButton.TextButtonStyle();
+        tbs1.font = Resource.font.getFont();
+        tbs1.fontColor = new Color(44/255f,114/255f,227/255f,0.5f);
+        tbs1.up = new TextureRegionDrawable( new TextureRegion(actor1) );
+
+        returnButton = new TextButton("return",tbs1);
+        returnButton.setSize(200,130);
         stage.addActor(returnButton);
+
+        //scores ranking
+
+        for(int i=0;i< 5;i++)
+        {
+            Label.LabelStyle ls = new Label.LabelStyle(Resource.Bfont.getFont(),
+                    Color.YELLOW);
+            Label label = new Label(Recorder.records.get(i).score + " ",ls);
+            label.setColor(0f,0f,0f,0.8f);
+
+            Label.LabelStyle ls1 = new Label.LabelStyle(Resource.Bfont.getFont(),
+                    Color.YELLOW);
+            Label label1 = new Label(Recorder.records.get(i).coin + " ",ls1);
+            label1.setColor(0f,0f,0f,0.8f);
+
+            if(Recorder.records.get(i).score==0)
+            {
+                scoresShow = i;
+                break;
+            }
+
+            scores.add(label);
+            coins.add(label1);
+            label.setPosition((480-label.getWidth())/2,450- 50*i);
+            label1.setPosition((480-label.getWidth())/2 + 100,450- 50*i);
+
+        }
+
+        for( int i=0;i<scoresShow;i++)
+        {
+
+            Label.LabelStyle ls = new Label.LabelStyle(Resource.Bfont.getFont(),
+                    Color.YELLOW);
+            Label label = new Label(i+1+" ",ls);
+            label.setColor(254/255f,254/255f,65/255f,1f);
+
+            label.setPosition((480-label.getWidth())/2 - 100,450- 50*i);
+
+            stage.addActor(label);
+            stage.addActor(scores.get(i));
+            stage.addActor(coins.get(i));
+        }
+
+
+        Label.LabelStyle ls1 = new Label.LabelStyle(Resource.fontX.getFont(),
+                Color.YELLOW);
+        Label label1 = new Label("Rank",ls1);
+        label1.setColor(44/255f,114/255f,227/255f,0.5f);
+        stage.addActor(label1);
+        label1.setPosition((480-scores.get(0).getWidth())/2 - 100, 500);
+
+        Label.LabelStyle ls2 = new Label.LabelStyle(Resource.fontX.getFont(),
+                Color.YELLOW);
+        Label label2 = new Label("Scores",ls2);
+        label2.setColor(44/255f,114/255f,227/255f,0.5f);
+        stage.addActor(label2);
+        label2.setPosition((480-scores.get(0).getWidth())/2, 500);
+
+        Label.LabelStyle ls3 = new Label.LabelStyle(Resource.fontX.getFont(),
+                Color.YELLOW);
+        Label label3 = new Label("Coins",ls3);
+        label3.setColor(44/255f,114/255f,227/255f,0.5f);
+        stage.addActor(label3);
+        label3.setPosition((480-scores.get(0).getWidth())/2 + 100, 500);
+
     }
 
-    private void lineMove(Button textButton,float time,int positionX,int positionY,int range)
-    {
-        float Dtime = (float)Math.floor(time);
-        if(Dtime%2==0)
-        {
-            textButton.setPosition(positionX+range*(time-Dtime),positionY);
-        }
-        else
-        {
-            textButton.setPosition(positionX-range*(time-Dtime),positionY);
-        }
+    private void DoctorMove(float time, int positionX, int positionY, int Yrange,float Yfrequence){
+
+        image_doctor.setPosition(positionX,positionY + Yrange*(float) (Math.sin(Yfrequence * (double) (time))));
+        image_balloon.setPosition(positionX - 43,positionY + 10 + Yrange*(float) (Math.sin(Yfrequence * (double) (time))));
     }
 }
