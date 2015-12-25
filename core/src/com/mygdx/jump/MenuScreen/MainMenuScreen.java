@@ -42,7 +42,7 @@ import static com.badlogic.gdx.math.Interpolation.*;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.sun.javadoc.Doc;
+//import com.sun.javadoc.Doc;
 import com.sun.javaws.Main;
 
 import java.lang.Math.*;

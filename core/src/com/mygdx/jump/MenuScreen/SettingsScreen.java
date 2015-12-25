@@ -111,7 +111,7 @@ public class SettingsScreen extends ScreenAdapter {
             dialog.get(1).remove();
             dialog_image.remove();
             dialog_label_sound.remove();
-            Settings.soundOpen = false;
+            Settings.SOUNDOPEN = false;
         }
 
         if (dialog.get(1).isPressed()==true)
@@ -120,7 +120,7 @@ public class SettingsScreen extends ScreenAdapter {
             dialog.get(1).remove();
             dialog_image.remove();
             dialog_label_sound.remove();
-            Settings.soundOpen = true;
+            Settings.SOUNDOPEN = true;
         }
 
         //level
