@@ -11,7 +11,7 @@ import com.mygdx.jump.Resource.Assets;
  * Created by Yao on 15/12/7.
  */
 public class Shield extends Item {
-    static public float rate = 0.02f;
+    static public float rate = 0.01f;
     static public float SHIELD_TIME = 5f;
     static public float SHIELD_WIDTH = 2* Doctor.WIDTH;
     static public float SHIELD_HEIGHT = SHIELD_WIDTH;

@@ -11,7 +11,7 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Spring extends Item{
 
-    static public final float rate = 0.04f;
+    static public final float rate = 0.03f;
     // active
     private TextureRegion activeTexture;
 

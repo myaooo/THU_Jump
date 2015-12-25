@@ -1,6 +1,7 @@
 package com.mygdx.jump.GameScreen.GameItem;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.jump.GameScreen.Doctor;
 import com.mygdx.jump.GameScreen.Floor.Floor;
 import com.mygdx.jump.Resource.Assets;
@@ -10,10 +11,10 @@ import com.mygdx.jump.Resource.Assets;
  */
 public class Rocket extends Item {
 
-    static public final float ROCKET_TIME = 5f;
-    static public final float ROCKET_WIDTH = 1.5f;
-    static public final float ROCKET_HEIGHT = 1.5f;
-    static public final float rate = 0.01f;
+    static public final float ROCKET_TIME = 6f;
+    static public final float ROCKET_WIDTH = 15/4f;
+    static public final float ROCKET_HEIGHT = 5f;
+    static public final float rate = 0.005f;
     static public final float ROCKET_VELOCITY = 60;
     static public final float ROCKET_ACCELERATION = 10;
 
@@ -39,7 +40,8 @@ public class Rocket extends Item {
         keyFrame = animation.getKeyFrame(0,true);
         this.setWidth(ROCKET_WIDTH);
         this.setHeight(ROCKET_HEIGHT);
-        this.setPosition(doctor.getX(),doctor.getY());
+        this.setOrigin(Align.center);
+        this.setPosition(doctor.getX(Align.center),doctor.getY(Align.center)-0.3f, Align.center);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class Rocket extends Item {
                 doctor.setAcceleration(0,0);
             }
             this.setColor(1,1,1,1 < mark ? 1 : (mark));
-            this.setPosition(doctor.getX(),doctor.getY());
+            this.setPosition(doctor.getX(Align.center),doctor.getY(Align.center)-0.3f, Align.center);
             this.setScale(doctor.getScaleX(), 1);
             stateTime += delta;
         }
